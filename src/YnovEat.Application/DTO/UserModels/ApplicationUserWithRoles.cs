@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
-using YnovEatApi.Data.Models;
+using YnovEat.Domain.ModelsAggregate.UserAggregate;
 
-namespace YnovEatApi.Core.UserModels
+namespace YnovEat.Application.DTO.UserModels
 {
     public class ApplicationUserWithRoles
     {
@@ -22,13 +22,13 @@ namespace YnovEatApi.Core.UserModels
         public DateTime EmailConfirmationDateTime { get; set; }
         public IList<string> Roles { get; set; }
 
-        public ApplicationUserWithRoles(ApplicationUser user, IList<string> roles)
+        public ApplicationUserWithRoles(User user, IList<string> roles)
         {
             FromEntity(user);
             Roles = roles;
         }
 
-        public void FromEntity(ApplicationUser entity)
+        public void FromEntity(User entity)
         {
             Id = entity.Id;
             UserName = entity.NormalizedUserName;

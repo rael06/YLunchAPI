@@ -3,20 +3,18 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using YnovEatApi.Data.Core;
-using YnovEatApi.Data.Models;
-using YnovEatApi.Core;
-using YnovEatApi.Core.Response;
-using YnovEatApi.Core.UserModels;
+using YnovEat.Application.DTO.UserModels;
+using YnovEat.Domain.ModelsAggregate.UserAggregate;
+using YnovEat.Domain.ModelsAggregate.UserAggregate.Roles;
 
-namespace YnovEatApi.Controllers
+namespace YnovEat.Api.Controllers
 {
     [Route("api")]
     public class ApiController : ControllerBase
     {
-        protected readonly UserManager<ApplicationUser> UserManager;
+        protected readonly UserManager<User> UserManager;
 
-        public ApiController(UserManager<ApplicationUser> userManager)
+        public ApiController(UserManager<User> userManager)
         {
             UserManager = userManager;
         }
@@ -71,7 +69,7 @@ namespace YnovEatApi.Controllers
 
             var user = await UserManager.FindByNameAsync(userName);
             var userRoles = await UserManager.GetRolesAsync(user);
-            return new UserDto(user, userRoles);
+            return new UserDto(user);
         }
     }
 }

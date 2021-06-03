@@ -1,11 +1,10 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using YnovEatApi.Data.Core;
-using YnovEatApi.Data.Models;
+using YnovEat.Domain.ModelsAggregate.UserAggregate;
 
-namespace YnovEatApi.Core.UserModels
+namespace YnovEat.Application.DTO.UserModels
 {
-    public class UserDto : IDtoConverter<ApplicationUser>
+    public class UserDto : IDtoConverter<User>
     {
         public string Id { get; set; }
         public string UserName { get; set; }
@@ -16,14 +15,12 @@ namespace YnovEatApi.Core.UserModels
         public bool EmailConfirmed { get; set; }
         public bool PhoneNumberConfirmed { get; set; }
         public bool IsActivated { get; set; }
-        public IList<string> Roles { get; set; }
-        public UserDto(ApplicationUser user, IList<string> roles)
+        public UserDto(User user)
         {
             FromEntity(user);
-            Roles = roles;
         }
 
-        public void FromEntity(ApplicationUser entity)
+        public void FromEntity(User entity)
         {
             Id = entity.Id;
             UserName = entity.NormalizedUserName;

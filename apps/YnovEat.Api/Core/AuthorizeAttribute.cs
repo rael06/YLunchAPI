@@ -1,9 +1,9 @@
 using System;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authorization.Infrastructure;
-using YnovEatApi.Data.Core;
+using YnovEat.Domain.ModelsAggregate.UserAggregate.Roles;
 
-namespace YnovEatApi.Core
+namespace YnovEat.Api.Core
 {
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true, Inherited = true)]
     public class AuthorizeAttribute : Microsoft.AspNetCore.Authorization.AuthorizeAttribute

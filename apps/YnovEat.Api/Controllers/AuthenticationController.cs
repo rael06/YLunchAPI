@@ -11,14 +11,14 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
-using YnovEatApi.Core.Response;
-using YnovEatApi.Core.Response.Errors;
-using YnovEatApi.Core.Response.Success;
+using YnovEat.Api.Core.Response;
+using YnovEat.Api.Core.Response.Errors;
+using YnovEat.Application.DTO.UserModels;
+using YnovEat.Domain.ModelsAggregate.UserAggregate;
+using YnovEat.Domain.ModelsAggregate.UserAggregate.Roles;
 using YnovEatApi.Core.UserModels;
-using YnovEatApi.Data.Core;
-using YnovEatApi.Data.Models;
 
-namespace YnovEatApi.Controllers
+namespace YnovEat.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -27,7 +27,7 @@ namespace YnovEatApi.Controllers
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IConfiguration _configuration;
 
-        public AuthenticationController(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager,
+        public AuthenticationController(UserManager<User> userManager, RoleManager<IdentityRole> roleManager,
             IConfiguration configuration) : base(userManager)
         {
             _roleManager = roleManager;
@@ -78,7 +78,7 @@ namespace YnovEatApi.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError,
                     new Response {Status = ResponseStatus.Error, Message = "User already exists!"});
 
-            var user = new ApplicationUser
+            var user = new User
             {
                 Email = model.Email,
                 SecurityStamp = Guid.NewGuid().ToString(),
@@ -98,7 +98,7 @@ namespace YnovEatApi.Controllers
 
             return StatusCode(
                 StatusCodes.Status201Created,
-                new UserCreationSuccessResponse(UserRoles.Customer)
+                new UserDto(user)
             );
         }
 
@@ -112,7 +112,7 @@ namespace YnovEatApi.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError,
                     new Response {Status = ResponseStatus.Error, Message = "User already exists!"});
 
-            var user = new ApplicationUser
+            var user = new User
             {
                 Email = model.Email,
                 SecurityStamp = Guid.NewGuid().ToString(),
@@ -132,7 +132,7 @@ namespace YnovEatApi.Controllers
 
             return StatusCode(
                 StatusCodes.Status201Created,
-                new UserCreationSuccessResponse(UserRoles.RestaurantAdmin)
+                new UserDto(user)
             );
         }
 
@@ -146,7 +146,7 @@ namespace YnovEatApi.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError,
                     new Response {Status = ResponseStatus.Error, Message = "User already exists!"});
 
-            var user = new ApplicationUser
+            var user = new User
             {
                 Email = model.Email,
                 SecurityStamp = Guid.NewGuid().ToString(),
@@ -166,7 +166,7 @@ namespace YnovEatApi.Controllers
 
             return StatusCode(
                 StatusCodes.Status201Created,
-                new UserCreationSuccessResponse(UserRoles.Employee)
+                new UserDto(user)
             );
         }
 
@@ -180,7 +180,7 @@ namespace YnovEatApi.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError,
                     new Response {Status = ResponseStatus.Error, Message = "User already exists!"});
 
-            var user = new ApplicationUser
+            var user = new User
             {
                 Email = model.Email,
                 SecurityStamp = Guid.NewGuid().ToString(),
@@ -209,7 +209,7 @@ namespace YnovEatApi.Controllers
 
             return StatusCode(
                 StatusCodes.Status201Created,
-                new UserCreationSuccessResponse(UserRoles.SuperAdmin)
+                new UserDto(user)
             );
         }
 

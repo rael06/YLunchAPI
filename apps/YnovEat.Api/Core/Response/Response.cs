@@ -1,4 +1,4 @@
-namespace YnovEatApi.Core.Response
+namespace YnovEat.Api.Core.Response
 {
     public class Response
     {

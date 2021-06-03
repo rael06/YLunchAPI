@@ -1,4 +1,4 @@
-namespace YnovEatApi.Core
+namespace YnovEat.Application.DTO
 {
     public interface IDtoConverter<in T>
     {
