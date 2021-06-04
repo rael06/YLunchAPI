@@ -1,5 +1,8 @@
 using System;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using Microsoft.AspNetCore.Identity;
+using YnovEat.Domain.ModelsAggregate.RestaurantAggregate;
 
 namespace YnovEat.Domain.ModelsAggregate.UserAggregate
 {
@@ -13,5 +16,7 @@ namespace YnovEat.Domain.ModelsAggregate.UserAggregate
         public DateTime PhoneNumberConfirmationDateTime { get; set; }
         public DateTime EmailConfirmationDateTime { get; set; }
         public bool IsActivated { get; set; }
+
+        public virtual ICollection<Restaurant> Restaurants { get; set; } = new List<Restaurant>();
     }
 }

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="ynoveatdb@localhost" uuid="52725603-2279-4747-819f-70bb25617c8a">
+    <data-source source="LOCAL" name="ynoveatdb@localhost" uuid="085e8476-bb39-41a2-9132-dcdb4128fbfb">
       <driver-ref>mysql.8</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>

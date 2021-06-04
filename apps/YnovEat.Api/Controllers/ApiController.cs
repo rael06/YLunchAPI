@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using YnovEat.Application.DTO.UserModels;
 using YnovEat.Domain.ModelsAggregate.UserAggregate;
 using YnovEat.Domain.ModelsAggregate.UserAggregate.Roles;
@@ -13,10 +14,12 @@ namespace YnovEat.Api.Controllers
     public class ApiController : ControllerBase
     {
         protected readonly UserManager<User> UserManager;
+        protected readonly IConfiguration Configuration;
 
-        public ApiController(UserManager<User> userManager)
+        public ApiController(UserManager<User> userManager, IConfiguration configuration)
         {
             UserManager = userManager;
+            Configuration = configuration;
         }
 
         [AllowAnonymous]

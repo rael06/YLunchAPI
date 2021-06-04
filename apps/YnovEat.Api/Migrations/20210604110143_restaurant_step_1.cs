@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace YnovEat.Api.Migrations
 {
-    public partial class User : Migration
+    public partial class restaurant_step_1 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -202,6 +202,115 @@ namespace YnovEat.Api.Migrations
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
+            migrationBuilder.CreateTable(
+                name: "Restaurants",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Name = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Phone = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Email = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    IsEmailConfirmed = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    EmailConfirmationDateTime = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    OrderLimitTimeInMinutes = table.Column<int>(type: "int", nullable: false),
+                    IsOpen = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    IsPublished = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    CreationDateTime = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    LastUpdateDateTime = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    ZipCode = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Country = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    City = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    StreetNumber = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    StreetName = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    ExtraInformation = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    UserId = table.Column<string>(type: "varchar(255)", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Restaurants", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Restaurants_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "ClosingDate",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    ClosingDateTime = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    RestaurantId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ClosingDate", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ClosingDate_Restaurants_RestaurantId",
+                        column: x => x.RestaurantId,
+                        principalTable: "Restaurants",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "DayOpeningHours",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    DayIndex = table.Column<int>(type: "int", nullable: false),
+                    RestaurantId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DayOpeningHours", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_DayOpeningHours_Restaurants_RestaurantId",
+                        column: x => x.RestaurantId,
+                        principalTable: "Restaurants",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "OpeningHour",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    HourInMinutes = table.Column<int>(type: "int", nullable: false),
+                    DayOpeningHoursId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_OpeningHour", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_OpeningHour_DayOpeningHours_DayOpeningHoursId",
+                        column: x => x.DayOpeningHoursId,
+                        principalTable: "DayOpeningHours",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -238,6 +347,26 @@ namespace YnovEat.Api.Migrations
                 table: "AspNetUsers",
                 column: "NormalizedUserName",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ClosingDate_RestaurantId",
+                table: "ClosingDate",
+                column: "RestaurantId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DayOpeningHours_RestaurantId",
+                table: "DayOpeningHours",
+                column: "RestaurantId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_OpeningHour_DayOpeningHoursId",
+                table: "OpeningHour",
+                column: "DayOpeningHoursId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Restaurants_UserId",
+                table: "Restaurants",
+                column: "UserId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -258,7 +387,19 @@ namespace YnovEat.Api.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "ClosingDate");
+
+            migrationBuilder.DropTable(
+                name: "OpeningHour");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoles");
+
+            migrationBuilder.DropTable(
+                name: "DayOpeningHours");
+
+            migrationBuilder.DropTable(
+                name: "Restaurants");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");

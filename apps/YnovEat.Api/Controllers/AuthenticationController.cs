@@ -25,13 +25,11 @@ namespace YnovEat.Api.Controllers
     public class AuthenticationController : ApiController
     {
         private readonly RoleManager<IdentityRole> _roleManager;
-        private readonly IConfiguration _configuration;
 
         public AuthenticationController(UserManager<User> userManager, RoleManager<IdentityRole> roleManager,
-            IConfiguration configuration) : base(userManager)
+            IConfiguration configuration) : base(userManager, configuration)
         {
             _roleManager = roleManager;
-            _configuration = configuration;
         }
 
         [AllowAnonymous]
@@ -51,11 +49,11 @@ namespace YnovEat.Api.Controllers
             };
             authClaims.AddRange(userRoles.Select(userRole => new Claim(ClaimTypes.Role, userRole)));
 
-            var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JwtSecret"]));
+            var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JwtSecret"]));
 
             var token = new JwtSecurityToken(
-                issuer: _configuration["JWT:ValidIssuer"],
-                audience: _configuration["JWT:ValidAudience"],
+                issuer: Configuration["JWT:ValidIssuer"],
+                audience: Configuration["JWT:ValidAudience"],
                 expires: DateTime.Now.AddHours(3),
                 claims: authClaims,
                 signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
@@ -175,6 +173,40 @@ namespace YnovEat.Api.Controllers
         [Route("register-super-admin")]
         public async Task<IActionResult> RegisterSuperAdmin([FromBody] UserRegisterDto model)
         {
+            var userExists = await UserManager.FindByNameAsync(model.Username);
+            if (userExists != null)
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                    new Response {Status = ResponseStatus.Error, Message = "User already exists!"});
+
+            var user = new User
+            {
+                Email = model.Email,
+                SecurityStamp = Guid.NewGuid().ToString(),
+                UserName = model.Username
+            };
+            var result = await UserManager.CreateAsync(user, model.Password);
+            if (!result.Succeeded)
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                    new Response
+                    {
+                        Status = ResponseStatus.Error,
+                        Message = "User creation failed! Please check user details and try again."
+                    });
+
+            if (await _roleManager.RoleExistsAsync(UserRoles.SuperAdmin))
+                await UserManager.AddToRoleAsync(user, UserRoles.SuperAdmin);
+
+            return StatusCode(
+                StatusCodes.Status201Created,
+                new UserDto(user)
+            );
+        }
+
+        [HttpPost]
+        [Route("init-super-admin/{pass}")]
+        public async Task<IActionResult> InitSuperAdmin([FromRoute] string pass, [FromBody] UserRegisterDto model)
+        {
+            if (pass != Configuration["InitAdminPass"]) return Unauthorized();
             var userExists = await UserManager.FindByNameAsync(model.Username);
             if (userExists != null)
                 return StatusCode(StatusCodes.Status500InternalServerError,

@@ -5,8 +5,8 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <Folder Include="ModelsAggregate\CommonAggregate" />
       <Folder Include="ModelsAggregate\CustomerAggregate" />
-      <Folder Include="ModelsAggregate\RestaurantAggregate" />
     </ItemGroup>
 
     <ItemGroup>
