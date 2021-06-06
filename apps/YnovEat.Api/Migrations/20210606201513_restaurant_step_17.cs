@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace YnovEat.Api.Migrations
 {
-    public partial class restaurant_step_3 : Migration
+    public partial class restaurant_step_17 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -27,6 +27,36 @@ namespace YnovEat.Api.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetRoles", x => x.Id);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "CustomerCategories",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Name = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CustomerCategories", x => x.Id);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "RestaurantCategories",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Name = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RestaurantCategories", x => x.Id);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -130,6 +160,108 @@ namespace YnovEat.Api.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUserTokens", x => new { x.UserId, x.LoginProvider, x.Name });
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "Carts",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    UserId = table.Column<string>(type: "varchar(255)", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    CreationDatetime = table.Column<DateTime>(type: "datetime(6)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Carts", x => x.Id);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "Customers",
+                columns: table => new
+                {
+                    UserId = table.Column<string>(type: "varchar(255)", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    CustomerCategoryId = table.Column<int>(type: "int", nullable: true),
+                    CartId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Customers", x => x.UserId);
+                    table.ForeignKey(
+                        name: "FK_Customers_Carts_CartId",
+                        column: x => x.CartId,
+                        principalTable: "Carts",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Customers_CustomerCategories_CustomerCategoryId",
+                        column: x => x.CustomerCategoryId,
+                        principalTable: "CustomerCategories",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "Orders",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    CustomerId = table.Column<int>(type: "int", nullable: false),
+                    CustomerUserId = table.Column<string>(type: "varchar(255)", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Orders", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Orders_Customers_CustomerUserId",
+                        column: x => x.CustomerUserId,
+                        principalTable: "Customers",
+                        principalColumn: "UserId",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "CustomerProduct",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Name = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Description = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Price = table.Column<double>(type: "double", nullable: false),
+                    Quantity = table.Column<int>(type: "int", nullable: false),
+                    IsActive = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    CreationDateTime = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    ExpirationDateTime = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    RestaurantProductId = table.Column<int>(type: "int", nullable: false),
+                    CartId = table.Column<int>(type: "int", nullable: true),
+                    OrderId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CustomerProduct", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_CustomerProduct_Carts_CartId",
+                        column: x => x.CartId,
+                        principalTable: "Carts",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_CustomerProduct_Orders_OrderId",
+                        column: x => x.OrderId,
+                        principalTable: "Orders",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -268,6 +400,60 @@ namespace YnovEat.Api.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
+                name: "Restaurant_RestaurantCategory_Links",
+                columns: table => new
+                {
+                    RestaurantId = table.Column<int>(type: "int", nullable: false),
+                    RestaurantCategoryId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Restaurant_RestaurantCategory_Links", x => new { x.RestaurantId, x.RestaurantCategoryId });
+                    table.ForeignKey(
+                        name: "FK_Restaurant_RestaurantCategory_Links_RestaurantCategories_Res~",
+                        column: x => x.RestaurantCategoryId,
+                        principalTable: "RestaurantCategories",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Restaurant_RestaurantCategory_Links_Restaurants_RestaurantId",
+                        column: x => x.RestaurantId,
+                        principalTable: "Restaurants",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "RestaurantProducts",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Name = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Description = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Price = table.Column<double>(type: "double", nullable: false),
+                    Quantity = table.Column<int>(type: "int", nullable: false),
+                    IsActive = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    CreationDateTime = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    ExpirationDateTime = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    RestaurantId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RestaurantProducts", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_RestaurantProducts_Restaurants_RestaurantId",
+                        column: x => x.RestaurantId,
+                        principalTable: "Restaurants",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
                 name: "OpeningHours",
                 columns: table => new
                 {
@@ -285,6 +471,60 @@ namespace YnovEat.Api.Migrations
                         principalTable: "DayOpeningHours",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "RestaurantProductCategories",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Name = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    RestaurantId = table.Column<int>(type: "int", nullable: true),
+                    RestaurantProductId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RestaurantProductCategories", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_RestaurantProductCategories_RestaurantProducts_RestaurantPro~",
+                        column: x => x.RestaurantProductId,
+                        principalTable: "RestaurantProducts",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_RestaurantProductCategories_Restaurants_RestaurantId",
+                        column: x => x.RestaurantId,
+                        principalTable: "Restaurants",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "RestaurantProduct_RestaurantProductCategory_Links",
+                columns: table => new
+                {
+                    RestaurantProductId = table.Column<int>(type: "int", nullable: false),
+                    RestaurantProductCategoryId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RestaurantProduct_RestaurantProductCategory_Links", x => new { x.RestaurantProductId, x.RestaurantProductCategoryId });
+                    table.ForeignKey(
+                        name: "FK_RestaurantProduct_RestaurantProductCategory_Links_Restauran~1",
+                        column: x => x.RestaurantProductId,
+                        principalTable: "RestaurantProducts",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_RestaurantProduct_RestaurantProductCategory_Links_Restaurant~",
+                        column: x => x.RestaurantProductCategoryId,
+                        principalTable: "RestaurantProductCategories",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -331,9 +571,34 @@ namespace YnovEat.Api.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_Carts_UserId",
+                table: "Carts",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_ClosingDates_RestaurantId",
                 table: "ClosingDates",
                 column: "RestaurantId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CustomerProduct_CartId",
+                table: "CustomerProduct",
+                column: "CartId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CustomerProduct_OrderId",
+                table: "CustomerProduct",
+                column: "OrderId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Customers_CartId",
+                table: "Customers",
+                column: "CartId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Customers_CustomerCategoryId",
+                table: "Customers",
+                column: "CustomerCategoryId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_DayOpeningHours_RestaurantId",
@@ -344,6 +609,36 @@ namespace YnovEat.Api.Migrations
                 name: "IX_OpeningHours_DayOpeningHoursId",
                 table: "OpeningHours",
                 column: "DayOpeningHoursId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Orders_CustomerUserId",
+                table: "Orders",
+                column: "CustomerUserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Restaurant_RestaurantCategory_Links_RestaurantCategoryId",
+                table: "Restaurant_RestaurantCategory_Links",
+                column: "RestaurantCategoryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_RestaurantProduct_RestaurantProductCategory_Links_Restaurant~",
+                table: "RestaurantProduct_RestaurantProductCategory_Links",
+                column: "RestaurantProductCategoryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_RestaurantProductCategories_RestaurantId",
+                table: "RestaurantProductCategories",
+                column: "RestaurantId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_RestaurantProductCategories_RestaurantProductId",
+                table: "RestaurantProductCategories",
+                column: "RestaurantProductId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_RestaurantProducts_RestaurantId",
+                table: "RestaurantProducts",
+                column: "RestaurantId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Restaurants_MainAdminId",
@@ -384,6 +679,22 @@ namespace YnovEat.Api.Migrations
                 onDelete: ReferentialAction.Cascade);
 
             migrationBuilder.AddForeignKey(
+                name: "FK_Carts_AspNetUsers_UserId",
+                table: "Carts",
+                column: "UserId",
+                principalTable: "AspNetUsers",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Restrict);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_Customers_AspNetUsers_UserId",
+                table: "Customers",
+                column: "UserId",
+                principalTable: "AspNetUsers",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Cascade);
+
+            migrationBuilder.AddForeignKey(
                 name: "FK_Restaurants_AspNetUsers_MainAdminId",
                 table: "Restaurants",
                 column: "MainAdminId",
@@ -417,13 +728,43 @@ namespace YnovEat.Api.Migrations
                 name: "ClosingDates");
 
             migrationBuilder.DropTable(
+                name: "CustomerProduct");
+
+            migrationBuilder.DropTable(
                 name: "OpeningHours");
+
+            migrationBuilder.DropTable(
+                name: "Restaurant_RestaurantCategory_Links");
+
+            migrationBuilder.DropTable(
+                name: "RestaurantProduct_RestaurantProductCategory_Links");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
+                name: "Orders");
+
+            migrationBuilder.DropTable(
                 name: "DayOpeningHours");
+
+            migrationBuilder.DropTable(
+                name: "RestaurantCategories");
+
+            migrationBuilder.DropTable(
+                name: "RestaurantProductCategories");
+
+            migrationBuilder.DropTable(
+                name: "Customers");
+
+            migrationBuilder.DropTable(
+                name: "RestaurantProducts");
+
+            migrationBuilder.DropTable(
+                name: "Carts");
+
+            migrationBuilder.DropTable(
+                name: "CustomerCategories");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");

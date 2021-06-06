@@ -161,14 +161,13 @@ namespace YnovEat.Api.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Cart");
+                    b.ToTable("Carts");
                 });
 
             modelBuilder.Entity("YnovEat.Domain.ModelsAggregate.CustomerAggregate.Customer", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                    b.Property<string>("UserId")
+                        .HasColumnType("varchar(255)");
 
                     b.Property<int?>("CartId")
                         .HasColumnType("int");
@@ -176,13 +175,13 @@ namespace YnovEat.Api.Migrations
                     b.Property<int?>("CustomerCategoryId")
                         .HasColumnType("int");
 
-                    b.HasKey("Id");
+                    b.HasKey("UserId");
 
                     b.HasIndex("CartId");
 
                     b.HasIndex("CustomerCategoryId");
 
-                    b.ToTable("Customer");
+                    b.ToTable("Customers");
                 });
 
             modelBuilder.Entity("YnovEat.Domain.ModelsAggregate.CustomerAggregate.CustomerCategory", b =>
@@ -196,7 +195,52 @@ namespace YnovEat.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("CustomerCategory");
+                    b.ToTable("CustomerCategories");
+                });
+
+            modelBuilder.Entity("YnovEat.Domain.ModelsAggregate.CustomerAggregate.CustomerProduct", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<int?>("CartId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreationDateTime")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime>("ExpirationDateTime")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("longtext");
+
+                    b.Property<int?>("OrderId")
+                        .HasColumnType("int");
+
+                    b.Property<double>("Price")
+                        .HasColumnType("double");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RestaurantProductId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CartId");
+
+                    b.HasIndex("OrderId");
+
+                    b.ToTable("CustomerProduct");
                 });
 
             modelBuilder.Entity("YnovEat.Domain.ModelsAggregate.RestaurantAggregate.ClosingDate", b =>
@@ -265,82 +309,15 @@ namespace YnovEat.Api.Migrations
                     b.Property<int>("CustomerId")
                         .HasColumnType("int");
 
-                    b.HasKey("Id");
-
-                    b.HasIndex("CustomerId");
-
-                    b.ToTable("Order");
-                });
-
-            modelBuilder.Entity("YnovEat.Domain.ModelsAggregate.RestaurantAggregate.Product", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<int?>("CartId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("CreationDateTime")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("longtext");
-
-                    b.Property<DateTime>("ExpirationDateTime")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("longtext");
-
-                    b.Property<double>("Price")
-                        .HasColumnType("double");
-
-                    b.Property<int>("Quantity")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("RestaurantId")
-                        .HasColumnType("int");
+                    b.Property<string>("CustomerUserId")
+                        .IsRequired()
+                        .HasColumnType("varchar(255)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CartId");
+                    b.HasIndex("CustomerUserId");
 
-                    b.HasIndex("RestaurantId");
-
-                    b.ToTable("Product");
-                });
-
-            modelBuilder.Entity("YnovEat.Domain.ModelsAggregate.RestaurantAggregate.ProductCategory", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("longtext");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("ProductCategory");
-                });
-
-            modelBuilder.Entity("YnovEat.Domain.ModelsAggregate.RestaurantAggregate.ProductCategoryLink", b =>
-                {
-                    b.Property<int>("ProductId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ProductCategoryId")
-                        .HasColumnType("int");
-
-                    b.HasKey("ProductId", "ProductCategoryId");
-
-                    b.HasIndex("ProductCategoryId");
-
-                    b.ToTable("ProductCategoryLink");
+                    b.ToTable("Orders");
                 });
 
             modelBuilder.Entity("YnovEat.Domain.ModelsAggregate.RestaurantAggregate.Restaurant", b =>
@@ -419,10 +396,86 @@ namespace YnovEat.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categories");
+                    b.ToTable("RestaurantCategories");
                 });
 
-            modelBuilder.Entity("YnovEat.Domain.ModelsAggregate.RestaurantAggregate.RestaurantCategoryLink", b =>
+            modelBuilder.Entity("YnovEat.Domain.ModelsAggregate.RestaurantAggregate.RestaurantProduct", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreationDateTime")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime>("ExpirationDateTime")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("longtext");
+
+                    b.Property<double>("Price")
+                        .HasColumnType("double");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("RestaurantId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RestaurantId");
+
+                    b.ToTable("RestaurantProducts");
+                });
+
+            modelBuilder.Entity("YnovEat.Domain.ModelsAggregate.RestaurantAggregate.RestaurantProductCategory", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("longtext");
+
+                    b.Property<int?>("RestaurantId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("RestaurantProductId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RestaurantId");
+
+                    b.HasIndex("RestaurantProductId");
+
+                    b.ToTable("RestaurantProductCategories");
+                });
+
+            modelBuilder.Entity("YnovEat.Domain.ModelsAggregate.RestaurantAggregate.RestaurantProduct_RestaurantProductCategory", b =>
+                {
+                    b.Property<int>("RestaurantProductId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RestaurantProductCategoryId")
+                        .HasColumnType("int");
+
+                    b.HasKey("RestaurantProductId", "RestaurantProductCategoryId");
+
+                    b.HasIndex("RestaurantProductCategoryId");
+
+                    b.ToTable("RestaurantProduct_RestaurantProductCategory_Links");
+                });
+
+            modelBuilder.Entity("YnovEat.Domain.ModelsAggregate.RestaurantAggregate.Restaurant_RestaurantCategory", b =>
                 {
                     b.Property<int>("RestaurantId")
                         .HasColumnType("int");
@@ -434,7 +487,7 @@ namespace YnovEat.Api.Migrations
 
                     b.HasIndex("RestaurantCategoryId");
 
-                    b.ToTable("RestaurantCategoryLinks");
+                    b.ToTable("Restaurant_RestaurantCategory_Links");
                 });
 
             modelBuilder.Entity("YnovEat.Domain.ModelsAggregate.UserAggregate.User", b =>
@@ -600,9 +653,32 @@ namespace YnovEat.Api.Migrations
                         .WithMany("Customer")
                         .HasForeignKey("CustomerCategoryId");
 
+                    b.HasOne("YnovEat.Domain.ModelsAggregate.UserAggregate.User", "User")
+                        .WithOne("Customer")
+                        .HasForeignKey("YnovEat.Domain.ModelsAggregate.CustomerAggregate.Customer", "UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Cart");
 
                     b.Navigation("CustomerCategory");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("YnovEat.Domain.ModelsAggregate.CustomerAggregate.CustomerProduct", b =>
+                {
+                    b.HasOne("YnovEat.Domain.ModelsAggregate.CustomerAggregate.Cart", "Cart")
+                        .WithMany("Products")
+                        .HasForeignKey("CartId");
+
+                    b.HasOne("YnovEat.Domain.ModelsAggregate.RestaurantAggregate.Order", "Order")
+                        .WithMany("CustomerProducts")
+                        .HasForeignKey("OrderId");
+
+                    b.Navigation("Cart");
+
+                    b.Navigation("Order");
                 });
 
             modelBuilder.Entity("YnovEat.Domain.ModelsAggregate.RestaurantAggregate.ClosingDate", b =>
@@ -636,43 +712,11 @@ namespace YnovEat.Api.Migrations
                 {
                     b.HasOne("YnovEat.Domain.ModelsAggregate.CustomerAggregate.Customer", "Customer")
                         .WithMany("Orders")
-                        .HasForeignKey("CustomerId")
+                        .HasForeignKey("CustomerUserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Customer");
-                });
-
-            modelBuilder.Entity("YnovEat.Domain.ModelsAggregate.RestaurantAggregate.Product", b =>
-                {
-                    b.HasOne("YnovEat.Domain.ModelsAggregate.CustomerAggregate.Cart", null)
-                        .WithMany("Products")
-                        .HasForeignKey("CartId");
-
-                    b.HasOne("YnovEat.Domain.ModelsAggregate.RestaurantAggregate.Restaurant", "Restaurant")
-                        .WithMany("Products")
-                        .HasForeignKey("RestaurantId");
-
-                    b.Navigation("Restaurant");
-                });
-
-            modelBuilder.Entity("YnovEat.Domain.ModelsAggregate.RestaurantAggregate.ProductCategoryLink", b =>
-                {
-                    b.HasOne("YnovEat.Domain.ModelsAggregate.RestaurantAggregate.ProductCategory", "ProductCategory")
-                        .WithMany("Customer")
-                        .HasForeignKey("ProductCategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("YnovEat.Domain.ModelsAggregate.RestaurantAggregate.Product", "Product")
-                        .WithMany()
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Product");
-
-                    b.Navigation("ProductCategory");
                 });
 
             modelBuilder.Entity("YnovEat.Domain.ModelsAggregate.RestaurantAggregate.Restaurant", b =>
@@ -684,16 +728,58 @@ namespace YnovEat.Api.Migrations
                     b.Navigation("MainAdmin");
                 });
 
-            modelBuilder.Entity("YnovEat.Domain.ModelsAggregate.RestaurantAggregate.RestaurantCategoryLink", b =>
+            modelBuilder.Entity("YnovEat.Domain.ModelsAggregate.RestaurantAggregate.RestaurantProduct", b =>
+                {
+                    b.HasOne("YnovEat.Domain.ModelsAggregate.RestaurantAggregate.Restaurant", "Restaurant")
+                        .WithMany("Products")
+                        .HasForeignKey("RestaurantId");
+
+                    b.Navigation("Restaurant");
+                });
+
+            modelBuilder.Entity("YnovEat.Domain.ModelsAggregate.RestaurantAggregate.RestaurantProductCategory", b =>
+                {
+                    b.HasOne("YnovEat.Domain.ModelsAggregate.RestaurantAggregate.Restaurant", "Restaurant")
+                        .WithMany("ProductCategories")
+                        .HasForeignKey("RestaurantId");
+
+                    b.HasOne("YnovEat.Domain.ModelsAggregate.RestaurantAggregate.RestaurantProduct", null)
+                        .WithMany("RestaurantProductCategories")
+                        .HasForeignKey("RestaurantProductId");
+
+                    b.Navigation("Restaurant");
+                });
+
+            modelBuilder.Entity("YnovEat.Domain.ModelsAggregate.RestaurantAggregate.RestaurantProduct_RestaurantProductCategory", b =>
+                {
+                    b.HasOne("YnovEat.Domain.ModelsAggregate.RestaurantAggregate.RestaurantProductCategory", "RestaurantProductCategory")
+                        .WithMany()
+                        .HasForeignKey("RestaurantProductCategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("YnovEat.Domain.ModelsAggregate.RestaurantAggregate.RestaurantProduct", "RestaurantProduct")
+                        .WithMany("Restaurant_RestaurantProductCategory_Links")
+                        .HasForeignKey("RestaurantProductId")
+                        .HasConstraintName("FK_RestaurantProduct_RestaurantProductCategory_Links_Restauran~1")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("RestaurantProduct");
+
+                    b.Navigation("RestaurantProductCategory");
+                });
+
+            modelBuilder.Entity("YnovEat.Domain.ModelsAggregate.RestaurantAggregate.Restaurant_RestaurantCategory", b =>
                 {
                     b.HasOne("YnovEat.Domain.ModelsAggregate.RestaurantAggregate.RestaurantCategory", "RestaurantCategory")
-                        .WithMany("RestaurantCategoryLinks")
+                        .WithMany("Restaurant_RestaurantCategory_Links")
                         .HasForeignKey("RestaurantCategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("YnovEat.Domain.ModelsAggregate.RestaurantAggregate.Restaurant", "Restaurant")
-                        .WithMany("RestaurantCategoryLinks")
+                        .WithMany("Restaurant_RestaurantCategory_Links")
                         .HasForeignKey("RestaurantId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -730,9 +816,9 @@ namespace YnovEat.Api.Migrations
                     b.Navigation("OpeningHours");
                 });
 
-            modelBuilder.Entity("YnovEat.Domain.ModelsAggregate.RestaurantAggregate.ProductCategory", b =>
+            modelBuilder.Entity("YnovEat.Domain.ModelsAggregate.RestaurantAggregate.Order", b =>
                 {
-                    b.Navigation("Customer");
+                    b.Navigation("CustomerProducts");
                 });
 
             modelBuilder.Entity("YnovEat.Domain.ModelsAggregate.RestaurantAggregate.Restaurant", b =>
@@ -741,20 +827,31 @@ namespace YnovEat.Api.Migrations
 
                     b.Navigation("DaysOpeningHours");
 
+                    b.Navigation("ProductCategories");
+
                     b.Navigation("Products");
 
-                    b.Navigation("RestaurantCategoryLinks");
+                    b.Navigation("Restaurant_RestaurantCategory_Links");
 
                     b.Navigation("Users");
                 });
 
             modelBuilder.Entity("YnovEat.Domain.ModelsAggregate.RestaurantAggregate.RestaurantCategory", b =>
                 {
-                    b.Navigation("RestaurantCategoryLinks");
+                    b.Navigation("Restaurant_RestaurantCategory_Links");
+                });
+
+            modelBuilder.Entity("YnovEat.Domain.ModelsAggregate.RestaurantAggregate.RestaurantProduct", b =>
+                {
+                    b.Navigation("Restaurant_RestaurantProductCategory_Links");
+
+                    b.Navigation("RestaurantProductCategories");
                 });
 
             modelBuilder.Entity("YnovEat.Domain.ModelsAggregate.UserAggregate.User", b =>
                 {
+                    b.Navigation("Customer");
+
                     b.Navigation("Restaurant");
                 });
 #pragma warning restore 612, 618
