@@ -1,6 +1,6 @@
 namespace YnovEat.Domain.ModelsAggregate.RestaurantAggregate
 {
-    public class RestaurantCategoryLink
+    public class Restaurant_RestaurantCategory
     {
         public int RestaurantId { get; set; }
         public virtual Restaurant Restaurant { get; set; }

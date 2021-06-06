@@ -30,7 +30,7 @@ namespace YnovEat.Application.DTO.UserModels
             PhoneNumber = entity.PhoneNumber;
             EmailConfirmed = entity.EmailConfirmed;
             PhoneNumberConfirmed = entity.PhoneNumberConfirmed;
-            IsActivated = entity.IsActivated;
+            IsActivated = entity.IsAccountActivated;
         }
     }
 }

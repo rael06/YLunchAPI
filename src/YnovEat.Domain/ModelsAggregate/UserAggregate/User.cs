@@ -1,22 +1,24 @@
 using System;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.AspNetCore.Identity;
+using YnovEat.Domain.ModelsAggregate.CustomerAggregate;
 using YnovEat.Domain.ModelsAggregate.RestaurantAggregate;
 
 namespace YnovEat.Domain.ModelsAggregate.UserAggregate
 {
-    public class User  : IdentityUser
+    public class User : IdentityUser
     {
-        public string Firstname { get; set; }
-        public string Lastname { get; set; }
-        public DateTime CreationDateTime { get; set; }
-        public DateTime ConfirmationDateTime { get; set; }
-        public DateTime LastUpdateDateTime { get; set; }
-        public DateTime PhoneNumberConfirmationDateTime { get; set; }
-        public DateTime EmailConfirmationDateTime { get; set; }
-        public bool IsActivated { get; set; }
-
-        public virtual ICollection<Restaurant> Restaurants { get; set; } = new List<Restaurant>();
+        [Required] public string Firstname { get; set; }
+        [Required] public string Lastname { get; set; }
+        [Required] public DateTime CreationDateTime { get; set; }
+        public DateTime? ConfirmationDateTime { get; set; }
+        public DateTime? LastUpdateDateTime { get; set; }
+        public DateTime? PhoneNumberConfirmationDateTime { get; set; }
+        public DateTime? EmailConfirmationDateTime { get; set; }
+        [NotMapped] public bool IsAccountConfirmed => ConfirmationDateTime != null;
+        public bool IsAccountActivated { get; set; }
+        public virtual Restaurant Restaurant { get; set; }
+        public virtual Customer Customer { get; set; }
     }
 }

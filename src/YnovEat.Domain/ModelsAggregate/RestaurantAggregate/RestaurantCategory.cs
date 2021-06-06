@@ -1,12 +1,14 @@
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace YnovEat.Domain.ModelsAggregate.RestaurantAggregate
 {
-    public class Category
+    public class RestaurantCategory
     {
         public int Id { get; set; }
-        public string Name { get; set; }
+        [Required] public string Name { get; set; }
 
-        public ICollection<RestaurantCategoryLink> RestaurantCategoryLinks { get; set; }
+        public ICollection<Restaurant_RestaurantCategory> Restaurant_RestaurantCategory_Links { get; set; } =
+            new List<Restaurant_RestaurantCategory>();
     }
 }

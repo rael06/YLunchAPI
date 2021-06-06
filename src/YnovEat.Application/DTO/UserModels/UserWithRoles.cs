@@ -4,7 +4,7 @@ using YnovEat.Domain.ModelsAggregate.UserAggregate;
 
 namespace YnovEat.Application.DTO.UserModels
 {
-    public class ApplicationUserWithRoles
+    public class UserWithRoles
     {
         public string Id { get; set; }
         public string UserName { get; set; }
@@ -22,7 +22,7 @@ namespace YnovEat.Application.DTO.UserModels
         public DateTime EmailConfirmationDateTime { get; set; }
         public IList<string> Roles { get; set; }
 
-        public ApplicationUserWithRoles(User user, IList<string> roles)
+        public UserWithRoles(User user, IList<string> roles)
         {
             FromEntity(user);
             Roles = roles;
