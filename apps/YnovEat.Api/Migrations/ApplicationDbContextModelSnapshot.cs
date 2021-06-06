@@ -161,7 +161,7 @@ namespace YnovEat.Api.Migrations
 
                     b.HasIndex("RestaurantId");
 
-                    b.ToTable("ClosingDate");
+                    b.ToTable("ClosingDates");
                 });
 
             modelBuilder.Entity("YnovEat.Domain.ModelsAggregate.RestaurantAggregate.DayOpeningHours", b =>
@@ -199,7 +199,7 @@ namespace YnovEat.Api.Migrations
 
                     b.HasIndex("DayOpeningHoursId");
 
-                    b.ToTable("OpeningHour");
+                    b.ToTable("OpeningHours");
                 });
 
             modelBuilder.Entity("YnovEat.Domain.ModelsAggregate.RestaurantAggregate.Restaurant", b =>
@@ -238,6 +238,9 @@ namespace YnovEat.Api.Migrations
                     b.Property<DateTime>("LastUpdateDateTime")
                         .HasColumnType("datetime(6)");
 
+                    b.Property<string>("MainAdminId")
+                        .HasColumnType("varchar(255)");
+
                     b.Property<string>("Name")
                         .HasColumnType("longtext");
 
@@ -253,15 +256,13 @@ namespace YnovEat.Api.Migrations
                     b.Property<string>("StreetNumber")
                         .HasColumnType("longtext");
 
-                    b.Property<string>("UserId")
-                        .HasColumnType("varchar(255)");
-
                     b.Property<string>("ZipCode")
                         .HasColumnType("longtext");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("MainAdminId")
+                        .IsUnique();
 
                     b.ToTable("Restaurants");
                 });
@@ -332,6 +333,9 @@ namespace YnovEat.Api.Migrations
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("tinyint(1)");
 
+                    b.Property<int?>("RestaurantId")
+                        .HasColumnType("int");
+
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("longtext");
 
@@ -350,6 +354,8 @@ namespace YnovEat.Api.Migrations
                     b.HasIndex("NormalizedUserName")
                         .IsUnique()
                         .HasDatabaseName("UserNameIndex");
+
+                    b.HasIndex("RestaurantId");
 
                     b.ToTable("AspNetUsers");
                 });
@@ -434,11 +440,18 @@ namespace YnovEat.Api.Migrations
 
             modelBuilder.Entity("YnovEat.Domain.ModelsAggregate.RestaurantAggregate.Restaurant", b =>
                 {
-                    b.HasOne("YnovEat.Domain.ModelsAggregate.UserAggregate.User", "User")
-                        .WithMany("Restaurants")
-                        .HasForeignKey("UserId");
+                    b.HasOne("YnovEat.Domain.ModelsAggregate.UserAggregate.User", "MainAdmin")
+                        .WithOne("Restaurant")
+                        .HasForeignKey("YnovEat.Domain.ModelsAggregate.RestaurantAggregate.Restaurant", "MainAdminId");
 
-                    b.Navigation("User");
+                    b.Navigation("MainAdmin");
+                });
+
+            modelBuilder.Entity("YnovEat.Domain.ModelsAggregate.UserAggregate.User", b =>
+                {
+                    b.HasOne("YnovEat.Domain.ModelsAggregate.RestaurantAggregate.Restaurant", null)
+                        .WithMany("Users")
+                        .HasForeignKey("RestaurantId");
                 });
 
             modelBuilder.Entity("YnovEat.Domain.ModelsAggregate.RestaurantAggregate.DayOpeningHours", b =>
@@ -451,11 +464,13 @@ namespace YnovEat.Api.Migrations
                     b.Navigation("ClosingDates");
 
                     b.Navigation("DaysOpeningHours");
+
+                    b.Navigation("Users");
                 });
 
             modelBuilder.Entity("YnovEat.Domain.ModelsAggregate.UserAggregate.User", b =>
                 {
-                    b.Navigation("Restaurants");
+                    b.Navigation("Restaurant");
                 });
 #pragma warning restore 612, 618
         }
