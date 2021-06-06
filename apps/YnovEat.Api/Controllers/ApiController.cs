@@ -53,7 +53,7 @@ namespace YnovEat.Api.Controllers
         public string TryAsAuthenticatedCustomer() =>
             "Api is running, and you're a " + UserRoles.Customer;
 
-        protected async Task<ApplicationUserWithRoles> GetAuthenticatedUser()
+        protected async Task<UserWithRoles> GetAuthenticatedUser()
         {
             var userName = User.Identity?.Name;
             if (userName == null)
@@ -61,7 +61,7 @@ namespace YnovEat.Api.Controllers
 
             var user = await UserManager.FindByNameAsync(userName);
             var userRoles = await UserManager.GetRolesAsync(user);
-            return new ApplicationUserWithRoles(user, userRoles);
+            return new UserWithRoles(user, userRoles);
         }
 
         protected async Task<UserDto> GetAuthenticatedUserDto()
@@ -71,7 +71,6 @@ namespace YnovEat.Api.Controllers
                 return null;
 
             var user = await UserManager.FindByNameAsync(userName);
-            var userRoles = await UserManager.GetRolesAsync(user);
             return new UserDto(user);
         }
     }

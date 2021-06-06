@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using YnovEat.Infrastructure.Database;
 
 namespace YnovEat.Api.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210606210532_restaurant_step_20")]
+    partial class restaurant_step_20
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -151,7 +153,7 @@ namespace YnovEat.Api.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<DateTime?>("CreationDatetime")
+                    b.Property<DateTime>("CreationDatetime")
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("UserId")
@@ -166,7 +168,7 @@ namespace YnovEat.Api.Migrations
 
             modelBuilder.Entity("YnovEat.Domain.ModelsAggregate.CustomerAggregate.Customer", b =>
                 {
-                    b.Property<string>("UserId")
+                    b.Property<string>("Id")
                         .HasColumnType("varchar(255)");
 
                     b.Property<int?>("CartId")
@@ -175,7 +177,7 @@ namespace YnovEat.Api.Migrations
                     b.Property<int?>("CustomerCategoryId")
                         .HasColumnType("int");
 
-                    b.HasKey("UserId");
+                    b.HasKey("Id");
 
                     b.HasIndex("CartId");
 
@@ -191,7 +193,6 @@ namespace YnovEat.Api.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.HasKey("Id");
@@ -212,11 +213,9 @@ namespace YnovEat.Api.Migrations
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<int?>("OrderId")
@@ -300,7 +299,10 @@ namespace YnovEat.Api.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<string>("CustomerId")
+                    b.Property<int>("CustomerId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("CustomerId1")
                         .HasColumnType("varchar(255)");
 
                     b.Property<bool>("IsPassed")
@@ -308,7 +310,7 @@ namespace YnovEat.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CustomerId");
+                    b.HasIndex("CustomerId1");
 
                     b.ToTable("Orders");
                 });
@@ -323,7 +325,6 @@ namespace YnovEat.Api.Migrations
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<int?>("OrderId")
@@ -408,7 +409,6 @@ namespace YnovEat.Api.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.HasKey("Id");
@@ -426,17 +426,15 @@ namespace YnovEat.Api.Migrations
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<DateTime?>("ExpirationDateTime")
+                    b.Property<DateTime>("ExpirationDateTime")
                         .HasColumnType("datetime(6)");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("tinyint(1)");
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<double>("Price")
@@ -462,7 +460,6 @@ namespace YnovEat.Api.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<int?>("RestaurantId")
@@ -522,7 +519,7 @@ namespace YnovEat.Api.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("longtext");
 
-                    b.Property<DateTime?>("ConfirmationDateTime")
+                    b.Property<DateTime>("ConfirmationDateTime")
                         .HasColumnType("datetime(6)");
 
                     b.Property<DateTime>("CreationDateTime")
@@ -532,24 +529,22 @@ namespace YnovEat.Api.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("varchar(256)");
 
-                    b.Property<DateTime?>("EmailConfirmationDateTime")
+                    b.Property<DateTime>("EmailConfirmationDateTime")
                         .HasColumnType("datetime(6)");
 
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("tinyint(1)");
 
                     b.Property<string>("Firstname")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<bool>("IsAccountActivated")
+                    b.Property<bool>("IsActivated")
                         .HasColumnType("tinyint(1)");
 
-                    b.Property<DateTime?>("LastUpdateDateTime")
+                    b.Property<DateTime>("LastUpdateDateTime")
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("Lastname")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<bool>("LockoutEnabled")
@@ -572,7 +567,7 @@ namespace YnovEat.Api.Migrations
                     b.Property<string>("PhoneNumber")
                         .HasColumnType("longtext");
 
-                    b.Property<DateTime?>("PhoneNumberConfirmationDateTime")
+                    b.Property<DateTime>("PhoneNumberConfirmationDateTime")
                         .HasColumnType("datetime(6)");
 
                     b.Property<bool>("PhoneNumberConfirmed")
@@ -726,7 +721,7 @@ namespace YnovEat.Api.Migrations
                 {
                     b.HasOne("YnovEat.Domain.ModelsAggregate.CustomerAggregate.Customer", "Customer")
                         .WithMany("Orders")
-                        .HasForeignKey("CustomerId");
+                        .HasForeignKey("CustomerId1");
 
                     b.Navigation("Customer");
                 });
