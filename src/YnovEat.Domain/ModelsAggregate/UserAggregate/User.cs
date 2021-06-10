@@ -16,9 +16,9 @@ namespace YnovEat.Domain.ModelsAggregate.UserAggregate
         public DateTime? LastUpdateDateTime { get; set; }
         public DateTime? PhoneNumberConfirmationDateTime { get; set; }
         public DateTime? EmailConfirmationDateTime { get; set; }
-        [NotMapped] public bool IsAccountConfirmed => ConfirmationDateTime != null;
+        public bool IsAccountConfirmed => ConfirmationDateTime != null;
         public bool IsAccountActivated { get; set; }
-        public virtual Restaurant Restaurant { get; set; }
+        public virtual RestaurantUser RestaurantUser { get; set; }
         public virtual Customer Customer { get; set; }
     }
 }

@@ -1,4 +1,13 @@
-$HEADER$namespace $NAMESPACE$
+namespace DomainShared.RestaurantAggregate.Enums
 {
-  public enum $ENUM$ {$END$}
+    public enum ProductFamily
+    {
+        Starter,
+        Main,
+        Dessert,
+        Drink,
+        Menu,
+        Sandwich,
+        Daily
+    }
 }

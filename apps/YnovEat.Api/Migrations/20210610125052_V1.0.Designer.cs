@@ -9,8 +9,8 @@ using YnovEat.Infrastructure.Database;
 namespace YnovEat.Api.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20210610105923_restaurant_step_36")]
-    partial class restaurant_step_36
+    [Migration("20210610125052_V1.0")]
+    partial class V10
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -180,29 +180,12 @@ namespace YnovEat.Api.Migrations
                     b.Property<string>("UserId")
                         .HasColumnType("varchar(255)");
 
-                    b.Property<int?>("CustomerCategoryId")
+                    b.Property<int>("CustomerFamily")
                         .HasColumnType("int");
 
                     b.HasKey("UserId");
 
-                    b.HasIndex("CustomerCategoryId");
-
                     b.ToTable("Customers");
-                });
-
-            modelBuilder.Entity("YnovEat.Domain.ModelsAggregate.CustomerAggregate.CustomerCategory", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("CustomerCategories");
                 });
 
             modelBuilder.Entity("YnovEat.Domain.ModelsAggregate.CustomerAggregate.CustomerProduct", b =>
@@ -268,7 +251,7 @@ namespace YnovEat.Api.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<int>("DayIndex")
+                    b.Property<int>("DayOfWeek")
                         .HasColumnType("int");
 
                     b.Property<int?>("RestaurantId")
@@ -383,7 +366,7 @@ namespace YnovEat.Api.Migrations
                     b.Property<bool>("IsPublished")
                         .HasColumnType("tinyint(1)");
 
-                    b.Property<DateTime>("LastUpdateDateTime")
+                    b.Property<DateTime?>("LastUpdateDateTime")
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("Name")
@@ -430,16 +413,6 @@ namespace YnovEat.Api.Migrations
                     b.ToTable("RestaurantCategories");
                 });
 
-            modelBuilder.Entity("YnovEat.Domain.ModelsAggregate.RestaurantAggregate.RestaurantOwner", b =>
-                {
-                    b.Property<string>("UserId")
-                        .HasColumnType("varchar(255)");
-
-                    b.HasKey("UserId");
-
-                    b.ToTable("RestaurantOwners");
-                });
-
             modelBuilder.Entity("YnovEat.Domain.ModelsAggregate.RestaurantAggregate.RestaurantProduct", b =>
                 {
                     b.Property<int>("Id")
@@ -450,7 +423,6 @@ namespace YnovEat.Api.Migrations
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<DateTime?>("ExpirationDateTime")
@@ -505,6 +477,27 @@ namespace YnovEat.Api.Migrations
                     b.HasIndex("RestaurantProductId");
 
                     b.ToTable("RestaurantProductTags");
+                });
+
+            modelBuilder.Entity("YnovEat.Domain.ModelsAggregate.RestaurantAggregate.RestaurantUser", b =>
+                {
+                    b.Property<string>("UserId")
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<int?>("RestaurantId")
+                        .HasColumnType("int");
+
+                    b.HasKey("UserId");
+
+                    b.HasIndex("RestaurantId");
+
+                    b.ToTable("RestaurantUser");
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("RestaurantUser");
                 });
 
             modelBuilder.Entity("YnovEat.Domain.ModelsAggregate.UserAggregate.User", b =>
@@ -575,9 +568,6 @@ namespace YnovEat.Api.Migrations
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("tinyint(1)");
 
-                    b.Property<int?>("RestaurantId")
-                        .HasColumnType("int");
-
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("longtext");
 
@@ -597,9 +587,14 @@ namespace YnovEat.Api.Migrations
                         .IsUnique()
                         .HasDatabaseName("UserNameIndex");
 
-                    b.HasIndex("RestaurantId");
-
                     b.ToTable("AspNetUsers");
+                });
+
+            modelBuilder.Entity("YnovEat.Domain.ModelsAggregate.RestaurantAggregate.RestaurantOwner", b =>
+                {
+                    b.HasBaseType("YnovEat.Domain.ModelsAggregate.RestaurantAggregate.RestaurantUser");
+
+                    b.HasDiscriminator().HasValue("RestaurantOwner");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -681,17 +676,11 @@ namespace YnovEat.Api.Migrations
 
             modelBuilder.Entity("YnovEat.Domain.ModelsAggregate.CustomerAggregate.Customer", b =>
                 {
-                    b.HasOne("YnovEat.Domain.ModelsAggregate.CustomerAggregate.CustomerCategory", "CustomerCategory")
-                        .WithMany("Customer")
-                        .HasForeignKey("CustomerCategoryId");
-
                     b.HasOne("YnovEat.Domain.ModelsAggregate.UserAggregate.User", "User")
                         .WithOne("Customer")
                         .HasForeignKey("YnovEat.Domain.ModelsAggregate.CustomerAggregate.Customer", "UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("CustomerCategory");
 
                     b.Navigation("User");
                 });
@@ -785,19 +774,22 @@ namespace YnovEat.Api.Migrations
                         .HasForeignKey("RestaurantProductId");
                 });
 
+            modelBuilder.Entity("YnovEat.Domain.ModelsAggregate.RestaurantAggregate.RestaurantUser", b =>
+                {
+                    b.HasOne("YnovEat.Domain.ModelsAggregate.RestaurantAggregate.Restaurant", null)
+                        .WithMany("RestaurantUsers")
+                        .HasForeignKey("RestaurantId");
+                });
+
             modelBuilder.Entity("YnovEat.Domain.ModelsAggregate.UserAggregate.User", b =>
                 {
-                    b.HasOne("YnovEat.Domain.ModelsAggregate.RestaurantAggregate.RestaurantOwner", "RestaurantOwner")
+                    b.HasOne("YnovEat.Domain.ModelsAggregate.RestaurantAggregate.RestaurantUser", "RestaurantUser")
                         .WithOne("User")
                         .HasForeignKey("YnovEat.Domain.ModelsAggregate.UserAggregate.User", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("YnovEat.Domain.ModelsAggregate.RestaurantAggregate.Restaurant", null)
-                        .WithMany("Employees")
-                        .HasForeignKey("RestaurantId");
-
-                    b.Navigation("RestaurantOwner");
+                    b.Navigation("RestaurantUser");
                 });
 
             modelBuilder.Entity("YnovEat.Domain.ModelsAggregate.CustomerAggregate.Cart", b =>
@@ -810,11 +802,6 @@ namespace YnovEat.Api.Migrations
                     b.Navigation("Cart");
 
                     b.Navigation("Orders");
-                });
-
-            modelBuilder.Entity("YnovEat.Domain.ModelsAggregate.CustomerAggregate.CustomerCategory", b =>
-                {
-                    b.Navigation("Customer");
                 });
 
             modelBuilder.Entity("YnovEat.Domain.ModelsAggregate.RestaurantAggregate.DayOpeningHours", b =>
@@ -837,16 +824,9 @@ namespace YnovEat.Api.Migrations
 
                     b.Navigation("DaysOpeningHours");
 
-                    b.Navigation("Employees");
-
                     b.Navigation("Products");
-                });
 
-            modelBuilder.Entity("YnovEat.Domain.ModelsAggregate.RestaurantAggregate.RestaurantOwner", b =>
-                {
-                    b.Navigation("Restaurant");
-
-                    b.Navigation("User");
+                    b.Navigation("RestaurantUsers");
                 });
 
             modelBuilder.Entity("YnovEat.Domain.ModelsAggregate.RestaurantAggregate.RestaurantProduct", b =>
@@ -854,9 +834,19 @@ namespace YnovEat.Api.Migrations
                     b.Navigation("RestaurantProductTags");
                 });
 
+            modelBuilder.Entity("YnovEat.Domain.ModelsAggregate.RestaurantAggregate.RestaurantUser", b =>
+                {
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("YnovEat.Domain.ModelsAggregate.UserAggregate.User", b =>
                 {
                     b.Navigation("Customer");
+                });
+
+            modelBuilder.Entity("YnovEat.Domain.ModelsAggregate.RestaurantAggregate.RestaurantOwner", b =>
+                {
+                    b.Navigation("Restaurant");
                 });
 #pragma warning restore 612, 618
         }

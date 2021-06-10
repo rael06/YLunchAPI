@@ -6,9 +6,9 @@ namespace YnovEat.Domain.ModelsAggregate.RestaurantAggregate
     public class RestaurantCategory
     {
         public int Id { get; set; }
-        [Required] public string Name { get; set; }
+        public string Name { get; set; }
 
-        public ICollection<Restaurant_RestaurantCategory> Restaurant_RestaurantCategory_Links { get; set; } =
-            new List<Restaurant_RestaurantCategory>();
+        public ICollection<Restaurant> Restaurants { get; set; } =
+            new List<Restaurant>();
     }
 }

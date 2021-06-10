@@ -1,4 +1,13 @@
-$HEADER$namespace $NAMESPACE$
+namespace DomainShared.RestaurantAggregate.Enums
 {
-  public class $CLASS$ {$END$}
+    public enum OrderState
+    {
+        Idling,
+        Acknowledged,
+        InPreparation,
+        Ready,
+        Canceled,
+        Rejected,
+        Delivered
+    }
 }

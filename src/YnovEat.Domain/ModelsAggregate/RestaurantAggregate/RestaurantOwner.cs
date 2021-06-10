@@ -1,4 +1,10 @@
-$HEADER$namespace $NAMESPACE$
+using System.Collections.Generic;
+using YnovEat.Domain.ModelsAggregate.CustomerAggregate;
+using YnovEat.Domain.ModelsAggregate.UserAggregate;
+
+namespace YnovEat.Domain.ModelsAggregate.RestaurantAggregate
 {
-  public class $CLASS$ {$END$}
+    public class RestaurantOwner : RestaurantUser
+    {
+    }
 }
