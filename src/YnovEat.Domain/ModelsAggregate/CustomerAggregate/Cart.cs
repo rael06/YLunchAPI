@@ -6,7 +6,7 @@ namespace YnovEat.Domain.ModelsAggregate.CustomerAggregate
 {
     public class Cart
     {
-        public string CustomerId { get; set; }
+        public string Id { get; set; }
         public DateTime? FulfilmentDatetime { get; set; }
         public virtual Customer Customer { get; set; }
         public virtual ICollection<CustomerProduct> Products { get; set; } = new List<CustomerProduct>();

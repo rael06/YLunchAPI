@@ -108,30 +108,23 @@ namespace YnovEat.Infrastructure.Database
                     .HasForeignKey<User>(u => u.Id);
             });
 
-            builder.Entity<Cart>(x =>
-            {
-                x.HasKey(c => c.CustomerId);
-                x.HasOne(c => c.Customer)
-                    .WithOne(c => c.Cart)
-                    .HasForeignKey<Cart>(c => c.CustomerId);
-            });
-
             builder.Entity<Customer>(x =>
             {
-                x.HasKey(c => c.UserId);
-
                 x.HasOne(c => c.User)
                     .WithOne(u => u.Customer)
-                    .HasForeignKey<Customer>(c => c.UserId);
+                    .HasForeignKey<User>(c => c.Id);
 
                 x.HasMany(c => c.Orders)
                     .WithOne(o => o.Customer);
 
-                x.HasOne(c => c.Cart)
-                    .WithOne(c => c.Customer)
-                    .HasForeignKey<Customer>(c => c.CartId);
-
                 x.Property(c => c.CustomerFamily).IsRequired();
+            });
+
+            builder.Entity<Cart>(x =>
+            {
+                x.HasOne(c => c.Customer)
+                    .WithOne(u => u.Cart)
+                    .HasPrincipalKey<Customer>(c => c.Id);
             });
 
             builder.Entity<Order>(x =>

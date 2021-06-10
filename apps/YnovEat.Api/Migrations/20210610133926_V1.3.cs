@@ -2,20 +2,24 @@
 
 namespace YnovEat.Api.Migrations
 {
-    public partial class V14 : Migration
+    public partial class V13 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
-                name: "FK_Carts_Customers_CustomerId",
+                name: "FK_Carts_Customers_Id",
                 table: "Carts");
 
-            migrationBuilder.AddColumn<string>(
+            migrationBuilder.AlterColumn<string>(
                 name: "CartId",
                 table: "Customers",
                 type: "varchar(255)",
-                nullable: true)
-                .Annotation("MySql:CharSet", "utf8mb4");
+                nullable: true,
+                oldClrType: typeof(string),
+                oldType: "longtext",
+                oldNullable: true)
+                .Annotation("MySql:CharSet", "utf8mb4")
+                .OldAnnotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Customers_CartId",
@@ -28,7 +32,7 @@ namespace YnovEat.Api.Migrations
                 table: "Customers",
                 column: "CartId",
                 principalTable: "Carts",
-                principalColumn: "CustomerId",
+                principalColumn: "Id",
                 onDelete: ReferentialAction.Restrict);
         }
 
@@ -42,16 +46,23 @@ namespace YnovEat.Api.Migrations
                 name: "IX_Customers_CartId",
                 table: "Customers");
 
-            migrationBuilder.DropColumn(
+            migrationBuilder.AlterColumn<string>(
                 name: "CartId",
-                table: "Customers");
+                table: "Customers",
+                type: "longtext",
+                nullable: true,
+                oldClrType: typeof(string),
+                oldType: "varchar(255)",
+                oldNullable: true)
+                .Annotation("MySql:CharSet", "utf8mb4")
+                .OldAnnotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.AddForeignKey(
-                name: "FK_Carts_Customers_CustomerId",
+                name: "FK_Carts_Customers_Id",
                 table: "Carts",
-                column: "CustomerId",
+                column: "Id",
                 principalTable: "Customers",
-                principalColumn: "UserId",
+                principalColumn: "Id",
                 onDelete: ReferentialAction.Cascade);
         }
     }
