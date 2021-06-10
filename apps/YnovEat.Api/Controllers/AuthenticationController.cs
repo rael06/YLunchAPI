@@ -182,7 +182,9 @@ namespace YnovEat.Api.Controllers
             {
                 Email = model.Email,
                 SecurityStamp = Guid.NewGuid().ToString(),
-                UserName = model.Username
+                UserName = model.Username,
+                Lastname = model.Lastname,
+                Firstname = model.Firstname
             };
             var result = await UserManager.CreateAsync(user, model.Password);
             if (!result.Succeeded)
@@ -216,7 +218,9 @@ namespace YnovEat.Api.Controllers
             {
                 Email = model.Email,
                 SecurityStamp = Guid.NewGuid().ToString(),
-                UserName = model.Username
+                UserName = model.Username,
+                Lastname = model.Lastname,
+                Firstname = model.Firstname
             };
             var result = await UserManager.CreateAsync(user, model.Password);
             if (!result.Succeeded)
