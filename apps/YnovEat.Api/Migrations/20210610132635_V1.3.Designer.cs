@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using YnovEat.Infrastructure.Database;
 
 namespace YnovEat.Api.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210610132635_V1.3")]
+    partial class V13
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -178,16 +180,10 @@ namespace YnovEat.Api.Migrations
                     b.Property<string>("UserId")
                         .HasColumnType("varchar(255)");
 
-                    b.Property<string>("CartId")
-                        .HasColumnType("varchar(255)");
-
                     b.Property<int>("CustomerFamily")
                         .HasColumnType("int");
 
                     b.HasKey("UserId");
-
-                    b.HasIndex("CartId")
-                        .IsUnique();
 
                     b.ToTable("Customers");
                 });
@@ -667,19 +663,24 @@ namespace YnovEat.Api.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("YnovEat.Domain.ModelsAggregate.CustomerAggregate.Cart", b =>
+                {
+                    b.HasOne("YnovEat.Domain.ModelsAggregate.CustomerAggregate.Customer", "Customer")
+                        .WithOne("Cart")
+                        .HasForeignKey("YnovEat.Domain.ModelsAggregate.CustomerAggregate.Cart", "CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Customer");
+                });
+
             modelBuilder.Entity("YnovEat.Domain.ModelsAggregate.CustomerAggregate.Customer", b =>
                 {
-                    b.HasOne("YnovEat.Domain.ModelsAggregate.CustomerAggregate.Cart", "Cart")
-                        .WithOne("Customer")
-                        .HasForeignKey("YnovEat.Domain.ModelsAggregate.CustomerAggregate.Customer", "CartId");
-
                     b.HasOne("YnovEat.Domain.ModelsAggregate.UserAggregate.User", "User")
                         .WithOne("Customer")
                         .HasForeignKey("YnovEat.Domain.ModelsAggregate.CustomerAggregate.Customer", "UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Cart");
 
                     b.Navigation("User");
                 });
@@ -793,13 +794,13 @@ namespace YnovEat.Api.Migrations
 
             modelBuilder.Entity("YnovEat.Domain.ModelsAggregate.CustomerAggregate.Cart", b =>
                 {
-                    b.Navigation("Customer");
-
                     b.Navigation("Products");
                 });
 
             modelBuilder.Entity("YnovEat.Domain.ModelsAggregate.CustomerAggregate.Customer", b =>
                 {
+                    b.Navigation("Cart");
+
                     b.Navigation("Orders");
                 });
 

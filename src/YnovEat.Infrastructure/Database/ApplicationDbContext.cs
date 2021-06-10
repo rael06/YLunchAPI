@@ -27,6 +27,13 @@ namespace YnovEat.Infrastructure.Database
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            builder.Entity<User>(x =>
+            {
+                x.Property(c => c.UserName).IsRequired();
+                x.Property(c => c.Firstname).IsRequired();
+                x.Property(c => c.Lastname).IsRequired();
+            });
+
             builder.Entity<ClosingDate>(x => { x.Property(c => c.ClosingDateTime).IsRequired(); });
 
             builder.Entity<DayOpeningHours>(x =>
@@ -119,6 +126,10 @@ namespace YnovEat.Infrastructure.Database
 
                 x.HasMany(c => c.Orders)
                     .WithOne(o => o.Customer);
+
+                x.HasOne(c => c.Cart)
+                    .WithOne(c => c.Customer)
+                    .HasForeignKey<Customer>(c => c.CartId);
 
                 x.Property(c => c.CustomerFamily).IsRequired();
             });

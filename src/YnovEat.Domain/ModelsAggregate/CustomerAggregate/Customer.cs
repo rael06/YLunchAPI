@@ -8,6 +8,7 @@ namespace YnovEat.Domain.ModelsAggregate.CustomerAggregate
     public class Customer
     {
         public string UserId { get; set; }
+        public string CartId { get; set; }
         public CustomerFamily CustomerFamily { get; set; }
         public virtual User User { get; set; }
         public virtual Cart Cart { get; set; }
