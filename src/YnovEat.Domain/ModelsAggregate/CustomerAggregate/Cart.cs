@@ -10,5 +10,6 @@ namespace YnovEat.Domain.ModelsAggregate.CustomerAggregate
         public DateTime? FulfilmentDatetime { get; set; }
         public virtual Customer Customer { get; set; }
         public virtual ICollection<CustomerProduct> Products { get; set; } = new List<CustomerProduct>();
+        public bool IsEmpty => Products.Count == 0;
     }
 }

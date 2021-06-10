@@ -64,6 +64,14 @@ namespace YnovEat.Infrastructure.Database
                 x.Property(rp => rp.ProductFamily).IsRequired();
             });
 
+            builder.Entity<CustomerProduct>(x =>
+            {
+                x.Property(cp => cp.Name).IsRequired();
+                x.Property(cp => cp.Price).IsRequired();
+                x.Property(cp => cp.CreationDateTime).IsRequired();
+                x.Property(cp => cp.RestaurantProductId).IsRequired();
+            });
+
             builder.Entity<RestaurantProductTag>(x =>
             {
                 x.Property(rpt => rpt.Name).IsRequired();

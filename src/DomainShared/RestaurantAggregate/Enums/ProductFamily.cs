@@ -8,6 +8,7 @@ namespace DomainShared.RestaurantAggregate.Enums
         Drink,
         Menu,
         Sandwich,
-        Daily
+        Daily,
+        Other
     }
 }

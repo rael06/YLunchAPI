@@ -8,6 +8,7 @@ namespace DomainShared.RestaurantAggregate.Enums
         Ready,
         Canceled,
         Rejected,
-        Delivered
+        Delivered,
+        Other
     }
 }
