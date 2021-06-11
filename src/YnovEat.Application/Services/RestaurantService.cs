@@ -39,7 +39,8 @@ namespace YnovEat.Application.Services
                 StreetNumber = restaurantCreationDto.StreetNumber,
                 StreetName = restaurantCreationDto.StreetName,
                 AddressExtraInformation = restaurantCreationDto.AddressExtraInformation,
-                Owner = user.RestaurantUser as RestaurantOwner,
+                OwnerId = user.Id,
+                Owner = user.RestaurantUser as RestaurantOwner
             };
 
             await _restaurantRepository.CreateRestaurant(restaurant);

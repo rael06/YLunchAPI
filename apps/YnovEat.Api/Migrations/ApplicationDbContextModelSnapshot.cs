@@ -368,11 +368,11 @@ namespace YnovEat.Api.Migrations
                     b.Property<int?>("OrderLimitTimeInMinutes")
                         .HasColumnType("int");
 
+                    b.Property<string>("OwnerId")
+                        .HasColumnType("varchar(255)");
+
                     b.Property<string>("PhoneNumber")
                         .HasColumnType("longtext");
-
-                    b.Property<string>("RestaurantOwnerId")
-                        .HasColumnType("varchar(255)");
 
                     b.Property<string>("StreetName")
                         .HasColumnType("longtext");
@@ -385,7 +385,7 @@ namespace YnovEat.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("RestaurantOwnerId")
+                    b.HasIndex("OwnerId")
                         .IsUnique();
 
                     b.ToTable("Restaurants");
@@ -735,7 +735,7 @@ namespace YnovEat.Api.Migrations
                 {
                     b.HasOne("YnovEat.Domain.ModelsAggregate.RestaurantAggregate.RestaurantOwner", "Owner")
                         .WithOne("Restaurant")
-                        .HasForeignKey("YnovEat.Domain.ModelsAggregate.RestaurantAggregate.Restaurant", "RestaurantOwnerId");
+                        .HasForeignKey("YnovEat.Domain.ModelsAggregate.RestaurantAggregate.Restaurant", "OwnerId");
 
                     b.Navigation("Owner");
                 });

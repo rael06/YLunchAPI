@@ -9,8 +9,8 @@ using YnovEat.Infrastructure.Database;
 namespace YnovEat.Api.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20210611132822_V0.2")]
-    partial class V02
+    [Migration("20210611145114_V0.203")]
+    partial class V0203
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -334,6 +334,9 @@ namespace YnovEat.Api.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("varchar(255)");
 
+                    b.Property<string>("AddressExtraInformation")
+                        .HasColumnType("longtext");
+
                     b.Property<string>("City")
                         .HasColumnType("longtext");
 
@@ -346,11 +349,8 @@ namespace YnovEat.Api.Migrations
                     b.Property<string>("Email")
                         .HasColumnType("longtext");
 
-                    b.Property<DateTime>("EmailConfirmationDateTime")
+                    b.Property<DateTime?>("EmailConfirmationDateTime")
                         .HasColumnType("datetime(6)");
-
-                    b.Property<string>("ExtraInformation")
-                        .HasColumnType("longtext");
 
                     b.Property<bool>("IsEmailConfirmed")
                         .HasColumnType("tinyint(1)");
@@ -367,14 +367,14 @@ namespace YnovEat.Api.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("longtext");
 
-                    b.Property<int>("OrderLimitTimeInMinutes")
+                    b.Property<int?>("OrderLimitTimeInMinutes")
                         .HasColumnType("int");
+
+                    b.Property<string>("OwnerId")
+                        .HasColumnType("varchar(255)");
 
                     b.Property<string>("PhoneNumber")
                         .HasColumnType("longtext");
-
-                    b.Property<string>("RestaurantOwnerId")
-                        .HasColumnType("varchar(255)");
 
                     b.Property<string>("StreetName")
                         .HasColumnType("longtext");
@@ -387,7 +387,7 @@ namespace YnovEat.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("RestaurantOwnerId")
+                    b.HasIndex("OwnerId")
                         .IsUnique();
 
                     b.ToTable("Restaurants");
@@ -578,18 +578,6 @@ namespace YnovEat.Api.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
-            modelBuilder.Entity("YnovEat.Domain.ModelsAggregate.RestaurantAggregate.RestaurantEmployee", b =>
-                {
-                    b.HasBaseType("YnovEat.Domain.ModelsAggregate.RestaurantAggregate.RestaurantUser");
-
-                    b.Property<string>("RestaurantId1")
-                        .HasColumnType("varchar(255)");
-
-                    b.HasIndex("RestaurantId1");
-
-                    b.HasDiscriminator().HasValue("RestaurantEmployee");
-                });
-
             modelBuilder.Entity("YnovEat.Domain.ModelsAggregate.RestaurantAggregate.RestaurantOwner", b =>
                 {
                     b.HasBaseType("YnovEat.Domain.ModelsAggregate.RestaurantAggregate.RestaurantUser");
@@ -749,7 +737,7 @@ namespace YnovEat.Api.Migrations
                 {
                     b.HasOne("YnovEat.Domain.ModelsAggregate.RestaurantAggregate.RestaurantOwner", "Owner")
                         .WithOne("Restaurant")
-                        .HasForeignKey("YnovEat.Domain.ModelsAggregate.RestaurantAggregate.Restaurant", "RestaurantOwnerId");
+                        .HasForeignKey("YnovEat.Domain.ModelsAggregate.RestaurantAggregate.Restaurant", "OwnerId");
 
                     b.Navigation("Owner");
                 });
@@ -783,15 +771,6 @@ namespace YnovEat.Api.Migrations
                         .HasForeignKey("RestaurantId");
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("YnovEat.Domain.ModelsAggregate.RestaurantAggregate.RestaurantEmployee", b =>
-                {
-                    b.HasOne("YnovEat.Domain.ModelsAggregate.RestaurantAggregate.Restaurant", "Restaurant")
-                        .WithMany()
-                        .HasForeignKey("RestaurantId1");
-
-                    b.Navigation("Restaurant");
                 });
 
             modelBuilder.Entity("YnovEat.Domain.ModelsAggregate.CustomerAggregate.Cart", b =>

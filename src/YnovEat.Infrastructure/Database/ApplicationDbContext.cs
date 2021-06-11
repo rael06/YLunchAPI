@@ -92,7 +92,7 @@ namespace YnovEat.Infrastructure.Database
 
                 x.HasOne(r => r.Owner)
                     .WithOne(ru => ru.Restaurant)
-                    .HasForeignKey<Restaurant>(r => r.RestaurantOwnerId);
+                    .HasForeignKey<Restaurant>(r => r.OwnerId);
             });
 
             builder.Entity<RestaurantUser>(x =>

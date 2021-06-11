@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using YnovEat.Domain.ModelsAggregate.RestaurantAggregate;
 using YnovEat.Domain.ModelsAggregate.UserAggregate;
 using YnovEat.Domain.Services.Database.Repositories;
@@ -26,6 +27,8 @@ namespace YnovEat.Infrastructure.Database.Repositories
 
         public async Task CreateRestaurant(Restaurant restaurant)
         {
+            var owner = await _context.RestaurantUsers.FirstAsync(x => x.User.Id.Equals(restaurant.OwnerId));
+            owner.RestaurantId = restaurant.Id;
             await _context.Restaurants.AddAsync(restaurant);
             await _context.SaveChangesAsync();
         }
