@@ -3,13 +3,13 @@ using YnovEat.Domain.ModelsAggregate.RestaurantAggregate;
 
 namespace YnovEat.Domain.DTO.RestaurantModels.ClosingDatesModels
 {
-    public class ClosingDateDto : IDtoConverter<ClosingDate>
+    public class ClosingDateReadDto : IDtoConverter<ClosingDate>
     {
         public string Id { get; set; }
         public DateTime ClosingDateTime { get; set; }
         public string RestaurantId { get; set; }
 
-        public ClosingDateDto(ClosingDate closingDate)
+        public ClosingDateReadDto(ClosingDate closingDate)
         {
             FromEntity(closingDate);
         }

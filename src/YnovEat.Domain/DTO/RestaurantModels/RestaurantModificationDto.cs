@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using YnovEat.Domain.DTO.RestaurantModels.ClosingDatesModels;
 
 namespace YnovEat.Domain.DTO.RestaurantModels
 {
@@ -10,7 +12,6 @@ namespace YnovEat.Domain.DTO.RestaurantModels
         public string Name { get; set; }
         public string PhoneNumber { get; set; }
         public string Email { get; set; }
-        public int? OrderLimitTimeInMinutes { get; set; }
         public bool? IsOpen { get; set; }
 
         // address
@@ -21,5 +22,7 @@ namespace YnovEat.Domain.DTO.RestaurantModels
         public string StreetName { get; set; }
         public string AddressExtraInformation { get; set; }
         // !address
+
+        public ICollection<DateTime> ClosingDates { get; set; }
     }
 }

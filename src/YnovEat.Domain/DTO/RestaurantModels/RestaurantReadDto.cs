@@ -15,8 +15,8 @@ namespace YnovEat.Domain.DTO.RestaurantModels
         public string Email { get; set; }
         public bool IsEmailConfirmed { get; set; }
         public DateTime? EmailConfirmationDateTime { get; set; }
-        public int? OrderLimitTimeInMinutes { get; set; }
         public bool IsOpen { get; set; }
+        public bool IsCurrentlyOpenToOrder { get; set; }
         public bool IsPublished { get; set; }
         public DateTime CreationDateTime { get; set; }
         public DateTime? LastUpdateDateTime { get; set; }
@@ -32,7 +32,7 @@ namespace YnovEat.Domain.DTO.RestaurantModels
         // !address
 
         public string OwnerId { get; set; }
-        public ICollection<ClosingDateDto> ClosingDatesDto { get; set; }
+        public ICollection<ClosingDateReadDto> ClosingDatesReadDtoCollection { get; set; }
 
         public RestaurantReadDto(Restaurant restaurant)
         {
@@ -47,7 +47,6 @@ namespace YnovEat.Domain.DTO.RestaurantModels
             Email = entity.Email;
             IsEmailConfirmed = entity.IsEmailConfirmed;
             EmailConfirmationDateTime = entity.EmailConfirmationDateTime;
-            OrderLimitTimeInMinutes = entity.OrderLimitTimeInMinutes;
             IsOpen = entity.IsOpen;
             IsPublished = entity.IsPublished;
             CreationDateTime = entity.CreationDateTime;
@@ -59,7 +58,7 @@ namespace YnovEat.Domain.DTO.RestaurantModels
             StreetName = entity.StreetName;
             AddressExtraInformation = entity.AddressExtraInformation;
             OwnerId = entity.OwnerId;
-            ClosingDatesDto = entity.ClosingDates.Select(x => new ClosingDateDto(x)).ToList();
+            ClosingDatesReadDtoCollection = entity.ClosingDates.Select(x => new ClosingDateReadDto(x)).ToList();
         }
     }
 }

@@ -16,8 +16,12 @@ namespace YnovEat.Domain.ModelsAggregate.RestaurantAggregate
         public string Email { get; set; }
         public bool IsEmailConfirmed { get; set; }
         public DateTime? EmailConfirmationDateTime { get; set; }
-        public int? OrderLimitTimeInMinutes { get; set; }
         public bool IsOpen { get; set; }
+        public bool IsCurrentlyOpenToOrder =>
+            IsOpen &&
+            // Todo set also based on order limit time
+            !ClosingDates.Any(x => x.ClosingDateTime.Date.Equals(DateTime.Now.Date));
+
         public bool IsPublished { get; set; }
         public DateTime CreationDateTime { get; set; }
         public DateTime? LastUpdateDateTime { get; set; }
@@ -28,6 +32,7 @@ namespace YnovEat.Domain.ModelsAggregate.RestaurantAggregate
         public string City { get; set; }
         public string StreetNumber { get; set; }
         public string StreetName { get; set; }
+
         public string AddressExtraInformation { get; set; }
         // !address
 

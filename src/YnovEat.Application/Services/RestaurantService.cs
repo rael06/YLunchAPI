@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using YnovEat.Domain.DTO.RestaurantModels;
 using YnovEat.Domain.DTO.UserModels;
@@ -36,7 +37,6 @@ namespace YnovEat.Application.Services
                 Email = restaurantCreationDto.Email,
                 IsEmailConfirmed = false,
                 EmailConfirmationDateTime = null,
-                OrderLimitTimeInMinutes = restaurantCreationDto.OrderLimitTimeInMinutes,
                 IsOpen = restaurantCreationDto.IsOpen ?? false,
                 CreationDateTime = DateTime.Now,
                 ZipCode = restaurantCreationDto.ZipCode,
@@ -60,7 +60,6 @@ namespace YnovEat.Application.Services
             restaurant.Name = restaurantModificationDto.Name ?? restaurant.Name;
             restaurant.PhoneNumber = restaurantModificationDto.PhoneNumber ?? restaurant.PhoneNumber;
             restaurant.Email = restaurantModificationDto.Email ?? restaurant.Email;
-            restaurant.OrderLimitTimeInMinutes = restaurantModificationDto.OrderLimitTimeInMinutes ?? restaurant.OrderLimitTimeInMinutes;
             restaurant.IsOpen = restaurantModificationDto.IsOpen ?? restaurant.IsOpen;
             restaurant.ZipCode = restaurantModificationDto.ZipCode ?? restaurant.ZipCode;
             restaurant.Country = restaurantModificationDto.Country ?? restaurant.Country;
@@ -68,8 +67,15 @@ namespace YnovEat.Application.Services
             restaurant.StreetNumber = restaurantModificationDto.StreetNumber ?? restaurant.StreetNumber;
             restaurant.StreetName = restaurantModificationDto.StreetName ?? restaurant.StreetName;
             restaurant.AddressExtraInformation = restaurantModificationDto.AddressExtraInformation ?? restaurant.AddressExtraInformation;
+            restaurant.ClosingDates = restaurantModificationDto.ClosingDates.Select(dt => new ClosingDate
+            {
+                Id = Guid.NewGuid().ToString(),
+                RestaurantId = restaurant.Id,
+                ClosingDateTime = dt
+            }).ToList();
 
             var savedRestaurant = await _restaurantRepository.UpdateRestaurant(restaurant);
+
             return new RestaurantReadDto(savedRestaurant);
         }
     }

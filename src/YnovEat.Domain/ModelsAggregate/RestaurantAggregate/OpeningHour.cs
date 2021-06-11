@@ -7,6 +7,7 @@ namespace YnovEat.Domain.ModelsAggregate.RestaurantAggregate
         public string Id { get; set; }
         public int StartHourInMinutes { get; set; }
         public int EndHourInMinutes { get; set; }
+        public int? OrderTimeLimitInMinutes { get; set; }
         public virtual DayOpeningHours DayOpeningHours { get; set; }
     }
 }
