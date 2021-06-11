@@ -34,10 +34,10 @@ namespace YnovEat.Api.Controllers
         public async Task<IActionResult> Create([FromBody] RestaurantCreationDto model)
         {
             var currentUser = await GetAuthenticatedUser();
+
             try
             {
-                await _restaurantService.Create(model, currentUser);
-                return NoContent();
+                return Ok(await _restaurantService.Create(model, currentUser));
             }
             catch (Exception e)
             {

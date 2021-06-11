@@ -7,6 +7,6 @@ namespace YnovEat.Domain.Services.Database.Repositories
     public interface IRestaurantRepository
     {
         Task AddAdmin(User user);
-        Task CreateRestaurant(Restaurant restaurant);
+        Task<Restaurant> CreateRestaurant(Restaurant restaurant);
     }
 }

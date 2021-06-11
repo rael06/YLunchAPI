@@ -113,7 +113,7 @@ namespace YnovEat.Api.Controllers
 
         [Core.Authorize]
         [HttpGet("current-user")]
-        public async Task<ActionResult<UserDto>> GetCurrentUser()
+        public async Task<ActionResult<UserReadDto>> GetCurrentUser()
         {
             var currentUser = await GetAuthenticatedUserDto();
             if (currentUser == null)

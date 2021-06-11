@@ -3,7 +3,7 @@ using YnovEat.Domain.ModelsAggregate.UserAggregate;
 
 namespace YnovEat.Domain.DTO.UserModels
 {
-    public class UserDto : IDtoConverter<User>
+    public class UserReadDto : IDtoConverter<User>
     {
         public string Id { get; set; }
         public string UserName { get; set; }
@@ -15,7 +15,7 @@ namespace YnovEat.Domain.DTO.UserModels
         public bool PhoneNumberConfirmed { get; set; }
         public DateTime CreationDateTime { get; set; }
         public bool IsActivated { get; set; }
-        public UserDto(User user)
+        public UserReadDto(User user)
         {
             FromEntity(user);
         }

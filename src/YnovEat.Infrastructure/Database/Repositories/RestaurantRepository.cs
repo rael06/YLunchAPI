@@ -25,12 +25,13 @@ namespace YnovEat.Infrastructure.Database.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task CreateRestaurant(Restaurant restaurant)
+        public async Task<Restaurant> CreateRestaurant(Restaurant restaurant)
         {
             var owner = await _context.RestaurantUsers.FirstAsync(x => x.User.Id.Equals(restaurant.OwnerId));
             owner.RestaurantId = restaurant.Id;
             await _context.Restaurants.AddAsync(restaurant);
             await _context.SaveChangesAsync();
+            return restaurant;
         }
     }
 }

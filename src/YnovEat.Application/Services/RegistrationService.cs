@@ -23,7 +23,7 @@ namespace YnovEat.Application.Services
             _restaurantRepository = restaurantRepository;
         }
 
-        private async Task<UserDto> Register(RegisterSuperAdminDto registerUserDto)
+        private async Task<UserReadDto> Register(RegisterSuperAdminDto registerUserDto)
         {
             var user = new Domain.ModelsAggregate.UserAggregate.User
             {
@@ -36,10 +36,10 @@ namespace YnovEat.Application.Services
 
             await _userRepository.Register(user, registerUserDto.Password, UserRoles.SuperAdmin);
 
-            return new UserDto(user);
+            return new UserReadDto(user);
         }
 
-        private async Task<UserDto> Register(RegisterRestaurantAdminDto registerUserDto)
+        private async Task<UserReadDto> Register(RegisterRestaurantAdminDto registerUserDto)
         {
             var user = new Domain.ModelsAggregate.UserAggregate.User
             {
@@ -53,10 +53,10 @@ namespace YnovEat.Application.Services
             await _userRepository.Register(user, registerUserDto.Password, UserRoles.RestaurantAdmin);
             await _restaurantRepository.AddAdmin(user);
 
-            return new UserDto(user);
+            return new UserReadDto(user);
         }
 
-        private async Task<UserDto> Register(RegisterEmployeeDto registerUserDto)
+        private async Task<UserReadDto> Register(RegisterEmployeeDto registerUserDto)
         {
             var user = new Domain.ModelsAggregate.UserAggregate.User
             {
@@ -69,10 +69,10 @@ namespace YnovEat.Application.Services
 
             await _userRepository.Register(user, registerUserDto.Password, UserRoles.Employee);
 
-            return new UserDto(user);
+            return new UserReadDto(user);
         }
 
-        private async Task<UserDto> Register(RegisterCustomerDto registerUserDto)
+        private async Task<UserReadDto> Register(RegisterCustomerDto registerUserDto)
         {
             var user = new Domain.ModelsAggregate.UserAggregate.User
             {
@@ -87,10 +87,10 @@ namespace YnovEat.Application.Services
 
             await _userRepository.Register(user, registerUserDto.Password, UserRoles.Customer);
 
-            return new UserDto(user);
+            return new UserReadDto(user);
         }
 
-        public async Task<UserDto> Register<T>(T registerUserDto) where T : RegisterUserDto
+        public async Task<UserReadDto> Register<T>(T registerUserDto) where T : RegisterUserDto
         {
             return registerUserDto switch
             {

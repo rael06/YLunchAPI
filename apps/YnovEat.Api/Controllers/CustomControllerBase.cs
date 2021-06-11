@@ -32,14 +32,14 @@ namespace YnovEat.Api.Controllers
             return new CurrentUser(user, userRoles);
         }
 
-        protected async Task<UserDto> GetAuthenticatedUserDto()
+        protected async Task<UserReadDto> GetAuthenticatedUserDto()
         {
             var userName = User.Identity?.Name;
             if (userName == null)
                 return null;
 
             var user = await UserManager.FindByNameAsync(userName);
-            return new UserDto(user);
+            return new UserReadDto(user);
         }
     }
 }

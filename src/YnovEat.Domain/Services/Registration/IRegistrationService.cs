@@ -6,6 +6,6 @@ namespace YnovEat.Domain.Services.Registration
 {
     public interface IRegistrationService
     {
-        Task<UserDto> Register<T>(T registerUserDto) where T : RegisterUserDto;
+        Task<UserReadDto> Register<T>(T registerUserDto) where T : RegisterUserDto;
     }
 }

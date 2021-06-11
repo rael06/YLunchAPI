@@ -20,7 +20,7 @@ namespace YnovEat.Application.Services
             _restaurantRepository = restaurantRepository;
         }
 
-        public async Task Create(RestaurantCreationDto restaurantCreationDto, CurrentUser user)
+        public async Task<RestaurantReadDto> Create(RestaurantCreationDto restaurantCreationDto, CurrentUser user)
         {
             var restaurant = new Restaurant
             {
@@ -43,7 +43,8 @@ namespace YnovEat.Application.Services
                 Owner = user.RestaurantUser as RestaurantOwner
             };
 
-            await _restaurantRepository.CreateRestaurant(restaurant);
+            var savedRestaurant = await _restaurantRepository.CreateRestaurant(restaurant);
+            return new RestaurantReadDto(savedRestaurant);
         }
     }
 }
