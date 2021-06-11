@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace YnovEatApi.Core.UserModels
+namespace YnovEat.Domain.DTO.UserModels
 {
     public class UserLoginDto
     {

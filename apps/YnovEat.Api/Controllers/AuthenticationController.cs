@@ -6,7 +6,6 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -14,23 +13,25 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using YnovEat.Api.Core.Response;
 using YnovEat.Api.Core.Response.Errors;
-using YnovEat.Application.DTO.UserModels;
-using YnovEat.Application.DTO.UserModels.Registration;
-using YnovEat.Application.Services;
+using YnovEat.Domain.DTO.UserModels;
+using YnovEat.Domain.DTO.UserModels.Registration;
 using YnovEat.Domain.ModelsAggregate.UserAggregate;
 using YnovEat.Domain.ModelsAggregate.UserAggregate.Roles;
-using YnovEatApi.Core.UserModels;
+using YnovEat.Domain.Services.Registration;
 
 namespace YnovEat.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AuthenticationController : ApiController
+    public class AuthenticationController : CustomControllerBase
     {
         private readonly IRegistrationService _registrationService;
 
-        public AuthenticationController(UserManager<User> userManager, RoleManager<IdentityRole> roleManager,
-            IConfiguration configuration, IRegistrationService registrationService) : base(userManager, configuration)
+        public AuthenticationController(
+            UserManager<User> userManager,
+            IConfiguration configuration,
+            IRegistrationService registrationService
+        ) : base(userManager, configuration)
         {
             _registrationService = registrationService;
         }

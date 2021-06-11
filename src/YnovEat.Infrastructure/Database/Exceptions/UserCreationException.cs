@@ -1,6 +1,6 @@
 using System;
 
-namespace YnovEat.Application.Exceptions
+namespace YnovEat.Infrastructure.Database.Exceptions
 {
     public class UserCreationException : Exception
     {

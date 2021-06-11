@@ -1,112 +1,81 @@
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Identity;
-using YnovEat.Application.DTO.UserModels;
-using YnovEat.Application.DTO.UserModels.Registration;
 using YnovEat.Application.Exceptions;
-using YnovEat.Domain.ModelsAggregate.UserAggregate;
+using YnovEat.Domain.DTO.UserModels;
+using YnovEat.Domain.DTO.UserModels.Registration;
 using YnovEat.Domain.ModelsAggregate.UserAggregate.Roles;
+using YnovEat.Domain.Services.Database.Repositories;
+using YnovEat.Domain.Services.Registration;
 
 namespace YnovEat.Application.Services
 {
     public class RegistrationService : IRegistrationService
     {
-        private readonly UserManager<User> _userManager;
-        private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly IUserRepository _userRepository;
 
-        public RegistrationService(UserManager<User> userManager, RoleManager<IdentityRole> roleManager)
+        public RegistrationService(IUserRepository userRepository)
         {
-            _userManager = userManager;
-            _roleManager = roleManager;
+            _userRepository = userRepository;
         }
-
-        private async Task<UserDto> Register(RegisterSuperAdminDto registerSuperAdminDto)
+        private async Task<UserDto> Register(RegisterSuperAdminDto registerUserDto)
         {
-            var user = new User
+            var user = new Domain.ModelsAggregate.UserAggregate.User
             {
                 SecurityStamp = Guid.NewGuid().ToString(),
-                UserName = registerSuperAdminDto.Username,
-                Lastname = registerSuperAdminDto.Lastname,
-                Firstname = registerSuperAdminDto.Firstname
+                UserName = registerUserDto.Username,
+                Lastname = registerUserDto.Lastname,
+                Firstname = registerUserDto.Firstname
             };
-            var result = await _userManager.CreateAsync(user, registerSuperAdminDto.Password);
 
-            // Todo create exception
-            if (!result.Succeeded)
-                throw new UserCreationException();
-
-            if (!await _roleManager.RoleExistsAsync(UserRoles.SuperAdmin))
-                await _roleManager.CreateAsync(new IdentityRole(UserRoles.SuperAdmin));
-            if (!await _roleManager.RoleExistsAsync(UserRoles.RestaurantAdmin))
-                await _roleManager.CreateAsync(new IdentityRole(UserRoles.RestaurantAdmin));
-            if (!await _roleManager.RoleExistsAsync(UserRoles.Employee))
-                await _roleManager.CreateAsync(new IdentityRole(UserRoles.Employee));
-            if (!await _roleManager.RoleExistsAsync(UserRoles.Customer))
-                await _roleManager.CreateAsync(new IdentityRole(UserRoles.Customer));
-
-            if (await _roleManager.RoleExistsAsync(UserRoles.SuperAdmin))
-                await _userManager.AddToRoleAsync(user, UserRoles.SuperAdmin);
+            await _userRepository.Register(user, registerUserDto.Password);
 
             return new UserDto(user);
         }
 
-        private async Task<UserDto> Register(RegisterRestaurantAdminDto registerRestaurantAdminDto)
+        private async Task<UserDto> Register(RegisterRestaurantAdminDto registerUserDto)
         {
-            var user = new User
+            var user = new Domain.ModelsAggregate.UserAggregate.User
             {
                 SecurityStamp = Guid.NewGuid().ToString(),
-                UserName = registerRestaurantAdminDto.Username,
-                Lastname = registerRestaurantAdminDto.Lastname,
-                Firstname = registerRestaurantAdminDto.Firstname
+                UserName = registerUserDto.Username,
+                Lastname = registerUserDto.Lastname,
+                Firstname = registerUserDto.Firstname
             };
-            var result = await _userManager.CreateAsync(user, registerRestaurantAdminDto.Password);
 
-            if (!result.Succeeded)
-                throw new UserCreationException();
-
-            await _userManager.AddToRoleAsync(user, UserRoles.RestaurantAdmin);
+            await _userRepository.Register(user, registerUserDto.Password);
 
             return new UserDto(user);
         }
 
-        private async Task<UserDto> Register(RegisterEmployeeDto registerEmployeeDto)
+        private async Task<UserDto> Register(RegisterEmployeeDto registerUserDto)
         {
-            var user = new User
+            var user = new Domain.ModelsAggregate.UserAggregate.User
             {
                 SecurityStamp = Guid.NewGuid().ToString(),
-                UserName = registerEmployeeDto.Username,
-                Lastname = registerEmployeeDto.Lastname,
-                Firstname = registerEmployeeDto.Firstname
+                UserName = registerUserDto.Username,
+                Lastname = registerUserDto.Lastname,
+                Firstname = registerUserDto.Firstname
             };
-            var result = await _userManager.CreateAsync(user, registerEmployeeDto.Password);
 
-            if (!result.Succeeded)
-                throw new UserCreationException();
-
-            await _userManager.AddToRoleAsync(user, UserRoles.Employee);
+            await _userRepository.Register(user, registerUserDto.Password);
 
             return new UserDto(user);
         }
 
-        private async Task<UserDto> Register(RegisterCustomerDto registerCustomerDto)
+        private async Task<UserDto> Register(RegisterCustomerDto registerUserDto)
         {
-            var user = new User
+            var user = new Domain.ModelsAggregate.UserAggregate.User
             {
                 SecurityStamp = Guid.NewGuid().ToString(),
-                UserName = registerCustomerDto.Username,
-                Lastname = registerCustomerDto.Lastname,
-                Firstname = registerCustomerDto.Firstname,
-                Email = registerCustomerDto.Username,
-                PhoneNumber = registerCustomerDto.PhoneNumber,
+                UserName = registerUserDto.Username,
+                Lastname = registerUserDto.Lastname,
+                Firstname = registerUserDto.Firstname,
+                Email = registerUserDto.Username,
+                PhoneNumber = registerUserDto.PhoneNumber,
                 CreationDateTime = DateTime.Now,
             };
-            var result = await _userManager.CreateAsync(user, registerCustomerDto.Password);
 
-            if (!result.Succeeded)
-                throw new UserCreationException();
-
-            await _userManager.AddToRoleAsync(user, UserRoles.Customer);
+            await _userRepository.Register(user, registerUserDto.Password);
 
             return new UserDto(user);
         }
@@ -119,7 +88,7 @@ namespace YnovEat.Application.Services
                 RegisterRestaurantAdminDto registerRestaurantAdminDto => await Register(registerRestaurantAdminDto),
                 RegisterEmployeeDto registerEmployeeDto => await Register(registerEmployeeDto),
                 RegisterCustomerDto registerCustomerDto => await Register(registerCustomerDto),
-                _ => throw new UserCreationException()
+                _ => throw new UserRegistrationException()
             };
         }
     }

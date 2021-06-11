@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace YnovEat.Application.DTO.UserModels.Registration
+namespace YnovEat.Domain.DTO.UserModels.Registration
 {
     public class RegisterCustomerDto : RegisterUserDto
     {

@@ -1,4 +1,4 @@
-namespace YnovEat.Application.DTO.UserModels.Registration
+namespace YnovEat.Domain.DTO.UserModels.Registration
 {
     public class RegisterSuperAdminDto : RegisterUserDto
     {

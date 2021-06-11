@@ -14,6 +14,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\YnovEat.Application\YnovEat.Application.csproj" />
       <ProjectReference Include="..\YnovEat.Domain\YnovEat.Domain.csproj" />
     </ItemGroup>
 

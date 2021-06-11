@@ -1,6 +1,6 @@
 using YnovEat.Domain.ModelsAggregate.UserAggregate;
 
-namespace YnovEat.Application.DTO.UserModels
+namespace YnovEat.Domain.DTO.UserModels
 {
     public class UserDto : IDtoConverter<User>
     {

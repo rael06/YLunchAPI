@@ -2,24 +2,21 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Server.HttpSys;
 using Microsoft.Extensions.Configuration;
-using YnovEat.Application.DTO.UserModels;
+using YnovEat.Domain.DTO.UserModels;
 using YnovEat.Domain.ModelsAggregate.UserAggregate;
 using YnovEat.Domain.ModelsAggregate.UserAggregate.Roles;
 
 namespace YnovEat.Api.Controllers
 {
     [Route("api")]
-    public class ApiController : ControllerBase
+    public class ApiController : CustomControllerBase
     {
-        protected readonly UserManager<User> UserManager;
-        protected readonly IConfiguration Configuration;
-
-        public ApiController(UserManager<User> userManager, IConfiguration configuration)
+        public ApiController(
+            UserManager<User> userManager,
+            IConfiguration configuration
+        ) : base(userManager, configuration)
         {
-            UserManager = userManager;
-            Configuration = configuration;
         }
 
         [AllowAnonymous]
@@ -52,26 +49,5 @@ namespace YnovEat.Api.Controllers
         [HttpGet("try-authenticated-customer")]
         public string TryAsAuthenticatedCustomer() =>
             "Api is running, and you're a " + UserRoles.Customer;
-
-        protected async Task<UserWithRoles> GetAuthenticatedUser()
-        {
-            var userName = User.Identity?.Name;
-            if (userName == null)
-                return null;
-
-            var user = await UserManager.FindByNameAsync(userName);
-            var userRoles = await UserManager.GetRolesAsync(user);
-            return new UserWithRoles(user, userRoles);
-        }
-
-        protected async Task<UserDto> GetAuthenticatedUserDto()
-        {
-            var userName = User.Identity?.Name;
-            if (userName == null)
-                return null;
-
-            var user = await UserManager.FindByNameAsync(userName);
-            return new UserDto(user);
-        }
     }
 }

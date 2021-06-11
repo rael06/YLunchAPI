@@ -1,8 +1,8 @@
 using System.Threading.Tasks;
-using YnovEat.Application.DTO.UserModels;
-using YnovEat.Application.DTO.UserModels.Registration;
+using YnovEat.Domain.DTO.UserModels;
+using YnovEat.Domain.DTO.UserModels.Registration;
 
-namespace YnovEat.Application.Services
+namespace YnovEat.Domain.Services.Registration
 {
     public interface IRegistrationService
     {
