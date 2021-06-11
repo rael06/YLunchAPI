@@ -21,7 +21,7 @@ namespace YnovEat.Api.Controllers
             Configuration = configuration;
         }
 
-        protected async Task<UserWithRoles> GetAuthenticatedUser()
+        protected async Task<CurrentUser> GetAuthenticatedUser()
         {
             var userName = User.Identity?.Name;
             if (userName == null)
@@ -29,7 +29,7 @@ namespace YnovEat.Api.Controllers
 
             var user = await UserManager.FindByNameAsync(userName);
             var userRoles = await UserManager.GetRolesAsync(user);
-            return new UserWithRoles(user, userRoles);
+            return new CurrentUser(user, userRoles);
         }
 
         protected async Task<UserDto> GetAuthenticatedUserDto()

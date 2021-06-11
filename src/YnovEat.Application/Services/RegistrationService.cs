@@ -30,10 +30,11 @@ namespace YnovEat.Application.Services
                 SecurityStamp = Guid.NewGuid().ToString(),
                 UserName = registerUserDto.Username,
                 Lastname = registerUserDto.Lastname,
-                Firstname = registerUserDto.Firstname
+                Firstname = registerUserDto.Firstname,
+                CreationDateTime = DateTime.Now,
             };
 
-            await _userRepository.Register(user, registerUserDto.Password);
+            await _userRepository.Register(user, registerUserDto.Password, UserRoles.SuperAdmin);
 
             return new UserDto(user);
         }
@@ -45,10 +46,11 @@ namespace YnovEat.Application.Services
                 SecurityStamp = Guid.NewGuid().ToString(),
                 UserName = registerUserDto.Username,
                 Lastname = registerUserDto.Lastname,
-                Firstname = registerUserDto.Firstname
+                Firstname = registerUserDto.Firstname,
+                CreationDateTime = DateTime.Now,
             };
 
-            await _userRepository.Register(user, registerUserDto.Password);
+            await _userRepository.Register(user, registerUserDto.Password, UserRoles.RestaurantAdmin);
             await _restaurantRepository.AddAdmin(user);
 
             return new UserDto(user);
@@ -61,10 +63,11 @@ namespace YnovEat.Application.Services
                 SecurityStamp = Guid.NewGuid().ToString(),
                 UserName = registerUserDto.Username,
                 Lastname = registerUserDto.Lastname,
-                Firstname = registerUserDto.Firstname
+                Firstname = registerUserDto.Firstname,
+                CreationDateTime = DateTime.Now,
             };
 
-            await _userRepository.Register(user, registerUserDto.Password);
+            await _userRepository.Register(user, registerUserDto.Password, UserRoles.Employee);
 
             return new UserDto(user);
         }
@@ -82,7 +85,7 @@ namespace YnovEat.Application.Services
                 CreationDateTime = DateTime.Now,
             };
 
-            await _userRepository.Register(user, registerUserDto.Password);
+            await _userRepository.Register(user, registerUserDto.Password, UserRoles.Customer);
 
             return new UserDto(user);
         }

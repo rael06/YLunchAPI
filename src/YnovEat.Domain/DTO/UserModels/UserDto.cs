@@ -1,3 +1,4 @@
+using System;
 using YnovEat.Domain.ModelsAggregate.UserAggregate;
 
 namespace YnovEat.Domain.DTO.UserModels
@@ -12,6 +13,7 @@ namespace YnovEat.Domain.DTO.UserModels
         public string PhoneNumber { get; set; }
         public bool EmailConfirmed { get; set; }
         public bool PhoneNumberConfirmed { get; set; }
+        public DateTime CreationDateTime { get; set; }
         public bool IsActivated { get; set; }
         public UserDto(User user)
         {
@@ -29,6 +31,7 @@ namespace YnovEat.Domain.DTO.UserModels
             EmailConfirmed = entity.EmailConfirmed;
             PhoneNumberConfirmed = entity.PhoneNumberConfirmed;
             IsActivated = entity.IsAccountActivated;
+            CreationDateTime = entity.CreationDateTime;
         }
     }
 }

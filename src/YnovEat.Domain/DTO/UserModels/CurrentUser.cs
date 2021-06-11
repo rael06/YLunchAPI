@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
+using YnovEat.Domain.ModelsAggregate.CustomerAggregate;
+using YnovEat.Domain.ModelsAggregate.RestaurantAggregate;
 using YnovEat.Domain.ModelsAggregate.UserAggregate;
 
 namespace YnovEat.Domain.DTO.UserModels
 {
-    public class UserWithRoles
+    public class CurrentUser
     {
         public string Id { get; set; }
         public string UserName { get; set; }
@@ -21,8 +23,12 @@ namespace YnovEat.Domain.DTO.UserModels
         public DateTime PhoneNumberConfirmationDateTime { get; set; }
         public DateTime EmailConfirmationDateTime { get; set; }
         public IList<string> Roles { get; set; }
+        public bool IsAccountConfirmed { get; set; }
+        public bool IsAccountActivated { get; set; }
+        public RestaurantUser RestaurantUser { get; set; }
+        public Customer Customer { get; set; }
 
-        public UserWithRoles(User user, IList<string> roles)
+        public CurrentUser(User user, IList<string> roles)
         {
             FromEntity(user);
             Roles = roles;
@@ -44,6 +50,10 @@ namespace YnovEat.Domain.DTO.UserModels
             LastUpdateDateTime = entity.CreationDateTime;
             PhoneNumberConfirmationDateTime = entity.CreationDateTime;
             EmailConfirmationDateTime = entity.CreationDateTime;
+            IsAccountConfirmed = entity.IsAccountConfirmed;
+            IsAccountActivated = entity.IsAccountActivated;
+            RestaurantUser = entity.RestaurantUser;
+            Customer = entity.Customer;
         }
     }
 }

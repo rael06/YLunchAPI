@@ -24,9 +24,10 @@ namespace YnovEat.Infrastructure.Database.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public Task CreateRestaurant()
+        public async Task CreateRestaurant(Restaurant restaurant)
         {
-            throw new System.NotImplementedException();
+            await _context.Restaurants.AddAsync(restaurant);
+            await _context.SaveChangesAsync();
         }
     }
 }

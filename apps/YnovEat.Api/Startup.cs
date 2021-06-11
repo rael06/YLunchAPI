@@ -14,6 +14,7 @@ using YnovEat.Application.Services;
 using YnovEat.Domain.ModelsAggregate.UserAggregate;
 using YnovEat.Domain.Services.Database.Repositories;
 using YnovEat.Domain.Services.Registration;
+using YnovEat.Domain.Services.RestaurantServices;
 using YnovEat.Infrastructure.Database;
 using YnovEat.Infrastructure.Database.Repositories;
 
@@ -84,6 +85,7 @@ namespace YnovEat.Api
             // Application Services
             services.AddScoped<IRegistrationService, RegistrationService>();
             services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IRestaurantService, RestaurantService>();
             services.AddScoped<IRestaurantRepository, RestaurantRepository>();
         }
 

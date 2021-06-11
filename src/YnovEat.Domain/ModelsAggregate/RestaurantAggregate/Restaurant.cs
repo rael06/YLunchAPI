@@ -15,8 +15,8 @@ namespace YnovEat.Domain.ModelsAggregate.RestaurantAggregate
         public string PhoneNumber { get; set; }
         public string Email { get; set; }
         public bool IsEmailConfirmed { get; set; }
-        public DateTime EmailConfirmationDateTime { get; set; }
-        public int OrderLimitTimeInMinutes { get; set; }
+        public DateTime? EmailConfirmationDateTime { get; set; }
+        public int? OrderLimitTimeInMinutes { get; set; }
         public bool IsOpen { get; set; }
         public bool IsPublished { get; set; }
         public DateTime CreationDateTime { get; set; }
@@ -28,7 +28,7 @@ namespace YnovEat.Domain.ModelsAggregate.RestaurantAggregate
         public string City { get; set; }
         public string StreetNumber { get; set; }
         public string StreetName { get; set; }
-        public string ExtraInformation { get; set; }
+        public string AddressExtraInformation { get; set; }
         // !address
 
         public string RestaurantOwnerId { get; set; }

@@ -20,7 +20,7 @@ namespace YnovEat.Infrastructure.Database.Repositories
             _roleManager = roleManager;
         }
 
-        public async Task Register(User user, string password)
+        public async Task Register(User user, string password, string role)
         {
             var result = await _userManager.CreateAsync(user, password);
             var success = result.Succeeded;
@@ -34,8 +34,8 @@ namespace YnovEat.Infrastructure.Database.Repositories
             if (!await _roleManager.RoleExistsAsync(UserRoles.Customer))
                 success &= (await _roleManager.CreateAsync(new IdentityRole(UserRoles.Customer))).Succeeded;
 
-            if (await _roleManager.RoleExistsAsync(UserRoles.SuperAdmin))
-                success &= (await _userManager.AddToRoleAsync(user, UserRoles.SuperAdmin)).Succeeded;
+            if (await _roleManager.RoleExistsAsync(role))
+                success &= (await _userManager.AddToRoleAsync(user, role)).Succeeded;
 
             if (!success)
                 throw new UserCreationException();
