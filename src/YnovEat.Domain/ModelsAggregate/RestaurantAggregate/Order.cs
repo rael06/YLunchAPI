@@ -1,15 +1,14 @@
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
-using DomainShared.RestaurantAggregate.Enums;
 using YnovEat.Domain.ModelsAggregate.CustomerAggregate;
+using YnovEat.DomainShared.RestaurantAggregate.Enums;
 
 namespace YnovEat.Domain.ModelsAggregate.RestaurantAggregate
 {
     public class Order
     {
-        public int Id { get; set; }
+        public string Id { get; set; }
         public string CustomerId { get; set; }
         public bool IsDeleted { get; set; }
         public string Comment { get; set; }

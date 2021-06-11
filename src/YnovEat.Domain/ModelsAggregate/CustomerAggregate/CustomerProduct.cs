@@ -6,13 +6,16 @@ namespace YnovEat.Domain.ModelsAggregate.CustomerAggregate
 {
     public class CustomerProduct
     {
-        public int Id { get; set; }
-        [Required] public string Name { get; set; }
+        public string Id { get; set; }
+        public string Name { get; set; }
         public string Description { get; set; }
-        [Required] public double Price { get; set; }
-        [Required] public DateTime CreationDateTime { get; set; }
-        [Required] public int RestaurantProductId { get; set; }
+        public double Price { get; set; }
+        public DateTime CreationDateTime { get; set; }
+        public int RestaurantProductId { get; set; }
+        public string CartId { get; set; }
         public virtual Cart Cart { get; set; }
+
+        public int? OrderId { get; set; }
         public virtual Order Order { get; set; }
     }
 }

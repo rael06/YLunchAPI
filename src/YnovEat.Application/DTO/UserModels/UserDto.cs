@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using YnovEat.Domain.ModelsAggregate.UserAggregate;
 
 namespace YnovEat.Application.DTO.UserModels

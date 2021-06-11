@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,7 +17,9 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Microsoft.VisualBasic;
 using Swashbuckle.AspNetCore.Swagger;
+using YnovEat.Application.Services;
 using YnovEat.Domain.ModelsAggregate.UserAggregate;
 using YnovEat.Infrastructure.Database;
 
@@ -62,7 +65,7 @@ namespace YnovEat.Api
                 {
                     options.SaveToken = true;
                     options.RequireHttpsMetadata = false;
-                    options.TokenValidationParameters = new TokenValidationParameters()
+                    options.TokenValidationParameters = new TokenValidationParameters
                     {
                         ValidateIssuer = true,
                         ValidateAudience = true,
@@ -71,6 +74,21 @@ namespace YnovEat.Api
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JwtSecret"]))
                     };
                 });
+
+            // Cors
+            // TODO customize Cors
+            services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(builder =>
+                {
+                    builder.AllowAnyOrigin();
+                    builder.AllowAnyHeader();
+                    builder.AllowAnyMethod();
+                });
+            });
+
+            // Application Services
+            services.AddScoped<IRegistrationService, RegistrationService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -86,6 +104,8 @@ namespace YnovEat.Api
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseCors();
 
             app.UseAuthentication();
             app.UseAuthorization();

@@ -1,4 +1,4 @@
-namespace DomainShared.RestaurantAggregate.Enums
+namespace YnovEat.DomainShared.RestaurantAggregate.Enums
 {
     public enum CustomerFamily
     {

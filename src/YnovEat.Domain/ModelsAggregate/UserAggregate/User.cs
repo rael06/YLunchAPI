@@ -9,9 +9,9 @@ namespace YnovEat.Domain.ModelsAggregate.UserAggregate
 {
     public class User : IdentityUser
     {
-        [Required] public string Firstname { get; set; }
-        [Required] public string Lastname { get; set; }
-        [Required] public DateTime CreationDateTime { get; set; }
+        public string Firstname { get; set; }
+        public string Lastname { get; set; }
+        public DateTime CreationDateTime { get; set; }
         public DateTime? ConfirmationDateTime { get; set; }
         public DateTime? LastUpdateDateTime { get; set; }
         public DateTime? PhoneNumberConfirmationDateTime { get; set; }

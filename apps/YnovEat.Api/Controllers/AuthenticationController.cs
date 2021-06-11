@@ -6,6 +6,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -14,6 +15,8 @@ using Microsoft.IdentityModel.Tokens;
 using YnovEat.Api.Core.Response;
 using YnovEat.Api.Core.Response.Errors;
 using YnovEat.Application.DTO.UserModels;
+using YnovEat.Application.DTO.UserModels.Registration;
+using YnovEat.Application.Services;
 using YnovEat.Domain.ModelsAggregate.UserAggregate;
 using YnovEat.Domain.ModelsAggregate.UserAggregate.Roles;
 using YnovEatApi.Core.UserModels;
@@ -24,12 +27,12 @@ namespace YnovEat.Api.Controllers
     [ApiController]
     public class AuthenticationController : ApiController
     {
-        private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly IRegistrationService _registrationService;
 
         public AuthenticationController(UserManager<User> userManager, RoleManager<IdentityRole> roleManager,
-            IConfiguration configuration) : base(userManager, configuration)
+            IConfiguration configuration, IRegistrationService registrationService) : base(userManager, configuration)
         {
-            _roleManager = roleManager;
+            _registrationService = registrationService;
         }
 
         [AllowAnonymous]
@@ -66,187 +69,45 @@ namespace YnovEat.Api.Controllers
             });
         }
 
-        [AllowAnonymous]
         [HttpPost]
-        [Route("register-customer")]
-        public async Task<IActionResult> RegisterCustomer([FromBody] UserRegisterDto model)
+        [Route("init-super-admin/{pass}")]
+        public async Task<IActionResult> InitSuperAdmin([FromRoute] string pass, [FromBody] RegisterSuperAdminDto model)
         {
-            var userExists = await UserManager.FindByNameAsync(model.Username);
-            if (userExists != null)
-                return StatusCode(StatusCodes.Status500InternalServerError,
-                    new Response {Status = ResponseStatus.Error, Message = "User already exists!"});
+            if (pass != Configuration["InitAdminPass"]) return Unauthorized();
 
-            var user = new User
-            {
-                Email = model.Email,
-                SecurityStamp = Guid.NewGuid().ToString(),
-                UserName = model.Username
-            };
-            var result = await UserManager.CreateAsync(user, model.Password);
-            if (!result.Succeeded)
-                return StatusCode(StatusCodes.Status500InternalServerError,
-                    new Response
-                    {
-                        Status = ResponseStatus.Error,
-                        Message = "User creation failed! Please check user details and try again."
-                    });
-
-            if (await _roleManager.RoleExistsAsync(UserRoles.Customer))
-                await UserManager.AddToRoleAsync(user, UserRoles.Customer);
-
-            return StatusCode(
-                StatusCodes.Status201Created,
-                new UserDto(user)
-            );
-        }
-
-        [AllowAnonymous]
-        [HttpPost]
-        [Route("register-restaurantAdmin")]
-        public async Task<IActionResult> RegisterRestaurantAdmin([FromBody] UserRegisterDto model)
-        {
-            var userExists = await UserManager.FindByNameAsync(model.Username);
-            if (userExists != null)
-                return StatusCode(StatusCodes.Status500InternalServerError,
-                    new Response {Status = ResponseStatus.Error, Message = "User already exists!"});
-
-            var user = new User
-            {
-                Email = model.Email,
-                SecurityStamp = Guid.NewGuid().ToString(),
-                UserName = model.Username
-            };
-            var result = await UserManager.CreateAsync(user, model.Password);
-            if (!result.Succeeded)
-                return StatusCode(StatusCodes.Status500InternalServerError,
-                    new Response
-                    {
-                        Status = ResponseStatus.Error,
-                        Message = "User creation failed! Please check user details and try again."
-                    });
-
-            if (await _roleManager.RoleExistsAsync(UserRoles.RestaurantAdmin))
-                await UserManager.AddToRoleAsync(user, UserRoles.RestaurantAdmin);
-
-            return StatusCode(
-                StatusCodes.Status201Created,
-                new UserDto(user)
-            );
-        }
-
-        [Core.Authorize(Roles = UserRoles.RestaurantAdmin)]
-        [HttpPost]
-        [Route("register-employee")]
-        public async Task<IActionResult> RegisterEmployee([FromBody] UserRegisterDto model)
-        {
-            var userExists = await UserManager.FindByNameAsync(model.Username);
-            if (userExists != null)
-                return StatusCode(StatusCodes.Status500InternalServerError,
-                    new Response {Status = ResponseStatus.Error, Message = "User already exists!"});
-
-            var user = new User
-            {
-                Email = model.Email,
-                SecurityStamp = Guid.NewGuid().ToString(),
-                UserName = model.Username
-            };
-            var result = await UserManager.CreateAsync(user, model.Password);
-            if (!result.Succeeded)
-                return StatusCode(StatusCodes.Status500InternalServerError,
-                    new Response
-                    {
-                        Status = ResponseStatus.Error,
-                        Message = "User creation failed! Please check user details and try again."
-                    });
-
-            if (await _roleManager.RoleExistsAsync(UserRoles.Employee))
-                await UserManager.AddToRoleAsync(user, UserRoles.Employee);
-
-            return StatusCode(
-                StatusCodes.Status201Created,
-                new UserDto(user)
-            );
+            return await RegisterUser(model);
         }
 
         [Core.Authorize(Roles = UserRoles.SuperAdmin)]
         [HttpPost]
         [Route("register-super-admin")]
-        public async Task<IActionResult> RegisterSuperAdmin([FromBody] UserRegisterDto model)
+        public async Task<IActionResult> RegisterSuperAdmin([FromBody] RegisterSuperAdminDto model)
         {
-            var userExists = await UserManager.FindByNameAsync(model.Username);
-            if (userExists != null)
-                return StatusCode(StatusCodes.Status500InternalServerError,
-                    new Response {Status = ResponseStatus.Error, Message = "User already exists!"});
-
-            var user = new User
-            {
-                Email = model.Email,
-                SecurityStamp = Guid.NewGuid().ToString(),
-                UserName = model.Username,
-                Lastname = model.Lastname,
-                Firstname = model.Firstname
-            };
-            var result = await UserManager.CreateAsync(user, model.Password);
-            if (!result.Succeeded)
-                return StatusCode(StatusCodes.Status500InternalServerError,
-                    new Response
-                    {
-                        Status = ResponseStatus.Error,
-                        Message = "User creation failed! Please check user details and try again."
-                    });
-
-            if (await _roleManager.RoleExistsAsync(UserRoles.SuperAdmin))
-                await UserManager.AddToRoleAsync(user, UserRoles.SuperAdmin);
-
-            return StatusCode(
-                StatusCodes.Status201Created,
-                new UserDto(user)
-            );
+            return await RegisterUser(model);
         }
 
+        [AllowAnonymous]
         [HttpPost]
-        [Route("init-super-admin/{pass}")]
-        public async Task<IActionResult> InitSuperAdmin([FromRoute] string pass, [FromBody] UserRegisterDto model)
+        [Route("register-restaurantAdmin")]
+        public async Task<IActionResult> RegisterRestaurantAdmin([FromBody] RegisterRestaurantAdminDto model)
         {
-            if (pass != Configuration["InitAdminPass"]) return Unauthorized();
-            var userExists = await UserManager.FindByNameAsync(model.Username);
-            if (userExists != null)
-                return StatusCode(StatusCodes.Status500InternalServerError,
-                    new Response {Status = ResponseStatus.Error, Message = "User already exists!"});
+            return await RegisterUser(model);
+        }
 
-            var user = new User
-            {
-                Email = model.Email,
-                SecurityStamp = Guid.NewGuid().ToString(),
-                UserName = model.Username,
-                Lastname = model.Lastname,
-                Firstname = model.Firstname
-            };
-            var result = await UserManager.CreateAsync(user, model.Password);
-            if (!result.Succeeded)
-                return StatusCode(StatusCodes.Status500InternalServerError,
-                    new Response
-                    {
-                        Status = ResponseStatus.Error,
-                        Message = "User creation failed! Please check user details and try again."
-                    });
+        [Core.Authorize(Roles = UserRoles.RestaurantAdmin)]
+        [HttpPost]
+        [Route("register-employee")]
+        public async Task<IActionResult> RegisterEmployee([FromBody] RegisterEmployeeDto model)
+        {
+            return await RegisterUser(model);
+        }
 
-            if (!await _roleManager.RoleExistsAsync(UserRoles.SuperAdmin))
-                await _roleManager.CreateAsync(new IdentityRole(UserRoles.SuperAdmin));
-            if (!await _roleManager.RoleExistsAsync(UserRoles.RestaurantAdmin))
-                await _roleManager.CreateAsync(new IdentityRole(UserRoles.RestaurantAdmin));
-            if (!await _roleManager.RoleExistsAsync(UserRoles.Employee))
-                await _roleManager.CreateAsync(new IdentityRole(UserRoles.Employee));
-            if (!await _roleManager.RoleExistsAsync(UserRoles.Customer))
-                await _roleManager.CreateAsync(new IdentityRole(UserRoles.Customer));
-
-            if (await _roleManager.RoleExistsAsync(UserRoles.SuperAdmin))
-                await UserManager.AddToRoleAsync(user, UserRoles.SuperAdmin);
-
-            return StatusCode(
-                StatusCodes.Status201Created,
-                new UserDto(user)
-            );
+        [AllowAnonymous]
+        [HttpPost]
+        [Route("register-customer")]
+        public async Task<IActionResult> RegisterCustomer([FromBody] RegisterCustomerDto model)
+        {
+            return await RegisterUser(model);
         }
 
         [Core.Authorize]
@@ -261,6 +122,44 @@ namespace YnovEat.Api.Controllers
                 );
 
             return currentUser;
+        }
+
+        private async Task CheckUserNonexistence(string username)
+        {
+            var userExists = await UserManager.FindByNameAsync(username);
+            if (userExists != null) throw new Exception("User already exists");
+        }
+
+        private async Task<IActionResult> RegisterUser<T>(T model) where T : RegisterUserDto
+        {
+            try
+            {
+                await CheckUserNonexistence(model.Username);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                    new Response {Status = ResponseStatus.Error, Message = e.Message});
+            }
+
+            try
+            {
+                var userDto = await _registrationService.Register(model);
+
+                return StatusCode(
+                    StatusCodes.Status201Created,
+                    userDto
+                );
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                    new Response
+                    {
+                        Status = ResponseStatus.Error,
+                        Message = "User creation failed! Please check user details and try again."
+                    });
+            }
         }
     }
 }

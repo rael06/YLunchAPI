@@ -1,8 +1,8 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Server.HttpSys;
 using Microsoft.Extensions.Configuration;
 using YnovEat.Application.DTO.UserModels;
 using YnovEat.Domain.ModelsAggregate.UserAggregate;
@@ -32,23 +32,23 @@ namespace YnovEat.Api.Controllers
         public string TryAsAuthenticated() =>
             "Api is running, and you're authenticated";
 
-        [Core.Authorize(Roles = UserRoles.SuperAdmin)]
+        [Core.Authorize(UserRoles.SuperAdmin)]
         [HttpGet("try-authenticated-superAdmin")]
         public string TryAsAuthenticatedSuperAdmin() =>
             "Api is running, and you're a " + UserRoles.SuperAdmin;
 
 
-        [Core.Authorize(Roles = UserRoles.RestaurantAdmin)]
+        [Core.Authorize(UserRoles.RestaurantAdmin)]
         [HttpGet("try-authenticated-restaurantAdmin")]
         public string TryAsAuthenticatedRestaurantAdmin() =>
             "Api is running, and you're a " + UserRoles.RestaurantAdmin;
 
-        [Core.Authorize(Roles = UserRoles.Employee)]
+        [Core.Authorize(UserRoles.Employee)]
         [HttpGet("try-authenticated-employee")]
         public string TryAsAuthenticatedEmployee() =>
             "Api is running, and you're a " + UserRoles.Employee;
 
-        [Core.Authorize(Roles = UserRoles.Customer)]
+        [Core.Authorize(UserRoles.Customer)]
         [HttpGet("try-authenticated-customer")]
         public string TryAsAuthenticatedCustomer() =>
             "Api is running, and you're a " + UserRoles.Customer;

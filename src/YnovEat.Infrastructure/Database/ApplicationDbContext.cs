@@ -56,10 +56,7 @@ namespace YnovEat.Infrastructure.Database
                 x.Property(os => os.DateTime).IsRequired();
             });
 
-            builder.Entity<RestaurantCategory>(x =>
-            {
-                x.Property(rc => rc.Name).IsRequired();
-            });
+            builder.Entity<RestaurantCategory>(x => { x.Property(rc => rc.Name).IsRequired(); });
 
             builder.Entity<RestaurantProduct>(x =>
             {
@@ -79,16 +76,10 @@ namespace YnovEat.Infrastructure.Database
                 x.Property(cp => cp.RestaurantProductId).IsRequired();
             });
 
-            builder.Entity<RestaurantProductTag>(x =>
-            {
-                x.Property(rpt => rpt.Name).IsRequired();
-            });
+            builder.Entity<RestaurantProductTag>(x => { x.Property(rpt => rpt.Name).IsRequired(); });
 
             builder.Entity<Restaurant>(x =>
             {
-                x.HasOne(r => r.Owner)
-                    .WithOne(ro => ro.Restaurant);
-
                 x.HasMany(r => r.DaysOpeningHours)
                     .WithOne(d => d.Restaurant);
 
@@ -97,22 +88,26 @@ namespace YnovEat.Infrastructure.Database
 
                 x.HasMany(r => r.Products)
                     .WithOne(p => p.Restaurant);
+
+                x.HasOne(r => r.Owner)
+                    .WithOne(ru => ru.Restaurant)
+                    .HasForeignKey<Restaurant>(r => r.RestaurantOwnerId);
             });
 
             builder.Entity<RestaurantUser>(x =>
             {
-                x.HasKey(ro => ro.UserId);
+                x.HasKey(ro => ro.Id);
 
                 x.HasOne(ru => ru.User)
                     .WithOne(u => u.RestaurantUser)
-                    .HasForeignKey<User>(u => u.Id);
+                    .HasForeignKey<RestaurantUser>(u => u.Id);
             });
 
             builder.Entity<Customer>(x =>
             {
                 x.HasOne(c => c.User)
                     .WithOne(u => u.Customer)
-                    .HasForeignKey<User>(c => c.Id);
+                    .HasForeignKey<Customer>(c => c.Id);
 
                 x.HasMany(c => c.Orders)
                     .WithOne(o => o.Customer);
@@ -135,6 +130,8 @@ namespace YnovEat.Infrastructure.Database
                 x.HasOne(o => o.Customer)
                     .WithMany(c => c.Orders)
                     .HasForeignKey(o => o.CustomerId);
+
+                x.Ignore(o => o.RestaurantProducts);
             });
 
             base.OnModelCreating(builder);

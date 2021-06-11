@@ -147,8 +147,8 @@ namespace YnovEat.Api.Migrations
 
             modelBuilder.Entity("RestaurantRestaurantCategory", b =>
                 {
-                    b.Property<int>("CategoriesId")
-                        .HasColumnType("int");
+                    b.Property<string>("CategoriesId")
+                        .HasColumnType("varchar(255)");
 
                     b.Property<string>("RestaurantsId")
                         .HasColumnType("varchar(255)");
@@ -188,9 +188,8 @@ namespace YnovEat.Api.Migrations
 
             modelBuilder.Entity("YnovEat.Domain.ModelsAggregate.CustomerAggregate.CustomerProduct", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                    b.Property<string>("Id")
+                        .HasColumnType("varchar(255)");
 
                     b.Property<string>("CartId")
                         .HasColumnType("varchar(255)");
@@ -208,6 +207,9 @@ namespace YnovEat.Api.Migrations
                     b.Property<int?>("OrderId")
                         .HasColumnType("int");
 
+                    b.Property<string>("OrderId1")
+                        .HasColumnType("varchar(255)");
+
                     b.Property<double>("Price")
                         .HasColumnType("double");
 
@@ -218,16 +220,15 @@ namespace YnovEat.Api.Migrations
 
                     b.HasIndex("CartId");
 
-                    b.HasIndex("OrderId");
+                    b.HasIndex("OrderId1");
 
                     b.ToTable("CustomerProduct");
                 });
 
             modelBuilder.Entity("YnovEat.Domain.ModelsAggregate.RestaurantAggregate.ClosingDate", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                    b.Property<string>("Id")
+                        .HasColumnType("varchar(255)");
 
                     b.Property<DateTime>("ClosingDateTime")
                         .HasColumnType("datetime(6)");
@@ -244,9 +245,8 @@ namespace YnovEat.Api.Migrations
 
             modelBuilder.Entity("YnovEat.Domain.ModelsAggregate.RestaurantAggregate.DayOpeningHours", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                    b.Property<string>("Id")
+                        .HasColumnType("varchar(255)");
 
                     b.Property<int>("DayOfWeek")
                         .HasColumnType("int");
@@ -263,12 +263,11 @@ namespace YnovEat.Api.Migrations
 
             modelBuilder.Entity("YnovEat.Domain.ModelsAggregate.RestaurantAggregate.OpeningHour", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                    b.Property<string>("Id")
+                        .HasColumnType("varchar(255)");
 
-                    b.Property<int?>("DayOpeningHoursId")
-                        .HasColumnType("int");
+                    b.Property<string>("DayOpeningHoursId")
+                        .HasColumnType("varchar(255)");
 
                     b.Property<int>("EndHourInMinutes")
                         .HasColumnType("int");
@@ -285,9 +284,8 @@ namespace YnovEat.Api.Migrations
 
             modelBuilder.Entity("YnovEat.Domain.ModelsAggregate.RestaurantAggregate.Order", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                    b.Property<string>("Id")
+                        .HasColumnType("varchar(255)");
 
                     b.Property<DateTime?>("AcceptationDateTime")
                         .HasColumnType("datetime(6)");
@@ -310,15 +308,14 @@ namespace YnovEat.Api.Migrations
 
             modelBuilder.Entity("YnovEat.Domain.ModelsAggregate.RestaurantAggregate.OrderStatus", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                    b.Property<string>("Id")
+                        .HasColumnType("varchar(255)");
 
                     b.Property<DateTime>("DateTime")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<int?>("OrderId")
-                        .HasColumnType("int");
+                    b.Property<string>("OrderId")
+                        .HasColumnType("varchar(255)");
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
@@ -371,7 +368,7 @@ namespace YnovEat.Api.Migrations
                     b.Property<int>("OrderLimitTimeInMinutes")
                         .HasColumnType("int");
 
-                    b.Property<string>("Phone")
+                    b.Property<string>("PhoneNumber")
                         .HasColumnType("longtext");
 
                     b.Property<string>("RestaurantOwnerId")
@@ -396,9 +393,8 @@ namespace YnovEat.Api.Migrations
 
             modelBuilder.Entity("YnovEat.Domain.ModelsAggregate.RestaurantAggregate.RestaurantCategory", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                    b.Property<string>("Id")
+                        .HasColumnType("varchar(255)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -411,9 +407,8 @@ namespace YnovEat.Api.Migrations
 
             modelBuilder.Entity("YnovEat.Domain.ModelsAggregate.RestaurantAggregate.RestaurantProduct", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                    b.Property<string>("Id")
+                        .HasColumnType("varchar(255)");
 
                     b.Property<DateTime>("CreationDateTime")
                         .HasColumnType("datetime(6)");
@@ -452,16 +447,15 @@ namespace YnovEat.Api.Migrations
 
             modelBuilder.Entity("YnovEat.Domain.ModelsAggregate.RestaurantAggregate.RestaurantProductTag", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                    b.Property<string>("Id")
+                        .HasColumnType("varchar(255)");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<int?>("RestaurantProductId")
-                        .HasColumnType("int");
+                    b.Property<string>("RestaurantProductId")
+                        .HasColumnType("varchar(255)");
 
                     b.HasKey("Id");
 
@@ -685,7 +679,7 @@ namespace YnovEat.Api.Migrations
 
                     b.HasOne("YnovEat.Domain.ModelsAggregate.RestaurantAggregate.Order", "Order")
                         .WithMany("CustomerProducts")
-                        .HasForeignKey("OrderId");
+                        .HasForeignKey("OrderId1");
 
                     b.Navigation("Cart");
 

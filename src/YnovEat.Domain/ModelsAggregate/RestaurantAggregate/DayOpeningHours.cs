@@ -6,7 +6,7 @@ namespace YnovEat.Domain.ModelsAggregate.RestaurantAggregate
 {
     public class DayOpeningHours
     {
-        public int Id { get; set; }
+        public string Id { get; set; }
         public DayOfWeek DayOfWeek { get; set; }
         public virtual Restaurant Restaurant { get; set; }
 

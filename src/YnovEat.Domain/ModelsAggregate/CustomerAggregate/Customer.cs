@@ -1,7 +1,7 @@
 using System.Collections.Generic;
-using DomainShared.RestaurantAggregate.Enums;
 using YnovEat.Domain.ModelsAggregate.RestaurantAggregate;
 using YnovEat.Domain.ModelsAggregate.UserAggregate;
+using YnovEat.DomainShared.RestaurantAggregate.Enums;
 
 namespace YnovEat.Domain.ModelsAggregate.CustomerAggregate
 {

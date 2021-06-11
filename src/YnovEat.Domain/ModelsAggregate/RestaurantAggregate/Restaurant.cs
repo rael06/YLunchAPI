@@ -3,15 +3,16 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
+using System.Net.Sockets;
 using YnovEat.Domain.ModelsAggregate.UserAggregate;
 
 namespace YnovEat.Domain.ModelsAggregate.RestaurantAggregate
 {
     public class Restaurant
     {
-        public int Id { get; set; }
+        public string Id { get; set; }
         public string Name { get; set; }
-        public string Phone { get; set; }
+        public string PhoneNumber { get; set; }
         public string Email { get; set; }
         public bool IsEmailConfirmed { get; set; }
         public DateTime EmailConfirmationDateTime { get; set; }
@@ -27,11 +28,10 @@ namespace YnovEat.Domain.ModelsAggregate.RestaurantAggregate
         public string City { get; set; }
         public string StreetNumber { get; set; }
         public string StreetName { get; set; }
-
         public string ExtraInformation { get; set; }
         // !address
 
-        public string OwnerId { get; set; }
+        public string RestaurantOwnerId { get; set; }
         public virtual RestaurantOwner Owner { get; set; }
         public virtual ICollection<ClosingDate> ClosingDates { get; set; } = new List<ClosingDate>();
         public virtual ICollection<DayOpeningHours> DaysOpeningHours { get; set; } = new List<DayOpeningHours>();
