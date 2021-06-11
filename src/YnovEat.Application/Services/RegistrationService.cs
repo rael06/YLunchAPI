@@ -12,11 +12,17 @@ namespace YnovEat.Application.Services
     public class RegistrationService : IRegistrationService
     {
         private readonly IUserRepository _userRepository;
+        private readonly IRestaurantRepository _restaurantRepository;
 
-        public RegistrationService(IUserRepository userRepository)
+        public RegistrationService(
+            IUserRepository userRepository,
+            IRestaurantRepository restaurantRepository
+        )
         {
             _userRepository = userRepository;
+            _restaurantRepository = restaurantRepository;
         }
+
         private async Task<UserDto> Register(RegisterSuperAdminDto registerUserDto)
         {
             var user = new Domain.ModelsAggregate.UserAggregate.User
@@ -43,6 +49,7 @@ namespace YnovEat.Application.Services
             };
 
             await _userRepository.Register(user, registerUserDto.Password);
+            await _restaurantRepository.AddAdmin(user);
 
             return new UserDto(user);
         }

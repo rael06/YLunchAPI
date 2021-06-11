@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using YnovEat.Infrastructure.Database;
 
 namespace YnovEat.Api.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210611132822_V0.2")]
+    partial class V02
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -576,6 +578,18 @@ namespace YnovEat.Api.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
+            modelBuilder.Entity("YnovEat.Domain.ModelsAggregate.RestaurantAggregate.RestaurantEmployee", b =>
+                {
+                    b.HasBaseType("YnovEat.Domain.ModelsAggregate.RestaurantAggregate.RestaurantUser");
+
+                    b.Property<string>("RestaurantId1")
+                        .HasColumnType("varchar(255)");
+
+                    b.HasIndex("RestaurantId1");
+
+                    b.HasDiscriminator().HasValue("RestaurantEmployee");
+                });
+
             modelBuilder.Entity("YnovEat.Domain.ModelsAggregate.RestaurantAggregate.RestaurantOwner", b =>
                 {
                     b.HasBaseType("YnovEat.Domain.ModelsAggregate.RestaurantAggregate.RestaurantUser");
@@ -769,6 +783,15 @@ namespace YnovEat.Api.Migrations
                         .HasForeignKey("RestaurantId");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("YnovEat.Domain.ModelsAggregate.RestaurantAggregate.RestaurantEmployee", b =>
+                {
+                    b.HasOne("YnovEat.Domain.ModelsAggregate.RestaurantAggregate.Restaurant", "Restaurant")
+                        .WithMany()
+                        .HasForeignKey("RestaurantId1");
+
+                    b.Navigation("Restaurant");
                 });
 
             modelBuilder.Entity("YnovEat.Domain.ModelsAggregate.CustomerAggregate.Cart", b =>

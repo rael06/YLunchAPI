@@ -10,7 +10,7 @@ namespace YnovEat.Infrastructure.Database
     public class ApplicationDbContext : IdentityDbContext<User>
     {
         public DbSet<Restaurant> Restaurants { get; set; }
-        public DbSet<RestaurantOwner> RestaurantOwners { get; set; }
+        public DbSet<RestaurantUser> RestaurantUsers { get; set; }
         public DbSet<ClosingDate> ClosingDates { get; set; }
         public DbSet<DayOpeningHours> DayOpeningHours { get; set; }
         public DbSet<OpeningHour> OpeningHours { get; set; }
@@ -19,6 +19,7 @@ namespace YnovEat.Infrastructure.Database
         public DbSet<RestaurantProduct> RestaurantProducts { get; set; }
         public DbSet<RestaurantProductTag> RestaurantProductTags { get; set; }
         public DbSet<Customer> Customers { get; set; }
+        public DbSet<CustomerProduct> CustomerProducts { get; set; }
         public DbSet<Cart> Carts { get; set; }
 
         public ApplicationDbContext(DbContextOptions options) : base(options)

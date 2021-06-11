@@ -84,6 +84,7 @@ namespace YnovEat.Api
             // Application Services
             services.AddScoped<IRegistrationService, RegistrationService>();
             services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IRestaurantRepository, RestaurantRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
