@@ -8,5 +8,7 @@ namespace YnovEat.Domain.Services.Database.Repositories
     {
         Task AddAdmin(User user);
         Task<Restaurant> CreateRestaurant(Restaurant restaurant);
+        Task<Restaurant> UpdateRestaurant(Restaurant restaurant);
+        Task<Restaurant> GetById(string id);
     }
 }

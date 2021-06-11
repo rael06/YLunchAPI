@@ -8,5 +8,7 @@ namespace YnovEat.Domain.Services.RestaurantServices
     public interface IRestaurantService
     {
         Task<RestaurantReadDto> Create(RestaurantCreationDto restaurantCreationDto, CurrentUser currentUser);
+        Task<RestaurantReadDto> Update(RestaurantModificationDto restaurantModificationDto);
+        Task<RestaurantReadDto> GetById(string id);
     }
 }

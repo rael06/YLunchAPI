@@ -15,6 +15,9 @@ namespace YnovEat.Infrastructure.Database.Repositories
             _context = context;
         }
 
+        public async Task<Restaurant> GetById(string id) =>
+            await _context.Restaurants.FindAsync(id);
+
         public async Task AddAdmin(User user)
         {
             await _context.RestaurantUsers.AddAsync(new RestaurantOwner
@@ -23,6 +26,13 @@ namespace YnovEat.Infrastructure.Database.Repositories
                 User = user
             });
             await _context.SaveChangesAsync();
+        }
+
+        public async Task<Restaurant> UpdateRestaurant(Restaurant restaurant)
+        {
+            _context.Restaurants.Update(restaurant);
+            await _context.SaveChangesAsync();
+            return restaurant;
         }
 
         public async Task<Restaurant> CreateRestaurant(Restaurant restaurant)

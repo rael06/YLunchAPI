@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using YnovEat.Api.Core;
-using YnovEat.Api.Core.Response.Errors;
 using YnovEat.Domain.DTO.RestaurantModels;
 using YnovEat.Domain.ModelsAggregate.UserAggregate;
 using YnovEat.Domain.ModelsAggregate.UserAggregate.Roles;
@@ -45,6 +44,32 @@ namespace YnovEat.Api.Controllers
             try
             {
                 return Ok(await _restaurantService.Create(model, currentUser));
+            }
+            catch (Exception e)
+            {
+                return StatusCode(
+                    StatusCodes.Status500InternalServerError,
+                    e
+                );
+            }
+        }
+
+        [Authorize(Roles = UserRoles.RestaurantAdmin)]
+        [HttpPatch]
+        [Route("update")]
+        public async Task<IActionResult> Update([FromBody] RestaurantModificationDto model)
+        {
+            var currentUser = await GetAuthenticatedUser();
+            var restaurant = await _restaurantService.GetById(model.Id);
+            if (!restaurant.OwnerId.Equals(currentUser.Id))
+                return StatusCode(
+                    StatusCodes.Status403Forbidden,
+                    "User is not the restaurant owner"
+                );
+
+            try
+            {
+                return Ok(await _restaurantService.Update(model));
             }
             catch (Exception e)
             {
