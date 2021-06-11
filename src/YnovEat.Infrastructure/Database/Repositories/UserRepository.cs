@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using YnovEat.Domain.ModelsAggregate.UserAggregate;
 using YnovEat.Domain.ModelsAggregate.UserAggregate.Roles;
 using YnovEat.Domain.Services.Database.Repositories;
@@ -12,12 +13,17 @@ namespace YnovEat.Infrastructure.Database.Repositories
     {
         private readonly UserManager<User> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly ApplicationDbContext _context;
 
-        public UserRepository(UserManager<User> userManager,
-            RoleManager<IdentityRole> roleManager)
+        public UserRepository(
+            UserManager<User> userManager,
+            RoleManager<IdentityRole> roleManager,
+            ApplicationDbContext context
+            )
         {
             _userManager = userManager;
             _roleManager = roleManager;
+            _context = context;
         }
 
         public async Task Register(User user, string password, string role)
@@ -39,6 +45,16 @@ namespace YnovEat.Infrastructure.Database.Repositories
 
             if (!success)
                 throw new UserCreationException();
+        }
+
+        public async Task<User> GetFullUser(string username)
+        {
+            var user = await _context.Users
+                .Include(x => x.Customer)
+                .Include(x => x.RestaurantUser)
+                .FirstOrDefaultAsync(x => x.UserName.Equals(username));
+
+            return user;
         }
     }
 }

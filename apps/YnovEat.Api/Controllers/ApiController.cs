@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using YnovEat.Domain.DTO.UserModels;
 using YnovEat.Domain.ModelsAggregate.UserAggregate;
 using YnovEat.Domain.ModelsAggregate.UserAggregate.Roles;
+using YnovEat.Domain.Services.Database.Repositories;
 
 namespace YnovEat.Api.Controllers
 {
@@ -14,8 +15,9 @@ namespace YnovEat.Api.Controllers
     {
         public ApiController(
             UserManager<User> userManager,
+            IUserRepository userRepository,
             IConfiguration configuration
-        ) : base(userManager, configuration)
+        ) : base(userManager, userRepository, configuration)
         {
         }
 

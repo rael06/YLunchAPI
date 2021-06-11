@@ -17,6 +17,7 @@ using YnovEat.Domain.DTO.UserModels;
 using YnovEat.Domain.DTO.UserModels.Registration;
 using YnovEat.Domain.ModelsAggregate.UserAggregate;
 using YnovEat.Domain.ModelsAggregate.UserAggregate.Roles;
+using YnovEat.Domain.Services.Database.Repositories;
 using YnovEat.Domain.Services.Registration;
 
 namespace YnovEat.Api.Controllers
@@ -26,13 +27,16 @@ namespace YnovEat.Api.Controllers
     public class AuthenticationController : CustomControllerBase
     {
         private readonly IRegistrationService _registrationService;
+        private readonly UserManager<User> _userManager;
 
         public AuthenticationController(
             UserManager<User> userManager,
+            IUserRepository userRepository,
             IConfiguration configuration,
             IRegistrationService registrationService
-        ) : base(userManager, configuration)
+        ) : base(userManager, userRepository, configuration)
         {
+            _userManager = userManager;
             _registrationService = registrationService;
         }
 
@@ -41,10 +45,10 @@ namespace YnovEat.Api.Controllers
         [Route("login")]
         public async Task<IActionResult> Login([FromBody] UserLoginDto model)
         {
-            var user = await UserManager.FindByNameAsync(model.Username);
-            if (user == null || !await UserManager.CheckPasswordAsync(user, model.Password)) return Unauthorized();
+            var user = await _userManager.FindByNameAsync(model.Username);
+            if (user == null || !await _userManager.CheckPasswordAsync(user, model.Password)) return Unauthorized();
 
-            var userRoles = await UserManager.GetRolesAsync(user);
+            var userRoles = await _userManager.GetRolesAsync(user);
 
             var authClaims = new List<Claim>
             {
@@ -127,7 +131,7 @@ namespace YnovEat.Api.Controllers
 
         private async Task CheckUserNonexistence(string username)
         {
-            var userExists = await UserManager.FindByNameAsync(username);
+            var userExists = await _userManager.FindByNameAsync(username);
             if (userExists != null) throw new Exception("User already exists");
         }
 

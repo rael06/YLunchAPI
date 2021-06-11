@@ -27,6 +27,7 @@ namespace YnovEat.Domain.DTO.UserModels
         public bool IsAccountActivated { get; set; }
         public RestaurantUser RestaurantUser { get; set; }
         public Customer Customer { get; set; }
+        public bool HasARestaurant => RestaurantUser.RestaurantId != null;
 
         public CurrentUser(User user, IList<string> roles)
         {

@@ -9,6 +9,7 @@ using YnovEat.Api.Core.Response.Errors;
 using YnovEat.Domain.DTO.RestaurantModels;
 using YnovEat.Domain.ModelsAggregate.UserAggregate;
 using YnovEat.Domain.ModelsAggregate.UserAggregate.Roles;
+using YnovEat.Domain.Services.Database.Repositories;
 using YnovEat.Domain.Services.RestaurantServices;
 
 namespace YnovEat.Api.Controllers
@@ -21,9 +22,10 @@ namespace YnovEat.Api.Controllers
 
         public RestaurantController(
             UserManager<User> userManager,
+            IUserRepository userRepository,
             IConfiguration configuration,
             IRestaurantService restaurantService
-        ) : base(userManager, configuration)
+        ) : base(userManager, userRepository, configuration)
         {
             _restaurantService = restaurantService;
         }
@@ -34,6 +36,11 @@ namespace YnovEat.Api.Controllers
         public async Task<IActionResult> Create([FromBody] RestaurantCreationDto model)
         {
             var currentUser = await GetAuthenticatedUser();
+            if (currentUser.HasARestaurant)
+                return StatusCode(
+                    StatusCodes.Status403Forbidden,
+                    "User has already a restaurant"
+                );
 
             try
             {

@@ -6,18 +6,22 @@ using Microsoft.Extensions.Configuration;
 using YnovEat.Domain.DTO.UserModels;
 using YnovEat.Domain.ModelsAggregate.UserAggregate;
 using YnovEat.Domain.ModelsAggregate.UserAggregate.Roles;
+using YnovEat.Domain.Services.Database.Repositories;
 
 namespace YnovEat.Api.Controllers
 {
     [Route("api")]
     public class CustomControllerBase : ControllerBase
     {
-        protected readonly UserManager<User> UserManager;
+        private readonly UserManager<User> _userManager;
+        private readonly IUserRepository _userRepository;
         protected readonly IConfiguration Configuration;
 
-        public CustomControllerBase(UserManager<User> userManager, IConfiguration configuration)
+        public CustomControllerBase(UserManager<User> userManager, IUserRepository userRepository,
+            IConfiguration configuration)
         {
-            UserManager = userManager;
+            _userManager = userManager;
+            _userRepository = userRepository;
             Configuration = configuration;
         }
 
@@ -27,8 +31,9 @@ namespace YnovEat.Api.Controllers
             if (userName == null)
                 return null;
 
-            var user = await UserManager.FindByNameAsync(userName);
-            var userRoles = await UserManager.GetRolesAsync(user);
+            var user = await _userRepository.GetFullUser(userName);
+            var userRoles = await _userManager.GetRolesAsync(user);
+
             return new CurrentUser(user, userRoles);
         }
 
@@ -38,7 +43,7 @@ namespace YnovEat.Api.Controllers
             if (userName == null)
                 return null;
 
-            var user = await UserManager.FindByNameAsync(userName);
+            var user = await _userManager.FindByNameAsync(userName);
             return new UserReadDto(user);
         }
     }

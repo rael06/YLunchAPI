@@ -6,5 +6,6 @@ namespace YnovEat.Domain.Services.Database.Repositories
     public interface IUserRepository
     {
         Task Register(User user, string password, string role);
+        Task<User> GetFullUser(string username);
     }
 }
