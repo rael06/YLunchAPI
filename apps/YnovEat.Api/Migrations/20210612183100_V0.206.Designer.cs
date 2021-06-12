@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using YnovEat.Infrastructure.Database;
 
 namespace YnovEat.Api.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210612183100_V0.206")]
+    partial class V0206
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -258,7 +260,7 @@ namespace YnovEat.Api.Migrations
 
                     b.HasIndex("RestaurantId");
 
-                    b.ToTable("DaysOpeningTimes");
+                    b.ToTable("WeeksOpeningTimes");
                 });
 
             modelBuilder.Entity("YnovEat.Domain.ModelsAggregate.RestaurantAggregate.OpeningTime", b =>

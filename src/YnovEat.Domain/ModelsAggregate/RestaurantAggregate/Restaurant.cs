@@ -39,7 +39,7 @@ namespace YnovEat.Domain.ModelsAggregate.RestaurantAggregate
         public string OwnerId { get; set; }
         public virtual RestaurantOwner Owner { get; set; }
         public virtual ICollection<ClosingDate> ClosingDates { get; set; } = new List<ClosingDate>();
-        public virtual ICollection<DayOpeningHours> DaysOpeningHours { get; set; } = new List<DayOpeningHours>();
+        public virtual ICollection<DayOpeningTimes> WeekOpeningTimes { get; set; } = new List<DayOpeningTimes>();
         public virtual ICollection<RestaurantUser> RestaurantUsers { get; set; } = new List<RestaurantUser>();
 
         public virtual ICollection<RestaurantCategory> Categories { get; set; } =

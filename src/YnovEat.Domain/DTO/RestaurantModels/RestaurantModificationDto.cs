@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using YnovEat.Domain.DTO.RestaurantModels.ClosingDatesModels;
+using YnovEat.Domain.DTO.RestaurantModels.ClosingDateModels;
+using YnovEat.Domain.DTO.RestaurantModels.OpeningTimeModels;
+using YnovEat.Domain.ModelsAggregate.RestaurantAggregate;
 
 namespace YnovEat.Domain.DTO.RestaurantModels
 {
@@ -24,5 +26,6 @@ namespace YnovEat.Domain.DTO.RestaurantModels
         // !address
 
         public ICollection<DateTime> ClosingDates { get; set; }
+        public ICollection<DayOpeningTimesCreationDto> WeekOpeningTimes { get; set; }
     }
 }

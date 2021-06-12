@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using YnovEat.Api.Core;
+using YnovEat.Application.Exceptions;
 using YnovEat.Domain.DTO.RestaurantModels;
 using YnovEat.Domain.ModelsAggregate.UserAggregate;
 using YnovEat.Domain.ModelsAggregate.UserAggregate.Roles;
@@ -18,15 +19,18 @@ namespace YnovEat.Api.Controllers
     public class RestaurantController : CustomControllerBase
     {
         private readonly IRestaurantService _restaurantService;
+        private readonly IRestaurantRepository _restaurantRepository;
 
         public RestaurantController(
             UserManager<User> userManager,
             IUserRepository userRepository,
             IConfiguration configuration,
-            IRestaurantService restaurantService
+            IRestaurantService restaurantService,
+            IRestaurantRepository restaurantRepository
         ) : base(userManager, userRepository, configuration)
         {
             _restaurantService = restaurantService;
+            _restaurantRepository = restaurantRepository;
         }
 
         [Authorize(Roles = UserRoles.RestaurantAdmin)]
@@ -60,16 +64,39 @@ namespace YnovEat.Api.Controllers
         public async Task<IActionResult> Update([FromBody] RestaurantModificationDto model)
         {
             var currentUser = await GetAuthenticatedUser();
-            var restaurant = await _restaurantService.GetById(model.Id);
+            var restaurant = await _restaurantRepository.GetById(model.Id);
             if (!restaurant.OwnerId.Equals(currentUser.Id))
                 return StatusCode(
                     StatusCodes.Status403Forbidden,
-                    "User is not the restaurant owner"
+                    "User is not from the restaurant"
                 );
 
             try
             {
-                return Ok(await _restaurantService.Update(model));
+                return Ok(await _restaurantService.Update(model, restaurant));
+            }
+            catch (Exception e)
+            {
+                return StatusCode(
+                    StatusCodes.Status500InternalServerError,
+                    e
+                );
+            }
+        }
+
+        [Authorize(Roles = UserRoles.RestaurantAdmin)]
+        [HttpGet]
+        [Route("get-mine")]
+        public async Task<IActionResult> Get()
+        {
+            var currentUser = await GetAuthenticatedUser();
+            try
+            {
+                return Ok(await _restaurantService.Get(currentUser.Id));
+            }
+            catch (NotFoundException e)
+            {
+                return NotFound(e.Message);
             }
             catch (Exception e)
             {

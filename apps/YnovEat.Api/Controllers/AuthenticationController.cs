@@ -62,7 +62,8 @@ namespace YnovEat.Api.Controllers
             var token = new JwtSecurityToken(
                 issuer: Configuration["JWT:ValidIssuer"],
                 audience: Configuration["JWT:ValidAudience"],
-                expires: DateTime.Now.AddHours(3),
+                // Todo update expiration time
+                expires: DateTime.Now.AddMinutes(Convert.ToDouble(Configuration["JWT:Expiration"])),
                 claims: authClaims,
                 signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
             );

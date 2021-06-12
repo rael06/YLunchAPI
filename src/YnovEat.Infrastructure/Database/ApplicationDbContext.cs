@@ -12,8 +12,8 @@ namespace YnovEat.Infrastructure.Database
         public DbSet<Restaurant> Restaurants { get; set; }
         public DbSet<RestaurantUser> RestaurantUsers { get; set; }
         public DbSet<ClosingDate> ClosingDates { get; set; }
-        public DbSet<DayOpeningHours> DayOpeningHours { get; set; }
-        public DbSet<OpeningHour> OpeningHours { get; set; }
+        public DbSet<DayOpeningTimes> DaysOpeningTimes { get; set; }
+        public DbSet<OpeningTime> OpeningTimes { get; set; }
         public DbSet<RestaurantCategory> RestaurantCategories { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<RestaurantProduct> RestaurantProducts { get; set; }
@@ -37,18 +37,18 @@ namespace YnovEat.Infrastructure.Database
 
             builder.Entity<ClosingDate>(x => { x.Property(c => c.ClosingDateTime).IsRequired(); });
 
-            builder.Entity<DayOpeningHours>(x =>
+            builder.Entity<DayOpeningTimes>(x =>
             {
-                x.HasMany(d => d.OpeningHours)
-                    .WithOne(o => o.DayOpeningHours);
+                x.HasMany(d => d.OpeningTimes)
+                    .WithOne(o => o.DayOpeningTimes);
 
                 x.Property(d => d.DayOfWeek).IsRequired();
             });
 
-            builder.Entity<OpeningHour>(x =>
+            builder.Entity<OpeningTime>(x =>
             {
-                x.Property(oh => oh.StartHourInMinutes).IsRequired();
-                x.Property(oh => oh.EndHourInMinutes).IsRequired();
+                x.Property(oh => oh.StartTimeInMinutes).IsRequired();
+                x.Property(oh => oh.EndTimeInMinutes).IsRequired();
             });
 
             builder.Entity<OrderStatus>(x =>
@@ -81,7 +81,7 @@ namespace YnovEat.Infrastructure.Database
 
             builder.Entity<Restaurant>(x =>
             {
-                x.HasMany(r => r.DaysOpeningHours)
+                x.HasMany(r => r.WeekOpeningTimes)
                     .WithOne(d => d.Restaurant);
 
                 x.HasMany(r => r.ClosingDates)

@@ -2,7 +2,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using YnovEat.Domain.DTO.RestaurantModels.ClosingDatesModels;
+using YnovEat.Domain.DTO.RestaurantModels.ClosingDateModels;
+using YnovEat.Domain.DTO.RestaurantModels.OpeningTimeModels;
 using YnovEat.Domain.ModelsAggregate.RestaurantAggregate;
 
 namespace YnovEat.Domain.DTO.RestaurantModels
@@ -32,7 +33,8 @@ namespace YnovEat.Domain.DTO.RestaurantModels
         // !address
 
         public string OwnerId { get; set; }
-        public ICollection<ClosingDateReadDto> ClosingDatesReadDtoCollection { get; set; }
+        public ICollection<ClosingDateReadDto> ClosingDatesReadDto { get; set; }
+        public ICollection<DayOpeningTimesReadDto> WeekOpeningTimes { get; set; }
 
         public RestaurantReadDto(Restaurant restaurant)
         {
@@ -58,7 +60,8 @@ namespace YnovEat.Domain.DTO.RestaurantModels
             StreetName = entity.StreetName;
             AddressExtraInformation = entity.AddressExtraInformation;
             OwnerId = entity.OwnerId;
-            ClosingDatesReadDtoCollection = entity.ClosingDates.Select(x => new ClosingDateReadDto(x)).ToList();
+            ClosingDatesReadDto = entity.ClosingDates.Select(x => new ClosingDateReadDto(x)).ToList();
+            WeekOpeningTimes = entity.WeekOpeningTimes.Select(x => new DayOpeningTimesReadDto(x)).ToList();
         }
     }
 }
