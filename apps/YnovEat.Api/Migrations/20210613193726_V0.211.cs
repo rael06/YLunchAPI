@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace YnovEat.Api.Migrations
 {
-    public partial class V0203 : Migration
+    public partial class V0211 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -221,16 +221,16 @@ namespace YnovEat.Api.Migrations
                 name: "Customers",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "varchar(255)", nullable: false)
+                    UserId = table.Column<string>(type: "varchar(255)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     CustomerFamily = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Customers", x => x.Id);
+                    table.PrimaryKey("PK_Customers", x => x.UserId);
                     table.ForeignKey(
-                        name: "FK_Customers_AspNetUsers_Id",
-                        column: x => x.Id,
+                        name: "FK_Customers_AspNetUsers_UserId",
+                        column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -241,18 +241,18 @@ namespace YnovEat.Api.Migrations
                 name: "Carts",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "varchar(255)", nullable: false)
+                    UserId = table.Column<string>(type: "varchar(255)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     FulfilmentDatetime = table.Column<DateTime>(type: "datetime(6)", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Carts", x => x.Id);
+                    table.PrimaryKey("PK_Carts", x => x.UserId);
                     table.ForeignKey(
-                        name: "FK_Carts_Customers_Id",
-                        column: x => x.Id,
+                        name: "FK_Carts_Customers_UserId",
+                        column: x => x.UserId,
                         principalTable: "Customers",
-                        principalColumn: "Id",
+                        principalColumn: "UserId",
                         onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
@@ -277,7 +277,7 @@ namespace YnovEat.Api.Migrations
                         name: "FK_Orders_Customers_CustomerId",
                         column: x => x.CustomerId,
                         principalTable: "Customers",
-                        principalColumn: "Id",
+                        principalColumn: "UserId",
                         onDelete: ReferentialAction.Restrict);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
@@ -308,7 +308,7 @@ namespace YnovEat.Api.Migrations
                         name: "FK_CustomerProducts_Carts_CartId",
                         column: x => x.CartId,
                         principalTable: "Carts",
-                        principalColumn: "Id",
+                        principalColumn: "UserId",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_CustomerProducts_Orders_OrderId1",
@@ -346,7 +346,7 @@ namespace YnovEat.Api.Migrations
                 name: "RestaurantUsers",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "varchar(255)", nullable: false)
+                    UserId = table.Column<string>(type: "varchar(255)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     RestaurantId = table.Column<string>(type: "varchar(255)", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
@@ -355,10 +355,10 @@ namespace YnovEat.Api.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_RestaurantUsers", x => x.Id);
+                    table.PrimaryKey("PK_RestaurantUsers", x => x.UserId);
                     table.ForeignKey(
-                        name: "FK_RestaurantUsers_AspNetUsers_Id",
-                        column: x => x.Id,
+                        name: "FK_RestaurantUsers_AspNetUsers_UserId",
+                        column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -379,7 +379,6 @@ namespace YnovEat.Api.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     IsEmailConfirmed = table.Column<bool>(type: "tinyint(1)", nullable: false),
                     EmailConfirmationDateTime = table.Column<DateTime>(type: "datetime(6)", nullable: true),
-                    OrderLimitTimeInMinutes = table.Column<int>(type: "int", nullable: true),
                     IsOpen = table.Column<bool>(type: "tinyint(1)", nullable: false),
                     IsPublished = table.Column<bool>(type: "tinyint(1)", nullable: false),
                     CreationDateTime = table.Column<DateTime>(type: "datetime(6)", nullable: false),
@@ -406,7 +405,7 @@ namespace YnovEat.Api.Migrations
                         name: "FK_Restaurants_RestaurantUsers_OwnerId",
                         column: x => x.OwnerId,
                         principalTable: "RestaurantUsers",
-                        principalColumn: "Id",
+                        principalColumn: "UserId",
                         onDelete: ReferentialAction.Restrict);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
@@ -434,7 +433,7 @@ namespace YnovEat.Api.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "DayOpeningHours",
+                name: "DaysOpeningTimes",
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "varchar(255)", nullable: false)
@@ -445,9 +444,9 @@ namespace YnovEat.Api.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_DayOpeningHours", x => x.Id);
+                    table.PrimaryKey("PK_DaysOpeningTimes", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_DayOpeningHours_Restaurants_RestaurantId",
+                        name: "FK_DaysOpeningTimes_Restaurants_RestaurantId",
                         column: x => x.RestaurantId,
                         principalTable: "Restaurants",
                         principalColumn: "Id",
@@ -514,23 +513,25 @@ namespace YnovEat.Api.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "OpeningHours",
+                name: "OpeningTimes",
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "varchar(255)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    StartHourInMinutes = table.Column<int>(type: "int", nullable: false),
-                    EndHourInMinutes = table.Column<int>(type: "int", nullable: false),
-                    DayOpeningHoursId = table.Column<string>(type: "varchar(255)", nullable: true)
+                    StartTimeInMinutes = table.Column<int>(type: "int", nullable: false),
+                    EndTimeInMinutes = table.Column<int>(type: "int", nullable: false),
+                    StartOrderTimeInMinutes = table.Column<int>(type: "int", nullable: true),
+                    EndOrderTimeInMinutes = table.Column<int>(type: "int", nullable: true),
+                    DayOpeningTimesId = table.Column<string>(type: "varchar(255)", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_OpeningHours", x => x.Id);
+                    table.PrimaryKey("PK_OpeningTimes", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_OpeningHours_DayOpeningHours_DayOpeningHoursId",
-                        column: x => x.DayOpeningHoursId,
-                        principalTable: "DayOpeningHours",
+                        name: "FK_OpeningTimes_DaysOpeningTimes_DayOpeningTimesId",
+                        column: x => x.DayOpeningTimesId,
+                        principalTable: "DaysOpeningTimes",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 })
@@ -612,14 +613,14 @@ namespace YnovEat.Api.Migrations
                 column: "OrderId1");
 
             migrationBuilder.CreateIndex(
-                name: "IX_DayOpeningHours_RestaurantId",
-                table: "DayOpeningHours",
+                name: "IX_DaysOpeningTimes_RestaurantId",
+                table: "DaysOpeningTimes",
                 column: "RestaurantId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_OpeningHours_DayOpeningHoursId",
-                table: "OpeningHours",
-                column: "DayOpeningHoursId");
+                name: "IX_OpeningTimes_DayOpeningTimesId",
+                table: "OpeningTimes",
+                column: "DayOpeningTimesId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Orders_CustomerId",
@@ -669,7 +670,7 @@ namespace YnovEat.Api.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
-                name: "FK_RestaurantUsers_AspNetUsers_Id",
+                name: "FK_RestaurantUsers_AspNetUsers_UserId",
                 table: "RestaurantUsers");
 
             migrationBuilder.DropForeignKey(
@@ -698,7 +699,7 @@ namespace YnovEat.Api.Migrations
                 name: "CustomerProducts");
 
             migrationBuilder.DropTable(
-                name: "OpeningHours");
+                name: "OpeningTimes");
 
             migrationBuilder.DropTable(
                 name: "OrderStatus");
@@ -716,7 +717,7 @@ namespace YnovEat.Api.Migrations
                 name: "Carts");
 
             migrationBuilder.DropTable(
-                name: "DayOpeningHours");
+                name: "DaysOpeningTimes");
 
             migrationBuilder.DropTable(
                 name: "Orders");

@@ -15,6 +15,8 @@ namespace YnovEat.Domain.DTO.RestaurantModels
         public string Name { get; set; }
         public string PhoneNumber { get; set; }
         public string Email { get; set; }
+        public string Base64Image { get; set; }
+        public string Base64Logo { get; set; }
         public bool? IsOpen { get; set; }
 
         // address
@@ -44,6 +46,8 @@ namespace YnovEat.Domain.DTO.RestaurantModels
                 Name = Name,
                 PhoneNumber = PhoneNumber,
                 Email = Email,
+                Base64Image = Base64Image,
+                Base64Logo = Base64Logo,
                 IsEmailConfirmed = false,
                 EmailConfirmationDateTime = null,
                 IsOpen = IsOpen ?? false,

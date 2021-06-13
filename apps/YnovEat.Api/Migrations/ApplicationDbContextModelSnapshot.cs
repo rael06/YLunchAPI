@@ -341,6 +341,12 @@ namespace YnovEat.Api.Migrations
                     b.Property<string>("AddressExtraInformation")
                         .HasColumnType("longtext");
 
+                    b.Property<string>("Base64Image")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Base64Logo")
+                        .HasColumnType("longtext");
+
                     b.Property<string>("City")
                         .HasColumnType("longtext");
 
