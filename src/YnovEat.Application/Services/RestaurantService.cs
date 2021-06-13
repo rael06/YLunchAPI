@@ -37,8 +37,9 @@ namespace YnovEat.Application.Services
 
         public async Task<RestaurantReadDto> Create(RestaurantCreationDto restaurantCreationDto, CurrentUser user)
         {
+            var allRestaurantCategories = await _restaurantRepository.GetAllRestaurantCategories();
             var savedRestaurant =
-                await _restaurantRepository.CreateRestaurant(restaurantCreationDto.CreateRestaurant(user));
+                await _restaurantRepository.CreateRestaurant(restaurantCreationDto.CreateRestaurant(user, allRestaurantCategories));
             return new RestaurantReadDto(savedRestaurant);
         }
 

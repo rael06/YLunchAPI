@@ -35,7 +35,7 @@ namespace YnovEat.Domain.DTO.RestaurantModels
         public ICollection<RestaurantCategoryCreationDto> Categories { get; set; } =
             new List<RestaurantCategoryCreationDto>();
 
-        public Restaurant CreateRestaurant(CurrentUser user)
+        public Restaurant CreateRestaurant(CurrentUser user, ICollection<RestaurantCategory> allRestaurantCategories)
         {
             var restaurantId = Guid.NewGuid().ToString();
             return new Restaurant
@@ -63,7 +63,13 @@ namespace YnovEat.Domain.DTO.RestaurantModels
                     day.CreateDayOpeningTimes(restaurantId)
                 ).ToList(),
 
-                Categories = Categories.Select(x => x.CreateRestaurantCategory()).ToList()
+                Categories = Categories
+                    .Select(x =>
+                    {
+                        var existingCategory = allRestaurantCategories.FirstOrDefault(y => y.Name.Equals(x.Name));
+                        return existingCategory ?? x.CreateRestaurantCategory();
+                    })
+                    .ToList()
             };
         }
     }
