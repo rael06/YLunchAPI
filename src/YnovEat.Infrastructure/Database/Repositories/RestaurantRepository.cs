@@ -21,19 +21,20 @@ namespace YnovEat.Infrastructure.Database.Repositories
 
         public async Task<Restaurant> GetById(string id) =>
             await QueryEnrichedRestaurant
-                .FirstOrDefaultAsync(x=>x.Id.Equals(id));
+                .FirstOrDefaultAsync(x => x.Id.Equals(id));
 
         private IIncludableQueryable<Restaurant, ICollection<OpeningTime>> QueryEnrichedRestaurant =>
             _context.Restaurants
                 .Include(x => x.ClosingDates)
-                .Include(x=>x.RestaurantUsers)
+                .Include(x => x.RestaurantUsers)
+                .Include(x => x.Categories)
                 .Include(x => x.WeekOpeningTimes.OrderBy(y => y.DayOfWeek))
                 .ThenInclude(x => x.OpeningTimes);
 
         public async Task<Restaurant> GetByUserId(string id) =>
             await QueryEnrichedRestaurant
-                .FirstOrDefaultAsync(x=>x.RestaurantUsers
-                    .Any(y=>y.UserId.Equals(id))
+                .FirstOrDefaultAsync(x => x.RestaurantUsers
+                    .Any(y => y.UserId.Equals(id))
                 );
 
         public async Task AddAdmin(User user)
@@ -54,15 +55,22 @@ namespace YnovEat.Infrastructure.Database.Repositories
 
             var existingWeekOpeningTimes =
                 await _context.DaysOpeningTimes.Where(x => x.RestaurantId.Equals(restaurant.Id)).ToListAsync();
-            var existingDaysOpeningTimesIds = existingWeekOpeningTimes.Select(x => x.Id).ToList();
-            var existingOpeningTimes =
-                await _context.OpeningTimes.Where(x => existingDaysOpeningTimesIds.Contains(x.DayOpeningTimesId)).ToListAsync();
-
-            _context.OpeningTimes.RemoveRange(existingOpeningTimes);
             _context.DaysOpeningTimes.RemoveRange(existingWeekOpeningTimes);
 
             await _context.SaveChangesAsync();
+
+            var uselessCategories =
+                await _context.RestaurantCategories
+                    .Where(x => x.Restaurants.Count == 0).ToListAsync();
+            _context.RestaurantCategories.RemoveRange(uselessCategories);
+
+            await _context.SaveChangesAsync();
             return restaurant;
+        }
+
+        public async Task<ICollection<RestaurantCategory>> GetAllRestaurantCategories()
+        {
+            return await _context.RestaurantCategories.ToListAsync();
         }
 
         public async Task<Restaurant> CreateRestaurant(Restaurant restaurant)

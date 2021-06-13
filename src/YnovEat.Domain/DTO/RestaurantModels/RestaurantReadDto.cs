@@ -4,12 +4,13 @@ using System.Collections.Generic;
 using System.Linq;
 using YnovEat.Domain.DTO.RestaurantModels.ClosingDateModels;
 using YnovEat.Domain.DTO.RestaurantModels.OpeningTimeModels;
+using YnovEat.Domain.DTO.RestaurantModels.RestaurantCategoryModels;
 using YnovEat.Domain.DTO.RestaurantModels.RestaurantUserModels;
 using YnovEat.Domain.ModelsAggregate.RestaurantAggregate;
 
 namespace YnovEat.Domain.DTO.RestaurantModels
 {
-    public class RestaurantReadDto : IDtoConverter<Restaurant>
+    public class RestaurantReadDto
     {
         public string Id { get; set; }
         public string Name { get; set; }
@@ -37,13 +38,9 @@ namespace YnovEat.Domain.DTO.RestaurantModels
         public ICollection<ClosingDateReadDto> ClosingDates { get; set; }
         public ICollection<DayOpeningTimesReadDto> WeekOpeningTimes { get; set; }
         public ICollection<RestaurantUserReadDto> RestaurantUsers { get; set; }
+        public ICollection<RestaurantCategoryReadDto> RestaurantCategories { get; set; }
 
-        public RestaurantReadDto(Restaurant restaurant)
-        {
-            FromEntity(restaurant);
-        }
-
-        public void FromEntity(Restaurant entity)
+        public RestaurantReadDto(Restaurant entity)
         {
             Id = entity.Id;
             Name = entity.Name;
@@ -66,6 +63,7 @@ namespace YnovEat.Domain.DTO.RestaurantModels
             ClosingDates = entity.ClosingDates.Select(x => new ClosingDateReadDto(x)).ToList();
             WeekOpeningTimes = entity.WeekOpeningTimes.Select(x => new DayOpeningTimesReadDto(x)).ToList();
             RestaurantUsers = entity.RestaurantUsers.Select(x => new RestaurantUserReadDto(x)).ToList();
+            RestaurantCategories = entity.Categories.Select(x => new RestaurantCategoryReadDto(x)).ToList();
         }
     }
 }

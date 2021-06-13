@@ -40,7 +40,8 @@ namespace YnovEat.Infrastructure.Database
             builder.Entity<DayOpeningTimes>(x =>
             {
                 x.HasMany(d => d.OpeningTimes)
-                    .WithOne(o => o.DayOpeningTimes);
+                    .WithOne(o => o.DayOpeningTimes)
+                    .OnDelete(DeleteBehavior.ClientCascade);
 
                 x.Property(d => d.DayOfWeek).IsRequired();
             });

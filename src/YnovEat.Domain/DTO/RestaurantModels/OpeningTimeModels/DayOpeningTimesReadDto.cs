@@ -5,20 +5,14 @@ using YnovEat.Domain.ModelsAggregate.RestaurantAggregate;
 
 namespace YnovEat.Domain.DTO.RestaurantModels.OpeningTimeModels
 {
-    public class DayOpeningTimesReadDto : IDtoConverter<DayOpeningTimes>
+    public class DayOpeningTimesReadDto
     {
         public string Id { get; set; }
         public DayOfWeek DayOfWeek { get; set; }
         public string RestaurantId { get; set; }
-        public virtual ICollection<OpeningTimeReadDto> OpeningTimes { get; set; } =
-            new List<OpeningTimeReadDto>();
+        public ICollection<OpeningTimeReadDto> OpeningTimes { get; set; }
 
-        public DayOpeningTimesReadDto(DayOpeningTimes dayOpeningTimes)
-        {
-            FromEntity(dayOpeningTimes);
-        }
-
-        public void FromEntity(DayOpeningTimes entity)
+        public DayOpeningTimesReadDto(DayOpeningTimes entity)
         {
             Id = entity.Id;
             DayOfWeek = entity.DayOfWeek;

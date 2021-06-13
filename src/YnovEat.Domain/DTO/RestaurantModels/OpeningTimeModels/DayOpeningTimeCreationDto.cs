@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using YnovEat.Domain.ModelsAggregate.RestaurantAggregate;
 
 namespace YnovEat.Domain.DTO.RestaurantModels.OpeningTimeModels
 {
@@ -11,5 +13,17 @@ namespace YnovEat.Domain.DTO.RestaurantModels.OpeningTimeModels
 
         public virtual ICollection<OpeningTimeCreationDto> OpeningTimes { get; set; } =
             new List<OpeningTimeCreationDto>();
+
+        public DayOpeningTimes CreateDayOpeningTimes(string restaurantId)
+        {
+            var dayOpeningTimesId = Guid.NewGuid().ToString();
+            return new DayOpeningTimes
+            {
+                Id = dayOpeningTimesId,
+                RestaurantId = restaurantId,
+                DayOfWeek = DayOfWeek,
+                OpeningTimes = OpeningTimes.Select(o => o.CreateOpeningTime(dayOpeningTimesId)).ToList()
+            };
+        }
     }
 }

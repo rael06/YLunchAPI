@@ -29,14 +29,9 @@ namespace YnovEat.Domain.DTO.UserModels
         public Customer Customer { get; set; }
         public bool HasARestaurant => RestaurantUser.RestaurantId != null;
 
-        public CurrentUser(User user, IList<string> roles)
+        public CurrentUser(User entity, IList<string> roles)
         {
-            FromEntity(user);
             Roles = roles;
-        }
-
-        public void FromEntity(User entity)
-        {
             Id = entity.Id;
             UserName = entity.NormalizedUserName;
             Firstname = entity.Firstname;

@@ -8,7 +8,7 @@ namespace YnovEat.Domain.ModelsAggregate.RestaurantAggregate
         public string Id { get; set; }
         public string Name { get; set; }
 
-        public ICollection<Restaurant> Restaurants { get; set; } =
+        public virtual ICollection<Restaurant> Restaurants { get; set; } =
             new List<Restaurant>();
     }
 }

@@ -2,7 +2,7 @@ using YnovEat.Domain.ModelsAggregate.RestaurantAggregate;
 
 namespace YnovEat.Domain.DTO.RestaurantModels.OpeningTimeModels
 {
-    public class OpeningTimeReadDto : IDtoConverter<OpeningTime>
+    public class OpeningTimeReadDto
     {
         public string Id { get; set; }
         public int StartTimeInMinutes { get; set; }
@@ -11,12 +11,7 @@ namespace YnovEat.Domain.DTO.RestaurantModels.OpeningTimeModels
         public int? EndOrderTimeInMinutes { get; set; }
         public string DayOpeningTimesId { get; set; }
 
-        public OpeningTimeReadDto(OpeningTime openingTime)
-        {
-            FromEntity(openingTime);
-        }
-
-        public void FromEntity(OpeningTime entity)
+        public OpeningTimeReadDto(OpeningTime entity)
         {
             Id = entity.Id;
             StartTimeInMinutes = entity.StartTimeInMinutes;
