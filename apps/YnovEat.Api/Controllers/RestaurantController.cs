@@ -92,7 +92,7 @@ namespace YnovEat.Api.Controllers
             var currentUser = await GetAuthenticatedUser();
             try
             {
-                return Ok(await _restaurantService.Get(currentUser.Id));
+                return Ok(await _restaurantService.GetByUserId(currentUser.Id));
             }
             catch (NotFoundException e)
             {

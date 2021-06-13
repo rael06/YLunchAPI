@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using YnovEat.Domain.DTO.RestaurantModels.ClosingDateModels;
 using YnovEat.Domain.DTO.RestaurantModels.OpeningTimeModels;
+using YnovEat.Domain.DTO.RestaurantModels.RestaurantUserModels;
 using YnovEat.Domain.ModelsAggregate.RestaurantAggregate;
 
 namespace YnovEat.Domain.DTO.RestaurantModels
@@ -33,8 +34,9 @@ namespace YnovEat.Domain.DTO.RestaurantModels
         // !address
 
         public string OwnerId { get; set; }
-        public ICollection<ClosingDateReadDto> ClosingDatesReadDto { get; set; }
+        public ICollection<ClosingDateReadDto> ClosingDates { get; set; }
         public ICollection<DayOpeningTimesReadDto> WeekOpeningTimes { get; set; }
+        public ICollection<RestaurantUserReadDto> RestaurantUsers { get; set; }
 
         public RestaurantReadDto(Restaurant restaurant)
         {
@@ -51,6 +53,7 @@ namespace YnovEat.Domain.DTO.RestaurantModels
             EmailConfirmationDateTime = entity.EmailConfirmationDateTime;
             IsOpen = entity.IsOpen;
             IsPublished = entity.IsPublished;
+            IsCurrentlyOpenToOrder = entity.IsCurrentlyOpenToOrder;
             CreationDateTime = entity.CreationDateTime;
             LastUpdateDateTime = entity.LastUpdateDateTime;
             ZipCode = entity.ZipCode;
@@ -60,8 +63,9 @@ namespace YnovEat.Domain.DTO.RestaurantModels
             StreetName = entity.StreetName;
             AddressExtraInformation = entity.AddressExtraInformation;
             OwnerId = entity.OwnerId;
-            ClosingDatesReadDto = entity.ClosingDates.Select(x => new ClosingDateReadDto(x)).ToList();
+            ClosingDates = entity.ClosingDates.Select(x => new ClosingDateReadDto(x)).ToList();
             WeekOpeningTimes = entity.WeekOpeningTimes.Select(x => new DayOpeningTimesReadDto(x)).ToList();
+            RestaurantUsers = entity.RestaurantUsers.Select(x => new RestaurantUserReadDto(x)).ToList();
         }
     }
 }

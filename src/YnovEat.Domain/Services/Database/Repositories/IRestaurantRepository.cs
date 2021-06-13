@@ -10,6 +10,6 @@ namespace YnovEat.Domain.Services.Database.Repositories
         Task<Restaurant> CreateRestaurant(Restaurant restaurant);
         Task<Restaurant> UpdateRestaurant(Restaurant restaurant);
         Task<Restaurant> GetById(string id);
-        Task<Restaurant> GetByOwnerId(string currentUserId);
+        Task<Restaurant> GetByUserId(string currentUserId);
     }
 }

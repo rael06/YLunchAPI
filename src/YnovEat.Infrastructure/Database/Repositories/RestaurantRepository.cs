@@ -23,20 +23,24 @@ namespace YnovEat.Infrastructure.Database.Repositories
             await QueryEnrichedRestaurant
                 .FirstOrDefaultAsync(x=>x.Id.Equals(id));
 
-        private IIncludableQueryable<Restaurant, ICollection<DayOpeningTimes>> QueryEnrichedRestaurant =>
+        private IIncludableQueryable<Restaurant, ICollection<OpeningTime>> QueryEnrichedRestaurant =>
             _context.Restaurants
                 .Include(x => x.ClosingDates)
-                .Include(x => x.WeekOpeningTimes);
+                .Include(x=>x.RestaurantUsers)
+                .Include(x => x.WeekOpeningTimes.OrderBy(y => y.DayOfWeek))
+                .ThenInclude(x => x.OpeningTimes);
 
-        public async Task<Restaurant> GetByOwnerId(string id) =>
+        public async Task<Restaurant> GetByUserId(string id) =>
             await QueryEnrichedRestaurant
-                .FirstOrDefaultAsync(x=>x.OwnerId.Equals(id));
+                .FirstOrDefaultAsync(x=>x.RestaurantUsers
+                    .Any(y=>y.UserId.Equals(id))
+                );
 
         public async Task AddAdmin(User user)
         {
             await _context.RestaurantUsers.AddAsync(new RestaurantOwner
             {
-                Id = user.Id,
+                UserId = user.Id,
                 User = user
             });
             await _context.SaveChangesAsync();

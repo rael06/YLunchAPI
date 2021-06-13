@@ -28,9 +28,9 @@ namespace YnovEat.Application.Services
             return new RestaurantReadDto(restaurant);
         }
 
-        public async Task<RestaurantReadDto> Get(string currentUserId)
+        public async Task<RestaurantReadDto> GetByUserId(string currentUserId)
         {
-            var restaurant = await _restaurantRepository.GetByOwnerId(currentUserId);
+            var restaurant = await _restaurantRepository.GetByUserId(currentUserId);
             if (restaurant == null) throw new NotFoundException();
             return new RestaurantReadDto(restaurant);
         }

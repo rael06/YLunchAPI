@@ -12,6 +12,6 @@ namespace YnovEat.Domain.Services.RestaurantServices
         Task<RestaurantReadDto> Update(RestaurantModificationDto restaurantModificationDto,
             Restaurant restaurantReadDto);
         Task<RestaurantReadDto> GetById(string id);
-        Task<RestaurantReadDto> Get(string currentUserId);
+        Task<RestaurantReadDto> GetByUserId(string currentUserId);
     }
 }

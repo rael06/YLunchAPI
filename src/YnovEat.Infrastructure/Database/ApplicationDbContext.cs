@@ -97,18 +97,20 @@ namespace YnovEat.Infrastructure.Database
 
             builder.Entity<RestaurantUser>(x =>
             {
-                x.HasKey(ro => ro.Id);
+                x.HasKey(ro => ro.UserId);
 
                 x.HasOne(ru => ru.User)
                     .WithOne(u => u.RestaurantUser)
-                    .HasForeignKey<RestaurantUser>(u => u.Id);
+                    .HasForeignKey<RestaurantUser>(u => u.UserId);
             });
 
             builder.Entity<Customer>(x =>
             {
+                x.HasKey(c => c.UserId);
+
                 x.HasOne(c => c.User)
                     .WithOne(u => u.Customer)
-                    .HasForeignKey<Customer>(c => c.Id);
+                    .HasForeignKey<Customer>(c => c.UserId);
 
                 x.HasMany(c => c.Orders)
                     .WithOne(o => o.Customer);
@@ -118,9 +120,11 @@ namespace YnovEat.Infrastructure.Database
 
             builder.Entity<Cart>(x =>
             {
+                x.HasKey(c => c.UserId);
+
                 x.HasOne(c => c.Customer)
                     .WithOne(u => u.Cart)
-                    .HasPrincipalKey<Customer>(c => c.Id);
+                    .HasPrincipalKey<Customer>(c => c.UserId);
             });
 
             builder.Entity<Order>(x =>
