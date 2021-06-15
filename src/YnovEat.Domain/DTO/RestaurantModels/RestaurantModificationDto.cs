@@ -12,8 +12,7 @@ namespace YnovEat.Domain.DTO.RestaurantModels
 {
     public class RestaurantModificationDto
     {
-        [Required]
-        public string Id { get; set; }
+        [Required] public string Id { get; set; }
         public string Name { get; set; }
         public string PhoneNumber { get; set; }
         public string Email { get; set; }
@@ -27,6 +26,7 @@ namespace YnovEat.Domain.DTO.RestaurantModels
         public string City { get; set; }
         public string StreetNumber { get; set; }
         public string StreetName { get; set; }
+
         public string AddressExtraInformation { get; set; }
         // !address
 
@@ -62,7 +62,10 @@ namespace YnovEat.Domain.DTO.RestaurantModels
             restaurant.Categories = Categories
                 .Select(x =>
                 {
-                    var existingCategory = allRestaurantCategories.FirstOrDefault(y => y.Name.Equals(x.Name));
+                    var existingCategory = allRestaurantCategories
+                            // TODO improvements
+                        .Where(y => Categories.Any(z => z.Name.Equals(y.Name)))
+                        .FirstOrDefault(y => y.Name.Equals(x.Name));
                     return existingCategory ?? x.CreateRestaurantCategory();
                 })
                 .ToList();

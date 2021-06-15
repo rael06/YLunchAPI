@@ -1,8 +1,10 @@
+using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using YnovEat.Application.Exceptions;
 using YnovEat.Domain.DTO.UserModels;
 using YnovEat.Domain.ModelsAggregate.UserAggregate;
 using YnovEat.Domain.ModelsAggregate.UserAggregate.Roles;
@@ -32,6 +34,7 @@ namespace YnovEat.Api.Controllers
                 return null;
 
             var user = await _userRepository.GetFullUser(userName);
+            if (user == null) throw new NotFoundException();
             var userRoles = await _userManager.GetRolesAsync(user);
 
             return new CurrentUser(user, userRoles);
@@ -44,6 +47,7 @@ namespace YnovEat.Api.Controllers
                 return null;
 
             var user = await _userRepository.GetFullUser(userName);
+            if (user == null) throw new NotFoundException();
             return new UserReadDto(user);
         }
     }

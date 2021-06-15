@@ -38,16 +38,19 @@ namespace YnovEat.Api.Controllers
         [Route("create")]
         public async Task<IActionResult> Create([FromBody] RestaurantCreationDto model)
         {
-            var currentUser = await GetAuthenticatedUser();
-            if (currentUser.HasARestaurant)
-                return StatusCode(
-                    StatusCodes.Status403Forbidden,
-                    "User has already a restaurant"
-                );
-
             try
             {
+                var currentUser = await GetAuthenticatedUser();
+                if (currentUser.HasARestaurant)
+                    return StatusCode(
+                        StatusCodes.Status403Forbidden,
+                        "User has already a restaurant"
+                    );
                 return Ok(await _restaurantService.Create(model, currentUser));
+            }
+            catch (NotFoundException e)
+            {
+                return NotFound(e.Message);
             }
             catch (Exception e)
             {
@@ -63,17 +66,21 @@ namespace YnovEat.Api.Controllers
         [Route("update")]
         public async Task<IActionResult> Update([FromBody] RestaurantModificationDto model)
         {
-            var currentUser = await GetAuthenticatedUser();
-            var restaurant = await _restaurantRepository.GetById(model.Id);
-            if (!restaurant.OwnerId.Equals(currentUser.Id))
-                return StatusCode(
-                    StatusCodes.Status403Forbidden,
-                    "User is not from the restaurant"
-                );
-
             try
             {
+                var currentUser = await GetAuthenticatedUser();
+                var restaurant = await _restaurantRepository.GetById(model.Id);
+                if (!restaurant.OwnerId.Equals(currentUser.Id))
+                    return StatusCode(
+                        StatusCodes.Status403Forbidden,
+                        "User is not from the restaurant"
+                    );
+
                 return Ok(await _restaurantService.Update(model, restaurant));
+            }
+            catch (NotFoundException e)
+            {
+                return NotFound(e.Message);
             }
             catch (Exception e)
             {
@@ -89,9 +96,9 @@ namespace YnovEat.Api.Controllers
         [Route("get-mine")]
         public async Task<IActionResult> Get()
         {
-            var currentUser = await GetAuthenticatedUser();
             try
             {
+                var currentUser = await GetAuthenticatedUser();
                 return Ok(await _restaurantService.GetByUserId(currentUser.Id));
             }
             catch (NotFoundException e)
