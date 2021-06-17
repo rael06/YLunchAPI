@@ -9,20 +9,20 @@ using YnovEat.Domain.Services.RestaurantServices;
 
 namespace YnovEat.Application.Services
 {
-    public class ProductService : IProductService
+    public class RestaurantProductService : IRestaurantProductService
     {
-        private readonly IProductRepository _productRepository;
+        private readonly IRestaurantProductRepository _restaurantProductRepository;
 
-        public ProductService(IProductRepository productRepository)
+        public RestaurantProductService(IRestaurantProductRepository restaurantProductRepository)
         {
-            _productRepository = productRepository;
+            _restaurantProductRepository = restaurantProductRepository;
         }
 
         public async Task<RestaurantProductReadDto> Create(RestaurantProductCreationDto restaurantProductCreationDto,
             string restaurantId)
         {
             var restaurantProduct = restaurantProductCreationDto.CreateRestaurantProduct(restaurantId);
-            await _productRepository.Create(restaurantProduct);
+            await _restaurantProductRepository.Create(restaurantProduct);
             return new RestaurantProductReadDto(restaurantProduct);
         }
 
@@ -31,14 +31,19 @@ namespace YnovEat.Application.Services
             RestaurantProduct restaurantProduct)
         {
             var updatedRestaurantProduct = restaurantProductModificationDto.UpdateRestaurantProduct(restaurantProduct);
-            await _productRepository.Update();
+            await _restaurantProductRepository.Update();
             return new RestaurantProductReadDto(updatedRestaurantProduct);
         }
 
         public async Task<ICollection<RestaurantProductReadDto>> GetAllByRestaurantId(string restaurantId)
         {
-            var restaurantProducts = await _productRepository.GetAllByRestaurantId(restaurantId);
+            var restaurantProducts = await _restaurantProductRepository.GetAllByRestaurantId(restaurantId);
             return restaurantProducts.Select(x => new RestaurantProductReadDto(x)).ToList();
+        }
+
+        public async Task Delete(string restaurantProductId)
+        {
+            await _restaurantProductRepository.Delete(restaurantProductId);
         }
     }
 }

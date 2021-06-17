@@ -16,26 +16,25 @@ namespace YnovEat.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ProductController : CustomControllerBase
+    public class RestaurantProductController : CustomControllerBase
     {
-        private readonly IProductService _productService;
-        private readonly IProductRepository _productRepository;
+        private readonly IRestaurantProductService _restaurantProductService;
+        private readonly IRestaurantProductRepository _restaurantProductRepository;
 
-        public ProductController(
+        public RestaurantProductController(
             UserManager<User> userManager,
             IUserRepository userRepository,
             IConfiguration configuration,
-            IProductService productService,
-            IProductRepository productRepository
+            IRestaurantProductService restaurantProductService,
+            IRestaurantProductRepository restaurantProductRepository
         ) : base(userManager, userRepository, configuration)
         {
-            _productService = productService;
-            _productRepository = productRepository;
+            _restaurantProductService = restaurantProductService;
+            _restaurantProductRepository = restaurantProductRepository;
         }
 
         [Authorize(Roles = UserRoles.RestaurantAdmin)]
         [HttpPost]
-        [Route("create")]
         public async Task<IActionResult> Create([FromBody] RestaurantProductCreationDto model)
         {
             try
@@ -46,7 +45,7 @@ namespace YnovEat.Api.Controllers
                         StatusCodes.Status403Forbidden,
                         "User has not a restaurant"
                     );
-                return Ok(await _productService.Create(model, currentUser.RestaurantUser.RestaurantId));
+                return Ok(await _restaurantProductService.Create(model, currentUser.RestaurantUser.RestaurantId));
             }
             catch (Exception e)
             {
@@ -59,7 +58,6 @@ namespace YnovEat.Api.Controllers
 
         [Authorize(Roles = UserRoles.RestaurantAdmin)]
         [HttpPatch]
-        [Route("update")]
         public async Task<IActionResult> Update([FromBody] RestaurantProductModificationDto model)
         {
             try
@@ -71,10 +69,10 @@ namespace YnovEat.Api.Controllers
                         "User has not a restaurant"
                     );
 
-                var existingProducts = await _productRepository.GetAllByRestaurantId(currentUser.RestaurantUser.RestaurantId);
+                var existingProducts = await _restaurantProductRepository.GetAllByRestaurantId(currentUser.RestaurantUser.RestaurantId);
 
                 var restaurantProductToUpdate =
-                    existingProducts.FirstOrDefault(x => x.Id == model.Id);
+                    existingProducts.FirstOrDefault(x => x.Id.Equals(model.Id));
 
                 if (restaurantProductToUpdate == null)
                     return StatusCode(
@@ -82,7 +80,7 @@ namespace YnovEat.Api.Controllers
                         "Product not found"
                     );
 
-                return Ok(await _productService.Update(model, restaurantProductToUpdate));
+                return Ok(await _restaurantProductService.Update(model, restaurantProductToUpdate));
             }
             catch (Exception e)
             {
@@ -108,7 +106,7 @@ namespace YnovEat.Api.Controllers
                     );
 
                 var restaurantProducts =
-                    await _productService.GetAllByRestaurantId(currentUser.RestaurantUser.RestaurantId);
+                    await _restaurantProductService.GetAllByRestaurantId(currentUser.RestaurantUser.RestaurantId);
 
                 return Ok(restaurantProducts);
             }
@@ -123,7 +121,7 @@ namespace YnovEat.Api.Controllers
 
         [Authorize(Roles = UserRoles.RestaurantAdmin)]
         [HttpGet]
-        [Route("get/{productId}")]
+        [Route("{productId}")]
         public async Task<IActionResult> Get(string productId)
         {
             try
@@ -136,10 +134,10 @@ namespace YnovEat.Api.Controllers
                     );
 
                 var restaurantProducts =
-                    await _productService.GetAllByRestaurantId(currentUser.RestaurantUser.RestaurantId);
+                    await _restaurantProductService.GetAllByRestaurantId(currentUser.RestaurantUser.RestaurantId);
 
                 var restaurantProduct =
-                    restaurantProducts.FirstOrDefault(x => x.Id == productId);
+                    restaurantProducts.FirstOrDefault(x => x.Id.Equals(productId));
 
                 if (restaurantProduct == null)
                     return StatusCode(
@@ -148,6 +146,45 @@ namespace YnovEat.Api.Controllers
                     );
 
                 return Ok(restaurantProduct);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(
+                    StatusCodes.Status500InternalServerError,
+                    e
+                );
+            }
+        }
+
+        [Authorize(Roles = UserRoles.RestaurantAdmin)]
+        [HttpDelete]
+        [Route("{productId}")]
+        public async Task<IActionResult> Delete(string productId)
+        {
+            try
+            {
+                var currentUser = await GetAuthenticatedUser();
+                if (!currentUser.HasARestaurant)
+                    return StatusCode(
+                        StatusCodes.Status403Forbidden,
+                        "User has not a restaurant"
+                    );
+
+                var restaurantProducts =
+                    await _restaurantProductService.GetAllByRestaurantId(currentUser.RestaurantUser.RestaurantId);
+
+                var restaurantProduct =
+                    restaurantProducts.FirstOrDefault(x => x.Id.Equals(productId));
+
+                if (restaurantProduct == null)
+                    return StatusCode(
+                        StatusCodes.Status403Forbidden,
+                        "Product not found"
+                    );
+
+                await _restaurantProductService.Delete(productId);
+
+                return NoContent();
             }
             catch (Exception e)
             {

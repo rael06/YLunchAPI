@@ -7,11 +7,11 @@ using YnovEat.Domain.Services.Database.Repositories;
 
 namespace YnovEat.Infrastructure.Database.Repositories
 {
-    public class ProductRepository : IProductRepository
+    public class RestaurantProductRepository : IRestaurantProductRepository
     {
         private readonly ApplicationDbContext _context;
 
-        public ProductRepository(ApplicationDbContext context)
+        public RestaurantProductRepository(ApplicationDbContext context)
         {
             _context = context;
         }
@@ -30,7 +30,14 @@ namespace YnovEat.Infrastructure.Database.Repositories
         public async Task<ICollection<RestaurantProduct>> GetAllByRestaurantId(string restaurantId)
         {
             return await _context.RestaurantProducts
-                .Where(x => x.RestaurantId == restaurantId).ToListAsync();
+                .Where(x => x.RestaurantId.Equals(restaurantId)).ToListAsync();
+        }
+
+        public async Task Delete(string restaurantProductId)
+        {
+            var restaurantProduct = await _context.RestaurantProducts.FirstOrDefaultAsync(x=>x.Id.Equals(restaurantProductId));
+            _context.RestaurantProducts.Remove(restaurantProduct);
+            await _context.SaveChangesAsync();
         }
     }
 }

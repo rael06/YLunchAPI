@@ -5,12 +5,13 @@ using YnovEat.Domain.ModelsAggregate.RestaurantAggregate;
 
 namespace YnovEat.Domain.Services.RestaurantServices
 {
-    public interface IProductService
+    public interface IRestaurantProductService
     {
         Task<RestaurantProductReadDto> Create(RestaurantProductCreationDto restaurantProductCreationDto, string restaurantId);
         Task<RestaurantProductReadDto> Update(RestaurantProductModificationDto restaurantProductModificationDto,
             RestaurantProduct restaurantProduct);
 
         Task<ICollection<RestaurantProductReadDto>> GetAllByRestaurantId(string restaurantId);
+        Task Delete(string restaurantProductId);
     }
 }
