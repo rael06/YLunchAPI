@@ -120,5 +120,42 @@ namespace YnovEat.Api.Controllers
                 );
             }
         }
+
+        [Authorize(Roles = UserRoles.RestaurantAdmin)]
+        [HttpGet]
+        [Route("get/{productId}")]
+        public async Task<IActionResult> Get(string productId)
+        {
+            try
+            {
+                var currentUser = await GetAuthenticatedUser();
+                if (!currentUser.HasARestaurant)
+                    return StatusCode(
+                        StatusCodes.Status403Forbidden,
+                        "User has not a restaurant"
+                    );
+
+                var restaurantProducts =
+                    await _productService.GetAllByRestaurantId(currentUser.RestaurantUser.RestaurantId);
+
+                var restaurantProduct =
+                    restaurantProducts.FirstOrDefault(x => x.Id == productId);
+
+                if (restaurantProduct == null)
+                    return StatusCode(
+                        StatusCodes.Status403Forbidden,
+                        "Product not found"
+                    );
+
+                return Ok(restaurantProduct);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(
+                    StatusCodes.Status500InternalServerError,
+                    e
+                );
+            }
+        }
     }
 }
