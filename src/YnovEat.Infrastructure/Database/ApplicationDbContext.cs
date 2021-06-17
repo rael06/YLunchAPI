@@ -64,7 +64,6 @@ namespace YnovEat.Infrastructure.Database
             {
                 x.Property(rp => rp.Name).IsRequired();
                 x.Property(rp => rp.Price).IsRequired();
-                x.Property(rp => rp.Quantity).IsRequired();
                 x.Property(rp => rp.IsActive).IsRequired();
                 x.Property(rp => rp.CreationDateTime).IsRequired();
                 x.Property(rp => rp.ProductFamily).IsRequired();
@@ -88,7 +87,7 @@ namespace YnovEat.Infrastructure.Database
                 x.HasMany(r => r.ClosingDates)
                     .WithOne(d => d.Restaurant);
 
-                x.HasMany(r => r.Products)
+                x.HasMany(r => r.RestaurantProducts)
                     .WithOne(p => p.Restaurant);
 
                 x.HasOne(r => r.Owner)

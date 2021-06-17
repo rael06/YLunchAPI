@@ -441,7 +441,7 @@ namespace YnovEat.Api.Migrations
                     b.Property<int>("ProductFamily")
                         .HasColumnType("int");
 
-                    b.Property<int>("Quantity")
+                    b.Property<int?>("Quantity")
                         .HasColumnType("int");
 
                     b.Property<string>("RestaurantId")
@@ -753,7 +753,7 @@ namespace YnovEat.Api.Migrations
             modelBuilder.Entity("YnovEat.Domain.ModelsAggregate.RestaurantAggregate.RestaurantProduct", b =>
                 {
                     b.HasOne("YnovEat.Domain.ModelsAggregate.RestaurantAggregate.Restaurant", "Restaurant")
-                        .WithMany("Products")
+                        .WithMany("RestaurantProducts")
                         .HasForeignKey("RestaurantId");
 
                     b.Navigation("Restaurant");
@@ -809,7 +809,7 @@ namespace YnovEat.Api.Migrations
                 {
                     b.Navigation("ClosingDates");
 
-                    b.Navigation("Products");
+                    b.Navigation("RestaurantProducts");
 
                     b.Navigation("RestaurantUsers");
 

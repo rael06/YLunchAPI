@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace YnovEat.Api.Migrations
 {
-    public partial class V0211 : Migration
+    public partial class V0214 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -377,6 +377,10 @@ namespace YnovEat.Api.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Email = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
+                    Base64Image = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Base64Logo = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     IsEmailConfirmed = table.Column<bool>(type: "tinyint(1)", nullable: false),
                     EmailConfirmationDateTime = table.Column<DateTime>(type: "datetime(6)", nullable: true),
                     IsOpen = table.Column<bool>(type: "tinyint(1)", nullable: false),
@@ -465,7 +469,7 @@ namespace YnovEat.Api.Migrations
                     Description = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Price = table.Column<double>(type: "double", nullable: false),
-                    Quantity = table.Column<int>(type: "int", nullable: false),
+                    Quantity = table.Column<int>(type: "int", nullable: true),
                     IsActive = table.Column<bool>(type: "tinyint(1)", nullable: false),
                     CreationDateTime = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     ExpirationDateTime = table.Column<DateTime>(type: "datetime(6)", nullable: true),

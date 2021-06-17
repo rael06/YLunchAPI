@@ -1,11 +1,8 @@
-using System;
-using System.Linq;
 using System.Threading.Tasks;
 using YnovEat.Application.Exceptions;
 using YnovEat.Domain.DTO.RestaurantModels;
 using YnovEat.Domain.DTO.UserModels;
 using YnovEat.Domain.ModelsAggregate.RestaurantAggregate;
-using YnovEat.Domain.ModelsAggregate.UserAggregate;
 using YnovEat.Domain.Services.Database.Repositories;
 using YnovEat.Domain.Services.RestaurantServices;
 

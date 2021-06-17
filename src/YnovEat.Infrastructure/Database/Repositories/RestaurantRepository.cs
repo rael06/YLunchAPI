@@ -25,6 +25,7 @@ namespace YnovEat.Infrastructure.Database.Repositories
 
         private IIncludableQueryable<Restaurant, ICollection<OpeningTime>> QueryEnrichedRestaurant =>
             _context.Restaurants
+                .Include(x => x.RestaurantProducts)
                 .Include(x => x.ClosingDates)
                 .Include(x => x.RestaurantUsers)
                 .Include(x => x.Categories)
@@ -47,17 +48,6 @@ namespace YnovEat.Infrastructure.Database.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task<Restaurant> UpdateRestaurant(Restaurant restaurant)
-        {
-            var uselessCategories =
-                await _context.RestaurantCategories
-                    .Where(x => x.Restaurants.Count == 0).ToListAsync();
-            _context.RemoveRange(uselessCategories);
-
-            await _context.SaveChangesAsync();
-            return restaurant;
-        }
-
         public async Task<ICollection<RestaurantCategory>> GetAllRestaurantCategories()
         {
             return await _context.RestaurantCategories.ToListAsync();
@@ -68,6 +58,17 @@ namespace YnovEat.Infrastructure.Database.Repositories
             var owner = await _context.RestaurantUsers.FirstAsync(x => x.User.Id.Equals(restaurant.OwnerId));
             owner.RestaurantId = restaurant.Id;
             await _context.Restaurants.AddAsync(restaurant);
+            await _context.SaveChangesAsync();
+            return restaurant;
+        }
+
+        public async Task<Restaurant> UpdateRestaurant(Restaurant restaurant)
+        {
+            var uselessCategories =
+                await _context.RestaurantCategories
+                    .Where(x => x.Restaurants.Count == 0).ToListAsync();
+            _context.RemoveRange(uselessCategories);
+
             await _context.SaveChangesAsync();
             return restaurant;
         }

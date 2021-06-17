@@ -47,6 +47,6 @@ namespace YnovEat.Domain.ModelsAggregate.RestaurantAggregate
         public virtual ICollection<RestaurantCategory> Categories { get; set; } =
             new List<RestaurantCategory>();
 
-        public virtual ICollection<RestaurantProduct> Products { get; set; } = new List<RestaurantProduct>();
+        public virtual ICollection<RestaurantProduct> RestaurantProducts { get; set; } = new List<RestaurantProduct>();
     }
 }

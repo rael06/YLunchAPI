@@ -29,7 +29,8 @@ namespace YnovEat.Domain.DTO.RestaurantModels
         public string AddressExtraInformation { get; set; }
         // !address
 
-        public ICollection<ClosingDateCreationDto> ClosingDates { get; set; } = new List<ClosingDateCreationDto>();
+        public ICollection<ClosingDateCreationDto> ClosingDates { get; set; } =
+            new List<ClosingDateCreationDto>();
 
         public ICollection<DayOpeningTimesCreationDto> WeekOpeningTimes { get; set; } =
             new List<DayOpeningTimesCreationDto>();

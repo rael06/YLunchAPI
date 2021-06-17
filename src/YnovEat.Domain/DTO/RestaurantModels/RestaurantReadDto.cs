@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using YnovEat.Domain.DTO.ProductModels.RestaurantProductModels;
 using YnovEat.Domain.DTO.RestaurantModels.ClosingDateModels;
 using YnovEat.Domain.DTO.RestaurantModels.OpeningTimeModels;
 using YnovEat.Domain.DTO.RestaurantModels.RestaurantCategoryModels;
@@ -43,6 +44,8 @@ namespace YnovEat.Domain.DTO.RestaurantModels
         public ICollection<RestaurantUserReadDto> RestaurantUsers { get; set; }
         public ICollection<RestaurantCategoryReadDto> RestaurantCategories { get; set; }
 
+        public ICollection<RestaurantProductReadDto> RestaurantProducts { get; set; }
+
         public RestaurantReadDto(Restaurant entity)
         {
             Id = entity.Id;
@@ -69,6 +72,7 @@ namespace YnovEat.Domain.DTO.RestaurantModels
             WeekOpeningTimes = entity.WeekOpeningTimes.Select(x => new DayOpeningTimesReadDto(x)).ToList();
             RestaurantUsers = entity.RestaurantUsers.Select(x => new RestaurantUserReadDto(x)).ToList();
             RestaurantCategories = entity.Categories.Select(x => new RestaurantCategoryReadDto(x)).ToList();
+            RestaurantProducts = entity.RestaurantProducts.Select(x => new RestaurantProductReadDto(x)).ToList();
         }
     }
 }

@@ -10,7 +10,7 @@ namespace YnovEat.Domain.ModelsAggregate.RestaurantAggregate
         public string Name { get; set; }
         public string Description { get; set; }
         public double Price { get; set; }
-        public int Quantity { get; set; }
+        public int? Quantity { get; set; }
         public bool IsActive { get; set; }
         public DateTime CreationDateTime { get; set; }
         public DateTime? ExpirationDateTime { get; set; }
@@ -18,8 +18,10 @@ namespace YnovEat.Domain.ModelsAggregate.RestaurantAggregate
         public virtual ICollection<RestaurantProductTag> RestaurantProductTags { get; set; } =
             new List<RestaurantProductTag>();
 
+        public string RestaurantId { get; set; }
+
         public virtual Restaurant Restaurant { get; set; }
 
-        public ProductFamily ProductFamily { get; set; }
+        public ProductFamilies ProductFamily { get; set; }
     }
 }

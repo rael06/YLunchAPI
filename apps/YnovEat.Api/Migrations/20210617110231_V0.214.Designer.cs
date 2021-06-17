@@ -9,8 +9,8 @@ using YnovEat.Infrastructure.Database;
 namespace YnovEat.Api.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20210613194743_V0.212")]
-    partial class V0212
+    [Migration("20210617110231_V0.214")]
+    partial class V0214
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -443,7 +443,7 @@ namespace YnovEat.Api.Migrations
                     b.Property<int>("ProductFamily")
                         .HasColumnType("int");
 
-                    b.Property<int>("Quantity")
+                    b.Property<int?>("Quantity")
                         .HasColumnType("int");
 
                     b.Property<string>("RestaurantId")
