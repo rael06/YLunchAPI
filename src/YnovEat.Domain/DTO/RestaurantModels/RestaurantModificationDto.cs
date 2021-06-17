@@ -30,13 +30,11 @@ namespace YnovEat.Domain.DTO.RestaurantModels
         public string AddressExtraInformation { get; set; }
         // !address
 
-        public ICollection<ClosingDateCreationDto> ClosingDates { get; set; } = new List<ClosingDateCreationDto>();
+        public ICollection<ClosingDateCreationDto> ClosingDates { get; set; }
 
-        public ICollection<DayOpeningTimesCreationDto> WeekOpeningTimes { get; set; } =
-            new List<DayOpeningTimesCreationDto>();
+        public ICollection<DayOpeningTimesCreationDto> WeekOpeningTimes { get; set; }
 
-        public ICollection<RestaurantCategoryCreationDto> Categories { get; set; } =
-            new List<RestaurantCategoryCreationDto>();
+        public ICollection<RestaurantCategoryCreationDto> Categories { get; set; }
 
         public Restaurant UpdateRestaurant(Restaurant restaurant,
             ICollection<RestaurantCategory> allRestaurantCategories)
@@ -55,20 +53,20 @@ namespace YnovEat.Domain.DTO.RestaurantModels
             restaurant.AddressExtraInformation = AddressExtraInformation ??
                                                  restaurant.AddressExtraInformation;
             restaurant.LastUpdateDateTime = DateTime.Now;
-            restaurant.ClosingDates = ClosingDates.Select(x => x.CreateClosingDate(restaurant.Id)).ToList();
-            restaurant.WeekOpeningTimes = WeekOpeningTimes.Select(day =>
+            restaurant.ClosingDates = ClosingDates?
+                .Select(x => x.CreateClosingDate(restaurant.Id)).ToList() ?? restaurant.ClosingDates;
+            restaurant.WeekOpeningTimes = WeekOpeningTimes?.Select(day =>
                 day.CreateDayOpeningTimes(restaurant.Id)
-            ).ToList();
-            restaurant.Categories = Categories
+            ).ToList() ?? restaurant.WeekOpeningTimes;
+            restaurant.Categories = Categories?
                 .Select(x =>
                 {
                     var existingCategory = allRestaurantCategories
-                            // TODO improvements
                         .Where(y => Categories.Any(z => z.Name.Equals(y.Name)))
                         .FirstOrDefault(y => y.Name.Equals(x.Name));
                     return existingCategory ?? x.CreateRestaurantCategory();
                 })
-                .ToList();
+                .ToList() ?? restaurant.Categories;
 
             return restaurant;
         }

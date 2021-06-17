@@ -49,20 +49,10 @@ namespace YnovEat.Infrastructure.Database.Repositories
 
         public async Task<Restaurant> UpdateRestaurant(Restaurant restaurant)
         {
-            var existingClosingDates =
-                await _context.ClosingDates.Where(x => x.RestaurantId.Equals(restaurant.Id)).ToListAsync();
-            _context.ClosingDates.RemoveRange(existingClosingDates);
-
-            var existingWeekOpeningTimes =
-                await _context.DaysOpeningTimes.Where(x => x.RestaurantId.Equals(restaurant.Id)).ToListAsync();
-            _context.DaysOpeningTimes.RemoveRange(existingWeekOpeningTimes);
-
-            await _context.SaveChangesAsync();
-
             var uselessCategories =
                 await _context.RestaurantCategories
                     .Where(x => x.Restaurants.Count == 0).ToListAsync();
-            _context.RestaurantCategories.RemoveRange(uselessCategories);
+            _context.RemoveRange(uselessCategories);
 
             await _context.SaveChangesAsync();
             return restaurant;

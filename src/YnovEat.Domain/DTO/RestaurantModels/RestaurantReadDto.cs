@@ -14,6 +14,9 @@ namespace YnovEat.Domain.DTO.RestaurantModels
     {
         public string Id { get; set; }
         public string Name { get; set; }
+
+        public string Base64Image { get; set; }
+        public string Base64Logo { get; set; }
         public string PhoneNumber { get; set; }
         public string Email { get; set; }
         public bool IsEmailConfirmed { get; set; }
@@ -45,6 +48,8 @@ namespace YnovEat.Domain.DTO.RestaurantModels
             Id = entity.Id;
             Name = entity.Name;
             PhoneNumber = entity.PhoneNumber;
+            Base64Image = entity.Base64Image;
+            Base64Logo = entity.Base64Logo;
             Email = entity.Email;
             IsEmailConfirmed = entity.IsEmailConfirmed;
             EmailConfirmationDateTime = entity.EmailConfirmationDateTime;
