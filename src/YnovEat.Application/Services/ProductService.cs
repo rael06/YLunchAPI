@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using YnovEat.Domain.DTO.ProductModels.RestaurantProductModels;
 using YnovEat.Domain.ModelsAggregate.RestaurantAggregate;
@@ -24,12 +26,19 @@ namespace YnovEat.Application.Services
             return new RestaurantProductReadDto(restaurantProduct);
         }
 
-        public async Task<RestaurantProductReadDto> Update(RestaurantProductModificationDto restaurantProductModificationDto,
+        public async Task<RestaurantProductReadDto> Update(
+            RestaurantProductModificationDto restaurantProductModificationDto,
             RestaurantProduct restaurantProduct)
         {
             var updatedRestaurantProduct = restaurantProductModificationDto.UpdateRestaurantProduct(restaurantProduct);
             await _productRepository.Update();
             return new RestaurantProductReadDto(updatedRestaurantProduct);
+        }
+
+        public async Task<ICollection<RestaurantProductReadDto>> GetAllByRestaurantId(string restaurantId)
+        {
+            var restaurantProducts = await _productRepository.GetAllByRestaurantId(restaurantId);
+            return restaurantProducts.Select(x => new RestaurantProductReadDto(x)).ToList();
         }
     }
 }

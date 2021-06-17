@@ -25,7 +25,6 @@ namespace YnovEat.Infrastructure.Database.Repositories
 
         private IIncludableQueryable<Restaurant, ICollection<OpeningTime>> QueryEnrichedRestaurant =>
             _context.Restaurants
-                .Include(x => x.RestaurantProducts)
                 .Include(x => x.ClosingDates)
                 .Include(x => x.RestaurantUsers)
                 .Include(x => x.Categories)

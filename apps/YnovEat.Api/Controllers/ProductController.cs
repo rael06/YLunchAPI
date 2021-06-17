@@ -19,18 +19,18 @@ namespace YnovEat.Api.Controllers
     public class ProductController : CustomControllerBase
     {
         private readonly IProductService _productService;
-        private readonly IRestaurantRepository _restaurantRepository;
+        private readonly IProductRepository _productRepository;
 
         public ProductController(
             UserManager<User> userManager,
             IUserRepository userRepository,
             IConfiguration configuration,
             IProductService productService,
-            IRestaurantRepository restaurantRepository
+            IProductRepository productRepository
         ) : base(userManager, userRepository, configuration)
         {
             _productService = productService;
-            _restaurantRepository = restaurantRepository;
+            _productRepository = productRepository;
         }
 
         [Authorize(Roles = UserRoles.RestaurantAdmin)]
@@ -71,18 +71,46 @@ namespace YnovEat.Api.Controllers
                         "User has not a restaurant"
                     );
 
-                var currentUserRestaurant = await _restaurantRepository.GetByUserId(currentUser.Id);
+                var existingProducts = await _productRepository.GetAllByRestaurantId(currentUser.RestaurantUser.RestaurantId);
 
-                var restaurantProduct =
-                    currentUserRestaurant.RestaurantProducts.FirstOrDefault(x => x.Id == model.Id);
+                var restaurantProductToUpdate =
+                    existingProducts.FirstOrDefault(x => x.Id == model.Id);
 
-                if (restaurantProduct == null)
+                if (restaurantProductToUpdate == null)
                     return StatusCode(
                         StatusCodes.Status403Forbidden,
                         "Product not found"
                     );
 
-                return Ok(await _productService.Update(model, restaurantProduct));
+                return Ok(await _productService.Update(model, restaurantProductToUpdate));
+            }
+            catch (Exception e)
+            {
+                return StatusCode(
+                    StatusCodes.Status500InternalServerError,
+                    e
+                );
+            }
+        }
+
+        [Authorize(Roles = UserRoles.RestaurantAdmin)]
+        [HttpGet]
+        [Route("get-all/{restaurantId}")]
+        public async Task<IActionResult> GetAll(string restaurantId)
+        {
+            try
+            {
+                var currentUser = await GetAuthenticatedUser();
+                if (!currentUser.HasARestaurant)
+                    return StatusCode(
+                        StatusCodes.Status403Forbidden,
+                        "User has not a restaurant"
+                    );
+
+                var restaurantProducts =
+                    await _productService.GetAllByRestaurantId(currentUser.RestaurantUser.RestaurantId);
+
+                return Ok(restaurantProducts);
             }
             catch (Exception e)
             {
