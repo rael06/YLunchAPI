@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -70,7 +71,14 @@ namespace YnovEat.Api.Controllers
             {
                 var currentUser = await GetAuthenticatedUser();
                 var restaurant = await _restaurantRepository.GetById(model.Id);
-                if (!restaurant.OwnerId.Equals(currentUser.Id))
+
+                if(restaurant == null)
+                    return StatusCode(
+                        StatusCodes.Status404NotFound,
+                        "Restaurant not found"
+                    );
+
+                if (!restaurant.RestaurantUsers.Any(x=>x.UserId.Equals(currentUser.Id)))
                     return StatusCode(
                         StatusCodes.Status403Forbidden,
                         "User is not from the restaurant"
