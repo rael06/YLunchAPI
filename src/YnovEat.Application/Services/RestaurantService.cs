@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using YnovEat.Application.Exceptions;
 using YnovEat.Domain.DTO.RestaurantModels;
@@ -30,6 +32,18 @@ namespace YnovEat.Application.Services
             var restaurant = await _restaurantRepository.GetByUserId(currentUserId);
             if (restaurant == null) throw new NotFoundException();
             return new RestaurantReadDto(restaurant);
+        }
+
+        public async Task<ICollection<RestaurantReadDto>> GetAllForCustomer()
+        {
+            var restaurants = await _restaurantRepository.GetAllForCustomer();
+            return restaurants.Select(x => new RestaurantReadDto(x)).ToList();
+        }
+
+        public async Task<ICollection<RestaurantReadDto>> GetAllRestaurants()
+        {
+            var restaurants = await _restaurantRepository.GetAll();
+            return restaurants.Select(x => new RestaurantReadDto(x)).ToList();
         }
 
         public async Task<RestaurantReadDto> Create(RestaurantCreationDto restaurantCreationDto, CurrentUser user)

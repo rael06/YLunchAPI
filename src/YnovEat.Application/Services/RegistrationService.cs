@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using YnovEat.Application.Exceptions;
 using YnovEat.Domain.DTO.UserModels;
 using YnovEat.Domain.DTO.UserModels.Registration;
+using YnovEat.Domain.ModelsAggregate.UserAggregate;
 using YnovEat.Domain.ModelsAggregate.UserAggregate.Roles;
 using YnovEat.Domain.Services.Database.Repositories;
 using YnovEat.Domain.Services.Registration;
@@ -25,7 +26,7 @@ namespace YnovEat.Application.Services
 
         private async Task<UserReadDto> Register(RegisterSuperAdminDto registerUserDto)
         {
-            var user = new Domain.ModelsAggregate.UserAggregate.User
+            var user = new User
             {
                 SecurityStamp = Guid.NewGuid().ToString(),
                 UserName = registerUserDto.Username,

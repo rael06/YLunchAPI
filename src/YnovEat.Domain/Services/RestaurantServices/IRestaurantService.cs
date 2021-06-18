@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using YnovEat.Domain.DTO.RestaurantModels;
 using YnovEat.Domain.DTO.UserModels;
@@ -13,5 +14,7 @@ namespace YnovEat.Domain.Services.RestaurantServices
             Restaurant restaurantReadDto);
         Task<RestaurantReadDto> GetById(string id);
         Task<RestaurantReadDto> GetByUserId(string currentUserId);
+        Task<ICollection<RestaurantReadDto>> GetAllForCustomer();
+        Task<ICollection<RestaurantReadDto>> GetAllRestaurants();
     }
 }

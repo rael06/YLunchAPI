@@ -1,7 +1,10 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
 using YnovEat.Domain.ModelsAggregate.UserAggregate;
 using YnovEat.Domain.ModelsAggregate.UserAggregate.Roles;
 using YnovEat.Domain.Services.Database.Repositories;
@@ -19,7 +22,7 @@ namespace YnovEat.Infrastructure.Database.Repositories
             UserManager<User> userManager,
             RoleManager<IdentityRole> roleManager,
             ApplicationDbContext context
-            )
+        )
         {
             _userManager = userManager;
             _roleManager = roleManager;
@@ -55,6 +58,14 @@ namespace YnovEat.Infrastructure.Database.Repositories
                 .FirstOrDefaultAsync(x => x.UserName.Equals(username));
 
             return user;
+        }
+
+        public async Task<ICollection<User>> GetFullUsers()
+        {
+            return await _context.Users
+                .Include(x => x.Customer)
+                .Include(x => x.RestaurantUser)
+                .ToListAsync();
         }
     }
 }

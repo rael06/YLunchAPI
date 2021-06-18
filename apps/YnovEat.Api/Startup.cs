@@ -15,6 +15,7 @@ using YnovEat.Domain.ModelsAggregate.UserAggregate;
 using YnovEat.Domain.Services.Database.Repositories;
 using YnovEat.Domain.Services.Registration;
 using YnovEat.Domain.Services.RestaurantServices;
+using YnovEat.Domain.Services.UserServices;
 using YnovEat.Infrastructure.Database;
 using YnovEat.Infrastructure.Database.Repositories;
 
@@ -89,6 +90,7 @@ namespace YnovEat.Api
             services.AddScoped<IRestaurantRepository, RestaurantRepository>();
             services.AddScoped<IRestaurantProductService, RestaurantProductService>();
             services.AddScoped<IRestaurantProductRepository, RestaurantProductRepository>();
+            services.AddScoped<IUserService, UserService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

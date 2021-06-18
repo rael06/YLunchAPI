@@ -20,10 +20,10 @@ namespace YnovEat.Infrastructure.Database.Repositories
         }
 
         public async Task<Restaurant> GetById(string id) =>
-            await QueryEnrichedRestaurant
+            await QueryEnrichedRestaurants
                 .FirstOrDefaultAsync(x => x.Id.Equals(id));
 
-        private IIncludableQueryable<Restaurant, ICollection<OpeningTime>> QueryEnrichedRestaurant =>
+        private IIncludableQueryable<Restaurant, ICollection<OpeningTime>> QueryEnrichedRestaurants =>
             _context.Restaurants
                 .Include(x => x.ClosingDates)
                 .Include(x => x.RestaurantUsers)
@@ -32,7 +32,7 @@ namespace YnovEat.Infrastructure.Database.Repositories
                 .ThenInclude(x => x.OpeningTimes);
 
         public async Task<Restaurant> GetByUserId(string id) =>
-            await QueryEnrichedRestaurant
+            await QueryEnrichedRestaurants
                 .FirstOrDefaultAsync(x => x.RestaurantUsers
                     .Any(y => y.UserId.Equals(id))
                 );
@@ -50,6 +50,24 @@ namespace YnovEat.Infrastructure.Database.Repositories
         public async Task<ICollection<RestaurantCategory>> GetAllRestaurantCategories()
         {
             return await _context.RestaurantCategories.ToListAsync();
+        }
+
+        public async Task<ICollection<Restaurant>> GetAllForCustomer()
+        {
+            return await QueryEnrichedRestaurants
+                .ToListAsync();
+        }
+
+        public async Task<ICollection<Restaurant>> GetAll()
+        {
+            return await _context.Restaurants
+                .Include(x => x.ClosingDates)
+                .Include(x => x.Categories)
+                .Include(x => x.WeekOpeningTimes.OrderBy(y => y.DayOfWeek))
+                .ThenInclude(x => x.OpeningTimes)
+                // Todo validate restaurant in creation and update and allow this line
+                // .Where(x=>x.IsPublished)
+                .ToListAsync();
         }
 
         public async Task<Restaurant> CreateRestaurant(Restaurant restaurant)

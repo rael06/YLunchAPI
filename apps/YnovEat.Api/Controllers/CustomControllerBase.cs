@@ -1,13 +1,10 @@
-using System;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using YnovEat.Application.Exceptions;
 using YnovEat.Domain.DTO.UserModels;
 using YnovEat.Domain.ModelsAggregate.UserAggregate;
-using YnovEat.Domain.ModelsAggregate.UserAggregate.Roles;
 using YnovEat.Domain.Services.Database.Repositories;
 
 namespace YnovEat.Api.Controllers

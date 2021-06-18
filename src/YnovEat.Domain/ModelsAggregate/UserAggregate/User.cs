@@ -20,5 +20,23 @@ namespace YnovEat.Domain.ModelsAggregate.UserAggregate
         public bool IsAccountActivated { get; set; }
         public virtual RestaurantUser RestaurantUser { get; set; }
         public virtual Customer Customer { get; set; }
+
+        public User()
+        {
+        }
+
+        public User(User user)
+        {
+            Firstname = user.Firstname;
+            Lastname = user.Lastname;
+            CreationDateTime = user.CreationDateTime;
+            ConfirmationDateTime = user.ConfirmationDateTime;
+            LastUpdateDateTime = user.LastUpdateDateTime;
+            PhoneNumberConfirmationDateTime = user.PhoneNumberConfirmationDateTime;
+            EmailConfirmationDateTime = user.EmailConfirmationDateTime;
+            IsAccountActivated = user.IsAccountActivated;
+            RestaurantUser = user.RestaurantUser;
+            Customer = user.Customer;
+        }
     }
 }
