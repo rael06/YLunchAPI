@@ -14,9 +14,9 @@ using YnovEat.Domain.Services.RestaurantServices;
 
 namespace YnovEat.Api.Controllers
 {
-    [Authorize(Roles = UserRoles.Customer)]
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("api/[controller]")]
+    [Authorize(Roles = UserRoles.Customer)]
     public class CustomerProductController : CustomControllerBase
     {
         private readonly IRestaurantProductService _restaurantProductService;
@@ -34,8 +34,7 @@ namespace YnovEat.Api.Controllers
             _restaurantProductRepository = restaurantProductRepository;
         }
 
-        [HttpGet]
-        [Route("get-all/{restaurantId}")]
+        [HttpGet("get-all/{restaurantId}")]
         public async Task<IActionResult> GetAll(string restaurantId)
         {
             try
@@ -54,8 +53,7 @@ namespace YnovEat.Api.Controllers
             }
         }
 
-        [HttpGet]
-        [Route("{restaurantId}/{productId}")]
+        [HttpGet("{restaurantId}/{productId}")]
         public async Task<IActionResult> Get(string restaurantId, string productId)
         {
             try

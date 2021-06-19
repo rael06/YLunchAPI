@@ -14,8 +14,8 @@ using YnovEat.Domain.Services.RestaurantServices;
 
 namespace YnovEat.Api.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("api/[controller]")]
     public class RestaurantProductController : CustomControllerBase
     {
         private readonly IRestaurantProductService _restaurantProductService;
@@ -33,8 +33,8 @@ namespace YnovEat.Api.Controllers
             _restaurantProductRepository = restaurantProductRepository;
         }
 
-        [Authorize(Roles = UserRoles.RestaurantAdmin)]
         [HttpPost]
+        [Authorize(Roles = UserRoles.RestaurantAdmin)]
         public async Task<IActionResult> Create([FromBody] RestaurantProductCreationDto model)
         {
             try
@@ -56,8 +56,8 @@ namespace YnovEat.Api.Controllers
             }
         }
 
-        [Authorize(Roles = UserRoles.RestaurantAdmin)]
         [HttpPatch]
+        [Authorize(Roles = UserRoles.RestaurantAdmin)]
         public async Task<IActionResult> Update([FromBody] RestaurantProductModificationDto model)
         {
             try
@@ -91,9 +91,8 @@ namespace YnovEat.Api.Controllers
             }
         }
 
+        [HttpGet("get-all/{restaurantId}")]
         [Authorize(Roles = UserRoles.RestaurantAdmin)]
-        [HttpGet]
-        [Route("get-all/{restaurantId}")]
         public async Task<IActionResult> GetAll(string restaurantId)
         {
             try
@@ -119,9 +118,8 @@ namespace YnovEat.Api.Controllers
             }
         }
 
+        [HttpGet("{productId}")]
         [Authorize(Roles = UserRoles.RestaurantAdmin)]
-        [HttpGet]
-        [Route("{productId}")]
         public async Task<IActionResult> Get(string productId)
         {
             try
@@ -156,9 +154,8 @@ namespace YnovEat.Api.Controllers
             }
         }
 
+        [HttpDelete("{productId}")]
         [Authorize(Roles = UserRoles.RestaurantAdmin)]
-        [HttpDelete]
-        [Route("{productId}")]
         public async Task<IActionResult> Delete(string productId)
         {
             try

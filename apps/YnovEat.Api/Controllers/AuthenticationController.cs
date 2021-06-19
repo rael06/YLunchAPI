@@ -40,9 +40,8 @@ namespace YnovEat.Api.Controllers
             _registrationService = registrationService;
         }
 
+        [HttpPost("login")]
         [AllowAnonymous]
-        [HttpPost]
-        [Route("login")]
         public async Task<IActionResult> Login([FromBody] UserLoginDto model)
         {
             var user = await _userManager.FindByNameAsync(model.Username);
@@ -75,8 +74,7 @@ namespace YnovEat.Api.Controllers
             });
         }
 
-        [HttpPost]
-        [Route("init-super-admin/{pass}")]
+        [HttpPost("init-super-admin/{pass}")]
         public async Task<IActionResult> InitSuperAdmin([FromRoute] string pass, [FromBody] RegisterSuperAdminDto model)
         {
             if (pass != Configuration["InitAdminPass"]) return Unauthorized();
@@ -84,33 +82,29 @@ namespace YnovEat.Api.Controllers
             return await RegisterUser(model);
         }
 
+        [HttpPost("register-super-admin")]
         [Core.Authorize(Roles = UserRoles.SuperAdmin)]
-        [HttpPost]
-        [Route("register-super-admin")]
         public async Task<IActionResult> RegisterSuperAdmin([FromBody] RegisterSuperAdminDto model)
         {
             return await RegisterUser(model);
         }
 
+        [HttpPost("register-restaurantAdmin")]
         [AllowAnonymous]
-        [HttpPost]
-        [Route("register-restaurantAdmin")]
         public async Task<IActionResult> RegisterRestaurantAdmin([FromBody] RegisterRestaurantAdminDto model)
         {
             return await RegisterUser(model);
         }
 
+        [HttpPost("register-employee")]
         [Core.Authorize(Roles = UserRoles.RestaurantAdmin)]
-        [HttpPost]
-        [Route("register-employee")]
         public async Task<IActionResult> RegisterEmployee([FromBody] RegisterEmployeeDto model)
         {
             return await RegisterUser(model);
         }
 
+        [HttpPost("register-customer")]
         [AllowAnonymous]
-        [HttpPost]
-        [Route("register-customer")]
         public async Task<IActionResult> RegisterCustomer([FromBody] RegisterCustomerDto model)
         {
             return await RegisterUser(model);

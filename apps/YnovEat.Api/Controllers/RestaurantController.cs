@@ -15,8 +15,8 @@ using YnovEat.Domain.Services.RestaurantServices;
 
 namespace YnovEat.Api.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("api/[controller]")]
     public class RestaurantController : CustomControllerBase
     {
         private readonly IRestaurantService _restaurantService;
@@ -34,9 +34,8 @@ namespace YnovEat.Api.Controllers
             _restaurantRepository = restaurantRepository;
         }
 
+        [HttpPost("create")]
         [Authorize(Roles = UserRoles.RestaurantAdmin)]
-        [HttpPost]
-        [Route("create")]
         public async Task<IActionResult> Create([FromBody] RestaurantCreationDto model)
         {
             try
@@ -62,9 +61,8 @@ namespace YnovEat.Api.Controllers
             }
         }
 
+        [HttpPatch("update")]
         [Authorize(Roles = UserRoles.RestaurantAdmin)]
-        [HttpPatch]
-        [Route("update")]
         public async Task<IActionResult> Update([FromBody] RestaurantModificationDto model)
         {
             try
@@ -99,9 +97,8 @@ namespace YnovEat.Api.Controllers
             }
         }
 
+        [HttpGet("get-mine")]
         [Authorize(Roles = UserRoles.RestaurantAdmin)]
-        [HttpGet]
-        [Route("get-mine")]
         public async Task<IActionResult> Get()
         {
             try

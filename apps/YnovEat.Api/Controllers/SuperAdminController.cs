@@ -13,8 +13,8 @@ using YnovEat.Domain.Services.UserServices;
 
 namespace YnovEat.Api.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("api/[controller]")]
     [Authorize(Roles = UserRoles.SuperAdmin)]
     public class SuperAdminController : CustomControllerBase
     {
@@ -41,15 +41,13 @@ namespace YnovEat.Api.Controllers
             _restaurantRepository = restaurantRepository;
         }
 
-        [HttpGet]
-        [Route("get-all-users")]
+        [HttpGet("get-all-users")]
         public async Task<IActionResult> GetAllUsers()
         {
             return Ok(await _userService.GetAllUsers());
         }
 
-        [HttpGet]
-        [Route("get-all-restaurants")]
+        [HttpGet("get-all-restaurants")]
         public async Task<IActionResult> GetAllRestaurants()
         {
             return Ok(await _restaurantService.GetAllRestaurants());

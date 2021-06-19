@@ -21,34 +21,34 @@ namespace YnovEat.Api.Controllers
         {
         }
 
-        [AllowAnonymous]
         [HttpGet("try")]
+        [AllowAnonymous]
         public string Try() =>
             "Api is running";
 
-        [Core.Authorize]
         [HttpGet("try-authenticated")]
+        [Core.Authorize]
         public string TryAsAuthenticated() =>
             "Api is running, and you're authenticated";
 
-        [Core.Authorize(UserRoles.SuperAdmin)]
         [HttpGet("try-authenticated-superAdmin")]
+        [Core.Authorize(UserRoles.SuperAdmin)]
         public string TryAsAuthenticatedSuperAdmin() =>
             "Api is running, and you're a " + UserRoles.SuperAdmin;
 
 
-        [Core.Authorize(UserRoles.RestaurantAdmin)]
         [HttpGet("try-authenticated-restaurantAdmin")]
+        [Core.Authorize(UserRoles.RestaurantAdmin)]
         public string TryAsAuthenticatedRestaurantAdmin() =>
             "Api is running, and you're a " + UserRoles.RestaurantAdmin;
 
-        [Core.Authorize(UserRoles.Employee)]
         [HttpGet("try-authenticated-employee")]
+        [Core.Authorize(UserRoles.Employee)]
         public string TryAsAuthenticatedEmployee() =>
             "Api is running, and you're a " + UserRoles.Employee;
 
-        [Core.Authorize(UserRoles.Customer)]
         [HttpGet("try-authenticated-customer")]
+        [Core.Authorize(UserRoles.Customer)]
         public string TryAsAuthenticatedCustomer() =>
             "Api is running, and you're a " + UserRoles.Customer;
     }

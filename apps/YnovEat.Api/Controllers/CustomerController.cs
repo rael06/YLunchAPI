@@ -13,8 +13,8 @@ using YnovEat.Domain.Services.RestaurantServices;
 
 namespace YnovEat.Api.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("api/[controller]")]
     public class CustomerController : CustomControllerBase
     {
         private readonly IRestaurantService _restaurantService;
@@ -29,9 +29,8 @@ namespace YnovEat.Api.Controllers
             _restaurantService = restaurantService;
         }
 
+        [HttpGet("get-all-restaurants")]
         [Authorize(Roles = UserRoles.Customer)]
-        [HttpGet]
-        [Route("get-all-restaurants")]
         public async Task<IActionResult> GetAllRestaurants()
         {
             try
