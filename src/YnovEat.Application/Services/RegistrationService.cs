@@ -3,10 +3,12 @@ using System.Threading.Tasks;
 using YnovEat.Application.Exceptions;
 using YnovEat.Domain.DTO.UserModels;
 using YnovEat.Domain.DTO.UserModels.Registration;
+using YnovEat.Domain.ModelsAggregate.CustomerAggregate;
 using YnovEat.Domain.ModelsAggregate.UserAggregate;
 using YnovEat.Domain.ModelsAggregate.UserAggregate.Roles;
 using YnovEat.Domain.Services.Database.Repositories;
 using YnovEat.Domain.Services.Registration;
+using YnovEat.DomainShared.RestaurantAggregate.Enums;
 
 namespace YnovEat.Application.Services
 {
@@ -42,7 +44,7 @@ namespace YnovEat.Application.Services
 
         private async Task<UserReadDto> Register(RegisterRestaurantAdminDto registerUserDto)
         {
-            var user = new Domain.ModelsAggregate.UserAggregate.User
+            var user = new User
             {
                 SecurityStamp = Guid.NewGuid().ToString(),
                 UserName = registerUserDto.Username,
@@ -59,7 +61,7 @@ namespace YnovEat.Application.Services
 
         private async Task<UserReadDto> Register(RegisterEmployeeDto registerUserDto)
         {
-            var user = new Domain.ModelsAggregate.UserAggregate.User
+            var user = new User
             {
                 SecurityStamp = Guid.NewGuid().ToString(),
                 UserName = registerUserDto.Username,
@@ -75,7 +77,7 @@ namespace YnovEat.Application.Services
 
         private async Task<UserReadDto> Register(RegisterCustomerDto registerUserDto)
         {
-            var user = new Domain.ModelsAggregate.UserAggregate.User
+            var user = new User
             {
                 SecurityStamp = Guid.NewGuid().ToString(),
                 UserName = registerUserDto.Username,
@@ -84,6 +86,12 @@ namespace YnovEat.Application.Services
                 Email = registerUserDto.Username,
                 PhoneNumber = registerUserDto.PhoneNumber,
                 CreationDateTime = DateTime.Now,
+            };
+
+            user.Customer = new Customer
+            {
+                CustomerFamily = CustomerFamily.Student,
+                UserId = user.Id
             };
 
             await _userRepository.Register(user, registerUserDto.Password, UserRoles.Customer);

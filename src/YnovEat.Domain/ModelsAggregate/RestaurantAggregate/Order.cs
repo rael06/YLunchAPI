@@ -32,13 +32,14 @@ namespace YnovEat.Domain.ModelsAggregate.RestaurantAggregate
 
         public ICollection<RestaurantProduct> RestaurantProducts => new List<RestaurantProduct>();
 
-        public static Order Create(string id, OrderCreationDto orderCreationDto, string customerId, ICollection<CustomerProduct> customerProducts)
+        public static Order Create(string id, OrderCreationDto orderCreationDto, Customer customer, ICollection<CustomerProduct> customerProducts)
         {
             return new Order
             {
                 Id = id,
                 Comment = orderCreationDto.Comment,
-                CustomerId = customerId,
+                CustomerId = customer.UserId,
+                Customer = customer,
                 CustomerProducts = customerProducts,
                 IsDeleted = false,
                 OrderStatuses = new List<OrderStatus> {new OrderStatus(id)}

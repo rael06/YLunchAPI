@@ -21,7 +21,7 @@ namespace YnovEat.Application.Services
             _restaurantProductRepository = restaurantProductRepository;
         }
 
-        public async Task<Order> Create(OrderCreationDto orderCreationDto, string customerId)
+        public async Task<Order> Create(OrderCreationDto orderCreationDto, Customer customer)
         {
             var restaurantProducts =
                 await _restaurantProductRepository.GetListByIds(orderCreationDto.ProductsId);
@@ -30,9 +30,9 @@ namespace YnovEat.Application.Services
             var customerProducts = restaurantProducts
                 .Select(x => CustomerProduct.Create(x, orderId)).ToList();
 
-            var order = Order.Create(orderId, orderCreationDto, customerId, customerProducts);
-            // await _orderRepository.Create(order);
-            return null;
+            var order = Order.Create(orderId, orderCreationDto, customer, customerProducts);
+            await _orderRepository.Create(order);
+            return order;
         }
     }
 }
