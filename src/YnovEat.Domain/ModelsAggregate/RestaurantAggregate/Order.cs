@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using YnovEat.Domain.DTO.OrderModels;
 using YnovEat.Domain.ModelsAggregate.CustomerAggregate;
 using YnovEat.DomainShared.RestaurantAggregate.Enums;
 
@@ -30,5 +31,18 @@ namespace YnovEat.Domain.ModelsAggregate.RestaurantAggregate
             new List<CustomerProduct>();
 
         public ICollection<RestaurantProduct> RestaurantProducts => new List<RestaurantProduct>();
+
+        public static Order Create(string id, OrderCreationDto orderCreationDto, string customerId, ICollection<CustomerProduct> customerProducts)
+        {
+            return new Order
+            {
+                Id = id,
+                Comment = orderCreationDto.Comment,
+                CustomerId = customerId,
+                CustomerProducts = customerProducts,
+                IsDeleted = false,
+                OrderStatuses = new List<OrderStatus> {new OrderStatus(id)}
+            };
+        }
     }
 }

@@ -7,6 +7,7 @@ using Microsoft.Extensions.Configuration;
 using YnovEat.Api.Core;
 using YnovEat.Application.Exceptions;
 using YnovEat.Domain.DTO.OrderModels;
+using YnovEat.Domain.ModelsAggregate.RestaurantAggregate;
 using YnovEat.Domain.ModelsAggregate.UserAggregate;
 using YnovEat.Domain.ModelsAggregate.UserAggregate.Roles;
 using YnovEat.Domain.Services.Database.Repositories;
@@ -34,7 +35,8 @@ namespace YnovEat.Api.Controllers
         [Authorize(Roles = UserRoles.Customer)]
         public async Task<IActionResult> Create([FromBody] OrderCreationDto orderCreationDto)
         {
-
+            var currentUser = await GetAuthenticatedUser();
+            var order = await _orderService.Create(orderCreationDto, currentUser.Id);
             return Ok("order create");
         }
     }

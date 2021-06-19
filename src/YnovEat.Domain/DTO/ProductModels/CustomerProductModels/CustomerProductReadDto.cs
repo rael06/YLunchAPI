@@ -12,8 +12,8 @@ namespace YnovEat.Domain.DTO.ProductModels.CustomerProductModels
         public string Description { get; set; }
         public double Price { get; set; }
         public DateTime CreationDateTime { get; set; }
-        public int RestaurantProductId { get; set; }
-        public int? OrderId { get; set; }
+        public string RestaurantProductId { get; set; }
+        public string OrderId { get; set; }
 
         public CustomerProductReadDto(CustomerProduct customerProduct)
         {

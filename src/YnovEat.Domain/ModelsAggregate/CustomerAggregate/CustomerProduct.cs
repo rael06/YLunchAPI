@@ -11,11 +11,22 @@ namespace YnovEat.Domain.ModelsAggregate.CustomerAggregate
         public string Description { get; set; }
         public double Price { get; set; }
         public DateTime CreationDateTime { get; set; }
-        public int RestaurantProductId { get; set; }
-        public string CartId { get; set; }
-        public virtual Cart Cart { get; set; }
-
-        public int? OrderId { get; set; }
+        public string RestaurantProductId { get; set; }
+        public string OrderId { get; set; }
         public virtual Order Order { get; set; }
+
+        public static CustomerProduct Create(RestaurantProduct restaurantProduct, string orderId)
+        {
+            return new CustomerProduct
+            {
+                Id = Guid.NewGuid().ToString(),
+                Name = restaurantProduct.Name,
+                Description = restaurantProduct.Description,
+                Price = restaurantProduct.Price,
+                CreationDateTime = restaurantProduct.CreationDateTime,
+                RestaurantProductId = restaurantProduct.Id,
+                OrderId = orderId
+            };
+        }
     }
 }
