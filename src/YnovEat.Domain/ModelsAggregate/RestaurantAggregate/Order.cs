@@ -9,7 +9,6 @@ namespace YnovEat.Domain.ModelsAggregate.RestaurantAggregate
     public class Order
     {
         public string Id { get; set; }
-        public string CustomerId { get; set; }
         public bool IsDeleted { get; set; }
         public string Comment { get; set; }
 
@@ -24,6 +23,7 @@ namespace YnovEat.Domain.ModelsAggregate.RestaurantAggregate
 
         public bool IsAcknowledged =>
             OrderStatuses.Any(os => os.Status.Equals(OrderState.Acknowledged));
+        public string CustomerId { get; set; }
         public virtual Customer Customer { get; set; }
 
         public virtual ICollection<CustomerProduct> CustomerProducts { get; set; } =

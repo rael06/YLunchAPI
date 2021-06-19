@@ -8,6 +8,7 @@ namespace YnovEat.Domain.ModelsAggregate.RestaurantAggregate
         public string Id { get; set; }
         public OrderState Status { get; set; }
         public DateTime DateTime { get; set; }
+        public string OrderId { get; set; }
         public virtual Order Order { get; set; }
     }
 }
