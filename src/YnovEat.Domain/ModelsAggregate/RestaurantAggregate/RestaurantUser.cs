@@ -10,18 +10,28 @@ namespace YnovEat.Domain.ModelsAggregate.RestaurantAggregate
         public virtual Restaurant Restaurant { get; set; }
         public string Discriminator { get; set; }
 
-        public static RestaurantAdmin CreateAdmin(string userId)
+        public static RestaurantOwner CreateOwner(string userId)
         {
-            return new ()
+            return new()
             {
                 UserId = userId,
+                Discriminator = nameof(RestaurantEmployee)
+            };
+        }
+
+        public static RestaurantAdmin CreateAdmin(string userId, string restaurantId)
+        {
+            return new()
+            {
+                UserId = userId,
+                RestaurantId = restaurantId,
                 Discriminator = nameof(RestaurantAdmin)
             };
         }
 
         public static RestaurantEmployee CreateEmployee(string userId, string restaurantId)
         {
-            return new ()
+            return new()
             {
                 UserId = userId,
                 RestaurantId = restaurantId,

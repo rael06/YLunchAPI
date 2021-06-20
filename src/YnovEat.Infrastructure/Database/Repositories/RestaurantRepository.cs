@@ -39,7 +39,7 @@ namespace YnovEat.Infrastructure.Database.Repositories
 
         public async Task AddAdmin(User user)
         {
-            await _context.RestaurantUsers.AddAsync(RestaurantUser.CreateAdmin(user.Id));
+            await _context.RestaurantUsers.AddAsync(RestaurantUser.CreateOwner(user.Id));
             await _context.SaveChangesAsync();
         }
 

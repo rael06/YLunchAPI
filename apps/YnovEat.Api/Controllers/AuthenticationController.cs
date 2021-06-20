@@ -89,17 +89,30 @@ namespace YnovEat.Api.Controllers
             return await RegisterUser(model);
         }
 
-        [HttpPost("register-restaurantAdmin")]
+        [HttpPost("register-restaurantOwner")]
         [AllowAnonymous]
-        public async Task<IActionResult> RegisterRestaurantAdmin([FromBody] RestaurantAdminCreationDto model)
+        public async Task<IActionResult> RegisterRestaurantOwner([FromBody] RestaurantOwnerCreationDto model)
         {
             return await RegisterUser(model);
         }
 
-        [HttpPost("register-employee")]
+        [HttpPost("register-restaurantAdmin")]
         [Core.Authorize(Roles = UserRoles.RestaurantAdmin)]
-        public async Task<IActionResult> RegisterEmployee([FromBody] EmployeeCreationDto model)
+        public async Task<IActionResult> RegisterRestaurantAdmin([FromBody] RestaurantAdminCreationDto model)
         {
+            var currentUser = await GetAuthenticatedUser();
+            var restaurantId = currentUser.RestaurantUser.RestaurantId;
+            model.RestaurantId = restaurantId;
+            return await RegisterUser(model);
+        }
+
+        [HttpPost("register-restaurant-employee")]
+        [Core.Authorize(Roles = UserRoles.RestaurantAdmin)]
+        public async Task<IActionResult> RegisterRestaurantEmployee([FromBody] EmployeeCreationDto model)
+        {
+            var currentUser = await GetAuthenticatedUser();
+            var restaurantId = currentUser.RestaurantUser.RestaurantId;
+            model.RestaurantId = restaurantId;
             return await RegisterUser(model);
         }
 

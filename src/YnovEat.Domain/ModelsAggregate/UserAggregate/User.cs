@@ -20,7 +20,7 @@ namespace YnovEat.Domain.ModelsAggregate.UserAggregate
         public virtual RestaurantUser RestaurantUser { get; set; }
         public virtual Customer Customer { get; set; }
 
-        public static User Create(EmployeeCreationDto userCreationDto)
+        public static User Create(RestaurantOwnerCreationDto userCreationDto)
         {
             var user = new User
             {
@@ -31,7 +31,7 @@ namespace YnovEat.Domain.ModelsAggregate.UserAggregate
                 CreationDateTime = DateTime.Now,
             };
 
-            user.RestaurantUser = RestaurantUser.CreateEmployee(user.Id, user.RestaurantUser.RestaurantId);
+            user.RestaurantUser = RestaurantUser.CreateOwner(user.Id);
             return user;
         }
 
@@ -46,7 +46,22 @@ namespace YnovEat.Domain.ModelsAggregate.UserAggregate
                 CreationDateTime = DateTime.Now,
             };
 
-            user.RestaurantUser = RestaurantUser.CreateAdmin(user.Id);
+            user.RestaurantUser = RestaurantUser.CreateAdmin(user.Id, userCreationDto.RestaurantId);
+            return user;
+        }
+
+        public static User Create(EmployeeCreationDto userCreationDto)
+        {
+            var user = new User
+            {
+                SecurityStamp = Guid.NewGuid().ToString(),
+                UserName = userCreationDto.Username,
+                Lastname = userCreationDto.Lastname,
+                Firstname = userCreationDto.Firstname,
+                CreationDateTime = DateTime.Now,
+            };
+
+            user.RestaurantUser = RestaurantUser.CreateEmployee(user.Id, userCreationDto.RestaurantId);
             return user;
         }
 

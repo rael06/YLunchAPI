@@ -35,6 +35,15 @@ namespace YnovEat.Application.Services
             return new UserReadDto(user);
         }
 
+        private async Task<UserReadDto> Register(RestaurantOwnerCreationDto userCreationDto)
+        {
+            var user = User.Create(userCreationDto);
+
+            await _userRepository.Register(user, userCreationDto.Password, UserRoles.RestaurantAdmin);
+
+            return new UserReadDto(user);
+        }
+
         private async Task<UserReadDto> Register(RestaurantAdminCreationDto userCreationDto)
         {
             var user = User.Create(userCreationDto);
@@ -66,10 +75,11 @@ namespace YnovEat.Application.Services
         {
             return userCreationDto switch
             {
-                SuperAdminCreationDto registerSuperAdminDto => await Register(registerSuperAdminDto),
-                RestaurantAdminCreationDto registerRestaurantAdminDto => await Register(registerRestaurantAdminDto),
-                EmployeeCreationDto registerEmployeeDto => await Register(registerEmployeeDto),
-                CustomerCreationDto registerCustomerDto => await Register(registerCustomerDto),
+                SuperAdminCreationDto superAdminCreationDto => await Register(superAdminCreationDto),
+                RestaurantOwnerCreationDto restaurantOwnerCreationDto => await Register(restaurantOwnerCreationDto),
+                RestaurantAdminCreationDto restaurantAdminCreationDto => await Register(restaurantAdminCreationDto),
+                EmployeeCreationDto employeeCreationDto => await Register(employeeCreationDto),
+                CustomerCreationDto customerCreationDto => await Register(customerCreationDto),
                 _ => throw new UserRegistrationException()
             };
         }
