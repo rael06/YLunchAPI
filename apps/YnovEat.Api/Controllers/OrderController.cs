@@ -32,8 +32,8 @@ namespace YnovEat.Api.Controllers
         public async Task<IActionResult> Create([FromBody] OrderCreationDto orderCreationDto)
         {
             var currentUser = await GetAuthenticatedUser();
-            var order = await _orderService.Create(orderCreationDto, currentUser.Customer);
-            return Ok(order);
+            var orderReadDto = await _orderService.Create(orderCreationDto, currentUser.Customer);
+            return Ok(orderReadDto);
         }
     }
 }
