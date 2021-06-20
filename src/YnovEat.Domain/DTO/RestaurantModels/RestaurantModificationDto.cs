@@ -64,7 +64,7 @@ namespace YnovEat.Domain.DTO.RestaurantModels
                     var existingCategory = allRestaurantCategories
                         .Where(y => Categories.Any(z => z.Name.Equals(y.Name)))
                         .FirstOrDefault(y => y.Name.Equals(x.Name));
-                    return existingCategory ?? x.CreateRestaurantCategory();
+                    return existingCategory ?? RestaurantCategory.Create(x);
                 })
                 .ToList() ?? restaurant.Categories;
 

@@ -85,7 +85,7 @@ namespace YnovEat.Domain.ModelsAggregate.RestaurantAggregate
                     .Select(x =>
                     {
                         var existingCategory = allRestaurantCategories.FirstOrDefault(y => y.Name.Equals(x.Name));
-                        return existingCategory ?? x.CreateRestaurantCategory();
+                        return existingCategory ?? RestaurantCategory.Create(x);
                     })
                     .ToList()
             };
