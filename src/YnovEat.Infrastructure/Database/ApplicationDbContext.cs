@@ -147,8 +147,6 @@ namespace YnovEat.Infrastructure.Database
                 x.HasOne(o => o.Customer)
                     .WithMany(c => c.Orders)
                     .HasForeignKey(o => o.CustomerId);
-
-                x.Ignore(o => o.RestaurantProducts);
             });
 
             base.OnModelCreating(builder);

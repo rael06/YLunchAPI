@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using YnovEat.Domain.DTO.OrderModels;
 using YnovEat.Domain.ModelsAggregate.CustomerAggregate;
@@ -33,10 +32,6 @@ namespace YnovEat.Domain.ModelsAggregate.RestaurantAggregate
         public virtual ICollection<CustomerProduct> CustomerProducts { get; set; } =
             new List<CustomerProduct>();
 
-        [NotMapped]
-        public ICollection<RestaurantProduct> RestaurantProducts { get; set; } =
-            new List<RestaurantProduct>();
-
         public string RestaurantId { get; set; }
         public virtual Restaurant Restaurant { get; set; }
         public double TotalPrice { get; set; }
@@ -45,22 +40,20 @@ namespace YnovEat.Domain.ModelsAggregate.RestaurantAggregate
             string id,
             OrderCreationDto orderCreationDto,
             Customer customer,
-            ICollection<CustomerProduct> customerProducts,
-            ICollection<RestaurantProduct> restaurantProducts
+            ICollection<CustomerProduct> customerProducts
         )
         {
-            return new Order
+            return new()
             {
                 Id = id,
                 CustomerComment = orderCreationDto.CustomerComment,
                 RestaurantComment = orderCreationDto.RestaurantComment,
-                TotalPrice = customerProducts.Sum(x => x.Price),
+                TotalPrice = Math.Round(customerProducts.Sum(x => x.Price), 2),
                 CreationDateTime = DateTime.Now,
                 CustomerId = customer.UserId,
                 RestaurantId = customerProducts.First().RestaurantId,
                 Customer = customer,
                 CustomerProducts = customerProducts,
-                RestaurantProducts = restaurantProducts,
                 IsDeleted = false,
                 OrderStatuses = new List<OrderStatus> {new(id)}
             };

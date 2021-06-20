@@ -49,7 +49,7 @@ namespace YnovEat.Application.Services
 
         public async Task<ICollection<OrderReadDto>> GetTodayOrders(string restaurantId)
         {
-            var orders = await _restaurantRepository.GetOrdersById(restaurantId);
+            var orders = await _restaurantRepository.GetOrdersByRestaurantId(restaurantId);
             return orders.Select(x => new OrderReadDto(x)).ToList();
         }
 

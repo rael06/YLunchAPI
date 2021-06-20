@@ -1,12 +1,10 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
 using YnovEat.Domain.ModelsAggregate.RestaurantAggregate;
-using YnovEat.Domain.ModelsAggregate.UserAggregate;
 using YnovEat.Domain.Services.Database.Repositories;
 
 namespace YnovEat.Infrastructure.Database.Repositories
@@ -58,7 +56,7 @@ namespace YnovEat.Infrastructure.Database.Repositories
                 .ToListAsync();
         }
 
-        public async Task<ICollection<Order>> GetOrdersById(string restaurantId)
+        public async Task<ICollection<Order>> GetOrdersByRestaurantId(string restaurantId)
         {
             return await _context.Orders
                 .Include(x=>x.OrderStatuses)

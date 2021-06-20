@@ -14,6 +14,6 @@ namespace YnovEat.Domain.Services.Database.Repositories
         Task<ICollection<RestaurantCategory>> GetAllRestaurantCategories();
         Task<ICollection<Restaurant>> GetAllForCustomer();
         Task<ICollection<Restaurant>> GetAll();
-        Task<ICollection<Order>> GetOrdersById(string restaurantId);
+        Task<ICollection<Order>> GetOrdersByRestaurantId(string restaurantId);
     }
 }

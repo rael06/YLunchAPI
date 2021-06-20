@@ -10,6 +10,6 @@ namespace YnovEat.Domain.Services.Database.Repositories
         Task Update();
         Task<ICollection<RestaurantProduct>> GetAllByRestaurantId(string restaurantId);
         Task Delete(string restaurantProductId);
-        Task<ICollection<RestaurantProduct>> GetListByIds(ICollection<string> ids);
+        ICollection<RestaurantProduct> GetListByIds(ICollection<string> ids);
     }
 }

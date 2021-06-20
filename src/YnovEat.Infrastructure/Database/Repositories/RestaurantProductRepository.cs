@@ -35,16 +35,18 @@ namespace YnovEat.Infrastructure.Database.Repositories
 
         public async Task Delete(string restaurantProductId)
         {
-            var restaurantProduct = await _context.RestaurantProducts.FirstOrDefaultAsync(x=>x.Id.Equals(restaurantProductId));
+            var restaurantProduct =
+                await _context.RestaurantProducts.FirstOrDefaultAsync(x => x.Id.Equals(restaurantProductId));
             _context.RestaurantProducts.Remove(restaurantProduct);
             await _context.SaveChangesAsync();
         }
 
-        public async Task<ICollection<RestaurantProduct>> GetListByIds(ICollection<string> ids)
+        public ICollection<RestaurantProduct> GetListByIds(ICollection<string> ids)
         {
-            var restaurantProducts = await _context.RestaurantProducts
-                .Where(x => ids.Contains(x.Id))
-                .ToListAsync();
+            var restaurantProducts = ids
+                .Select(id => _context.RestaurantProducts
+                    .Find(id))
+                .ToList();
             return restaurantProducts;
         }
     }

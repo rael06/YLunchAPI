@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using YnovEat.Domain.DTO.OrderModels.OrderStatusModels;
 using YnovEat.Domain.DTO.ProductModels.CustomerProductModels;
-using YnovEat.Domain.DTO.ProductModels.RestaurantProductModels;
 using YnovEat.Domain.ModelsAggregate.RestaurantAggregate;
 
 namespace YnovEat.Domain.DTO.OrderModels
@@ -23,7 +22,7 @@ namespace YnovEat.Domain.DTO.OrderModels
         public OrderStatusReadDto CurrentOrderStatus { get; set; }
         public bool IsAcknowledged { get; set; }
         public ICollection<CustomerProductReadDto> CustomerProducts { get; set; }
-        public ICollection<RestaurantProductReadDto> RestaurantProducts { get; set; }
+        public ICollection<string> RestaurantProductsId { get; set; }
         public double TotalPrice { get; set; }
 
         public OrderReadDto(Order order)
@@ -42,7 +41,7 @@ namespace YnovEat.Domain.DTO.OrderModels
             CurrentOrderStatus = new OrderStatusReadDto(order.CurrentOrderStatus);
             IsAcknowledged = order.IsAcknowledged;
             CustomerProducts = order.CustomerProducts.Select(x=>new CustomerProductReadDto(x)).ToList();
-            RestaurantProducts = order.RestaurantProducts.Select(x=>new RestaurantProductReadDto(x)).ToList();
+            RestaurantProductsId = order.CustomerProducts.Select(x=>x.RestaurantProductId).ToList();
         }
     }
 }

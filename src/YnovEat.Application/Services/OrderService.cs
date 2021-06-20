@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using YnovEat.Domain.DTO.OrderModels;
@@ -24,13 +23,13 @@ namespace YnovEat.Application.Services
         public async Task<OrderReadDto> Create(OrderCreationDto orderCreationDto, Customer customer)
         {
             var restaurantProducts =
-                await _restaurantProductRepository.GetListByIds(orderCreationDto.ProductsId);
+                _restaurantProductRepository.GetListByIds(orderCreationDto.ProductsId);
 
             var orderId = Guid.NewGuid().ToString();
             var customerProducts = restaurantProducts
                 .Select(x => CustomerProduct.Create(x, orderId)).ToList();
 
-            var order = Order.Create(orderId, orderCreationDto, customer, customerProducts, restaurantProducts);
+            var order = Order.Create(orderId, orderCreationDto, customer, customerProducts);
             await _orderRepository.Create(order);
             return new OrderReadDto(order);
         }
