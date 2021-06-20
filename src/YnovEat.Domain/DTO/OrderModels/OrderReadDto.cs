@@ -4,9 +4,7 @@ using System.Linq;
 using YnovEat.Domain.DTO.OrderModels.OrderStatusModels;
 using YnovEat.Domain.DTO.ProductModels.CustomerProductModels;
 using YnovEat.Domain.DTO.ProductModels.RestaurantProductModels;
-using YnovEat.Domain.ModelsAggregate.CustomerAggregate;
 using YnovEat.Domain.ModelsAggregate.RestaurantAggregate;
-using YnovEat.DomainShared.RestaurantAggregate.Enums;
 
 namespace YnovEat.Domain.DTO.OrderModels
 {

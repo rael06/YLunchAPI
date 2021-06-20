@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using YnovEat.Domain.DTO.OrderModels;
 using YnovEat.Domain.DTO.RestaurantModels;
 using YnovEat.Domain.DTO.UserModels;
 using YnovEat.Domain.ModelsAggregate.RestaurantAggregate;
-using YnovEat.Domain.ModelsAggregate.UserAggregate;
 
 namespace YnovEat.Domain.Services.RestaurantServices
 {
@@ -16,5 +16,6 @@ namespace YnovEat.Domain.Services.RestaurantServices
         Task<RestaurantReadDto> GetByUserId(string currentUserId);
         Task<ICollection<RestaurantReadDto>> GetAllForCustomer();
         Task<ICollection<RestaurantReadDto>> GetAllRestaurants();
+        Task<ICollection<OrderReadDto>> GetTodayOrders(string restaurantId);
     }
 }

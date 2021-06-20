@@ -74,13 +74,13 @@ namespace YnovEat.Api.Controllers
                 var currentUser = await GetAuthenticatedUser();
                 var restaurant = await _restaurantRepository.GetById(model.Id);
 
-                if(restaurant == null)
+                if (restaurant == null)
                     return StatusCode(
                         StatusCodes.Status404NotFound,
                         "Restaurant not found"
                     );
 
-                if (!restaurant.RestaurantUsers.Any(x=>x.UserId.Equals(currentUser.Id)))
+                if (!restaurant.RestaurantUsers.Any(x => x.UserId.Equals(currentUser.Id)))
                     return StatusCode(
                         StatusCodes.Status403Forbidden,
                         "User is not from the restaurant"
@@ -124,13 +124,36 @@ namespace YnovEat.Api.Controllers
         }
 
         [HttpGet("get-customer-details/{customerId}")]
-        [Authorize(Roles = UserRoles.RestaurantAdmin)]
+        [Authorize(Roles = UserRoles.RestaurantAdmin + "," + UserRoles.Employee)]
         public async Task<IActionResult> GetCustomerDetails(string customerId)
         {
             try
             {
                 var customer = await _userService.GetAsCustomerById(customerId);
                 return Ok(customer);
+            }
+            catch (NotFoundException e)
+            {
+                return NotFound(e.Message);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(
+                    StatusCodes.Status500InternalServerError,
+                    e
+                );
+            }
+        }
+
+        [HttpGet("get-today-orders")]
+        [Authorize(Roles = UserRoles.RestaurantAdmin + "," + UserRoles.Employee)]
+        public async Task<IActionResult> GetTodayOrders()
+        {
+            try
+            {
+                var currentUser = await GetAuthenticatedUser();
+                var orderReadDtoCollection = await _restaurantService.GetTodayOrders(currentUser.RestaurantUser.RestaurantId);
+                return Ok(orderReadDtoCollection);
             }
             catch (NotFoundException e)
             {

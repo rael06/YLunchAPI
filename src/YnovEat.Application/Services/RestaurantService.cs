@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using YnovEat.Application.Exceptions;
+using YnovEat.Domain.DTO.OrderModels;
 using YnovEat.Domain.DTO.RestaurantModels;
 using YnovEat.Domain.DTO.UserModels;
 using YnovEat.Domain.ModelsAggregate.RestaurantAggregate;
@@ -44,6 +45,12 @@ namespace YnovEat.Application.Services
         {
             var restaurants = await _restaurantRepository.GetAll();
             return restaurants.Select(x => new RestaurantReadDto(x)).ToList();
+        }
+
+        public async Task<ICollection<OrderReadDto>> GetTodayOrders(string restaurantId)
+        {
+            var orders = await _restaurantRepository.GetOrdersById(restaurantId);
+            return orders.Select(x => new OrderReadDto(x)).ToList();
         }
 
         public async Task<RestaurantReadDto> Create(RestaurantCreationDto restaurantCreationDto, CurrentUser user)

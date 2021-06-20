@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -54,6 +55,16 @@ namespace YnovEat.Infrastructure.Database.Repositories
         {
             return await QueryEnrichedRestaurants
                 .Include(x=>x.RestaurantUsers)
+                .ToListAsync();
+        }
+
+        public async Task<ICollection<Order>> GetOrdersById(string restaurantId)
+        {
+            return await _context.Orders
+                .Include(x=>x.OrderStatuses)
+                .Include(x=>x.CustomerProducts)
+                .Where(o => o.RestaurantId.Equals(restaurantId))
+                .Where(o => o.CreationDateTime > DateTime.Today)
                 .ToListAsync();
         }
 
