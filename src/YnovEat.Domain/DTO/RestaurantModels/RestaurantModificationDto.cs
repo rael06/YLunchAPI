@@ -35,40 +35,5 @@ namespace YnovEat.Domain.DTO.RestaurantModels
         public ICollection<DayOpeningTimesCreationDto> WeekOpeningTimes { get; set; }
 
         public ICollection<RestaurantCategoryCreationDto> Categories { get; set; }
-
-        public Restaurant UpdateRestaurant(Restaurant restaurant,
-            ICollection<RestaurantCategory> allRestaurantCategories)
-        {
-            restaurant.Name = Name ?? restaurant.Name;
-            restaurant.PhoneNumber = PhoneNumber ?? restaurant.PhoneNumber;
-            restaurant.Email = Email ?? restaurant.Email;
-            restaurant.Base64Image = Base64Image ?? restaurant.Base64Image;
-            restaurant.Base64Logo = Base64Logo ?? restaurant.Base64Logo;
-            restaurant.IsOpen = IsOpen ?? restaurant.IsOpen;
-            restaurant.ZipCode = ZipCode ?? restaurant.ZipCode;
-            restaurant.Country = Country ?? restaurant.Country;
-            restaurant.City = City ?? restaurant.City;
-            restaurant.StreetNumber = StreetNumber ?? restaurant.StreetNumber;
-            restaurant.StreetName = StreetName ?? restaurant.StreetName;
-            restaurant.AddressExtraInformation = AddressExtraInformation ??
-                                                 restaurant.AddressExtraInformation;
-            restaurant.LastUpdateDateTime = DateTime.Now;
-            restaurant.ClosingDates = ClosingDates?
-                .Select(x => ClosingDate.Create(x, restaurant.Id)).ToList() ?? restaurant.ClosingDates;
-            restaurant.WeekOpeningTimes = WeekOpeningTimes?.Select(x =>
-                DayOpeningTimes.Create(x, restaurant.Id)
-            ).ToList() ?? restaurant.WeekOpeningTimes;
-            restaurant.Categories = Categories?
-                .Select(x =>
-                {
-                    var existingCategory = allRestaurantCategories
-                        .Where(y => Categories.Any(z => z.Name.Equals(y.Name)))
-                        .FirstOrDefault(y => y.Name.Equals(x.Name));
-                    return existingCategory ?? RestaurantCategory.Create(x);
-                })
-                .ToList() ?? restaurant.Categories;
-
-            return restaurant;
-        }
     }
 }

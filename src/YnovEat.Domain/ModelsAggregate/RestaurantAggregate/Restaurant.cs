@@ -90,5 +90,37 @@ namespace YnovEat.Domain.ModelsAggregate.RestaurantAggregate
                     .ToList()
             };
         }
+
+        public void Update(RestaurantModificationDto restaurantModificationDto, ICollection<RestaurantCategory> allRestaurantCategories)
+        {
+            Name = restaurantModificationDto.Name ?? Name;
+            PhoneNumber = restaurantModificationDto.PhoneNumber ?? PhoneNumber;
+            Email = restaurantModificationDto.Email ?? Email;
+            Base64Image = restaurantModificationDto.Base64Image ?? Base64Image;
+            Base64Logo = restaurantModificationDto.Base64Logo ?? Base64Logo;
+            IsOpen = restaurantModificationDto.IsOpen ?? IsOpen;
+            ZipCode = restaurantModificationDto.ZipCode ?? ZipCode;
+            Country = restaurantModificationDto.Country ?? Country;
+            City = restaurantModificationDto.City ?? City;
+            StreetNumber = restaurantModificationDto.StreetNumber ?? StreetNumber;
+            StreetName = restaurantModificationDto.StreetName ?? StreetName;
+            AddressExtraInformation = restaurantModificationDto.AddressExtraInformation ??
+                                                 AddressExtraInformation;
+            LastUpdateDateTime = DateTime.Now;
+            ClosingDates = restaurantModificationDto.ClosingDates?
+                .Select(x => ClosingDate.Create(x, Id)).ToList() ?? ClosingDates;
+            WeekOpeningTimes = restaurantModificationDto.WeekOpeningTimes?.Select(x =>
+                DayOpeningTimes.Create(x, Id)
+            ).ToList() ?? WeekOpeningTimes;
+            Categories = restaurantModificationDto.Categories?
+                .Select(x =>
+                {
+                    var existingCategory = allRestaurantCategories
+                        .Where(y => Categories.Any(z => z.Name.Equals(y.Name)))
+                        .FirstOrDefault(y => y.Name.Equals(x.Name));
+                    return existingCategory ?? RestaurantCategory.Create(x);
+                })
+                .ToList() ?? Categories;
+        }
     }
 }
