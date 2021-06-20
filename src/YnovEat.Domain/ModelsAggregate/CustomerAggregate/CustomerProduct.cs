@@ -8,6 +8,7 @@ namespace YnovEat.Domain.ModelsAggregate.CustomerAggregate
     {
         public string Id { get; set; }
         public string Name { get; set; }
+        public string Image { get; set; }
         public string Description { get; set; }
         public double Price { get; set; }
         public DateTime CreationDateTime { get; set; }
@@ -22,6 +23,7 @@ namespace YnovEat.Domain.ModelsAggregate.CustomerAggregate
             {
                 Id = Guid.NewGuid().ToString(),
                 Name = restaurantProduct.Name,
+                Image = restaurantProduct.Image,
                 Description = restaurantProduct.Description,
                 Price = restaurantProduct.Price,
                 CreationDateTime = restaurantProduct.CreationDateTime,
