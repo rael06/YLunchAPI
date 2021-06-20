@@ -28,14 +28,7 @@ namespace YnovEat.Application.Services
 
         private async Task<UserReadDto> Register(SuperAdminCreationDto userCreationDto)
         {
-            var user = new User
-            {
-                SecurityStamp = Guid.NewGuid().ToString(),
-                UserName = userCreationDto.Username,
-                Lastname = userCreationDto.Lastname,
-                Firstname = userCreationDto.Firstname,
-                CreationDateTime = DateTime.Now,
-            };
+            var user = User.Create(userCreationDto);
 
             await _userRepository.Register(user, userCreationDto.Password, UserRoles.SuperAdmin);
 
@@ -44,14 +37,7 @@ namespace YnovEat.Application.Services
 
         private async Task<UserReadDto> Register(RestaurantAdminCreationDto userCreationDto)
         {
-            var user = new User
-            {
-                SecurityStamp = Guid.NewGuid().ToString(),
-                UserName = userCreationDto.Username,
-                Lastname = userCreationDto.Lastname,
-                Firstname = userCreationDto.Firstname,
-                CreationDateTime = DateTime.Now,
-            };
+            var user = User.Create(userCreationDto);
 
             await _userRepository.Register(user, userCreationDto.Password, UserRoles.RestaurantAdmin);
             await _restaurantRepository.AddAdmin(user);
@@ -61,14 +47,7 @@ namespace YnovEat.Application.Services
 
         private async Task<UserReadDto> Register(EmployeeCreationDto userCreationDto)
         {
-            var user = new User
-            {
-                SecurityStamp = Guid.NewGuid().ToString(),
-                UserName = userCreationDto.Username,
-                Lastname = userCreationDto.Lastname,
-                Firstname = userCreationDto.Firstname,
-                CreationDateTime = DateTime.Now,
-            };
+            var user = User.Create(userCreationDto);
 
             await _userRepository.Register(user, userCreationDto.Password, UserRoles.Employee);
 
@@ -77,22 +56,7 @@ namespace YnovEat.Application.Services
 
         private async Task<UserReadDto> Register(CustomerCreationDto userCreationDto)
         {
-            var user = new User
-            {
-                SecurityStamp = Guid.NewGuid().ToString(),
-                UserName = userCreationDto.Username,
-                Lastname = userCreationDto.Lastname,
-                Firstname = userCreationDto.Firstname,
-                Email = userCreationDto.Username,
-                PhoneNumber = userCreationDto.PhoneNumber,
-                CreationDateTime = DateTime.Now,
-            };
-
-            user.Customer = new Customer
-            {
-                CustomerFamily = CustomerFamily.Student,
-                UserId = user.Id
-            };
+            var user = User.Create(userCreationDto);
 
             await _userRepository.Register(user, userCreationDto.Password, UserRoles.Customer);
 
