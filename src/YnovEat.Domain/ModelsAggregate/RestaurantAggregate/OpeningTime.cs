@@ -1,6 +1,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using YnovEat.Domain.DTO.RestaurantModels.OpeningTimeModels;
+using YnovEat.Domain.Utils;
 
 namespace YnovEat.Domain.ModelsAggregate.RestaurantAggregate
 {
@@ -20,10 +21,10 @@ namespace YnovEat.Domain.ModelsAggregate.RestaurantAggregate
             {
                 Id = Guid.NewGuid().ToString(),
                 DayOpeningTimesId = dayOpeningTimesId,
-                StartTimeInMinutes = openingTimeCreationDto.StartTimeInMinutes,
-                EndTimeInMinutes = openingTimeCreationDto.EndTimeInMinutes,
-                StartOrderTimeInMinutes = openingTimeCreationDto.StartOrderTimeInMinutes,
-                EndOrderTimeInMinutes = openingTimeCreationDto.EndOrderTimeInMinutes
+                StartTimeInMinutes = TimeUtils.ToMinutes(openingTimeCreationDto.StartTimeInMinutes),
+                EndTimeInMinutes = TimeUtils.ToMinutes(openingTimeCreationDto.EndTimeInMinutes),
+                StartOrderTimeInMinutes = TimeUtils.ToNullableMinutes(openingTimeCreationDto.StartOrderTimeInMinutes),
+                EndOrderTimeInMinutes = TimeUtils.ToNullableMinutes(openingTimeCreationDto.EndOrderTimeInMinutes)
             };
         }
     }
