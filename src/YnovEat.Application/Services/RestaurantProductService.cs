@@ -30,9 +30,9 @@ namespace YnovEat.Application.Services
             RestaurantProductModificationDto restaurantProductModificationDto,
             RestaurantProduct restaurantProduct)
         {
-            var updatedRestaurantProduct = restaurantProductModificationDto.UpdateRestaurantProduct(restaurantProduct);
+            restaurantProduct.Update(restaurantProductModificationDto);
             await _restaurantProductRepository.Update();
-            return new RestaurantProductReadDto(updatedRestaurantProduct);
+            return new RestaurantProductReadDto(restaurantProduct);
         }
 
         public async Task<ICollection<RestaurantProductReadDto>> GetAllByRestaurantId(string restaurantId)

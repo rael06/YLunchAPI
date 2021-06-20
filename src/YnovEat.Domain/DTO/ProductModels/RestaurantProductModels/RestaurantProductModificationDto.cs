@@ -19,19 +19,5 @@ namespace YnovEat.Domain.DTO.ProductModels.RestaurantProductModels
 
         [Range(0, ProductFamiliesUtils.Count, ErrorMessage = "ProductFamily is out of range")]
         public ProductFamilies? ProductFamily { get; set; }
-
-        public RestaurantProduct UpdateRestaurantProduct(RestaurantProduct restaurantProduct)
-        {
-            restaurantProduct.Name = Name ?? restaurantProduct.Name;
-            restaurantProduct.Image = Image ?? restaurantProduct.Image;
-            restaurantProduct.Description = Description ?? restaurantProduct.Description;
-            restaurantProduct.Price = Price ?? restaurantProduct.Price;
-            restaurantProduct.Quantity = Quantity ?? restaurantProduct.Quantity;
-            restaurantProduct.IsActive = IsActive ?? restaurantProduct.IsActive;
-            restaurantProduct.ExpirationDateTime = ExpirationDateTime ?? restaurantProduct.ExpirationDateTime;
-            restaurantProduct.ProductFamily = ProductFamily ?? restaurantProduct.ProductFamily;
-
-            return restaurantProduct;
-        }
     }
 }

@@ -11,6 +11,7 @@ namespace YnovEat.Domain.DTO.ProductModels.RestaurantProductModels
         public string Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
+        public string Image { get; set; }
         public double Price { get; set; }
         public int? Quantity { get; set; }
         public bool IsActive { get; set; }
@@ -23,6 +24,7 @@ namespace YnovEat.Domain.DTO.ProductModels.RestaurantProductModels
         {
             Id = restaurantProduct.Id;
             Name = restaurantProduct.Name;
+            Image = restaurantProduct.Image;
             Description = restaurantProduct.Description;
             Price = restaurantProduct.Price;
             Quantity = restaurantProduct.Quantity;

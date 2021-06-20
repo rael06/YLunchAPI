@@ -45,5 +45,17 @@ namespace YnovEat.Domain.ModelsAggregate.RestaurantAggregate
                     RestaurantId = restaurantId
                 };
         }
+
+        public void Update(RestaurantProductModificationDto restaurantProductModificationDto)
+        {
+            Name = restaurantProductModificationDto.Name ?? Name;
+            Image = restaurantProductModificationDto.Image ?? Image;
+            Description = restaurantProductModificationDto.Description ?? Description;
+            Price = restaurantProductModificationDto.Price ?? Price;
+            Quantity = restaurantProductModificationDto.Quantity ?? Quantity;
+            IsActive = restaurantProductModificationDto.IsActive ?? IsActive;
+            ExpirationDateTime = restaurantProductModificationDto.ExpirationDateTime ?? ExpirationDateTime;
+            ProductFamily = restaurantProductModificationDto.ProductFamily ?? ProductFamily;
+        }
     }
 }
