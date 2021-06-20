@@ -4,6 +4,8 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Net.Sockets;
+using YnovEat.Domain.DTO.RestaurantModels;
+using YnovEat.Domain.DTO.UserModels;
 using YnovEat.Domain.ModelsAggregate.UserAggregate;
 
 namespace YnovEat.Domain.ModelsAggregate.RestaurantAggregate
@@ -48,5 +50,45 @@ namespace YnovEat.Domain.ModelsAggregate.RestaurantAggregate
             new List<RestaurantCategory>();
 
         public virtual ICollection<RestaurantProduct> RestaurantProducts { get; set; } = new List<RestaurantProduct>();
+
+        public static Restaurant Create(RestaurantCreationDto restaurantCreationDto, CurrentUser user, IEnumerable<RestaurantCategory> allRestaurantCategories)
+        {
+            var restaurantId = Guid.NewGuid().ToString();
+            return new Restaurant
+            {
+                Id = restaurantId,
+                Name = restaurantCreationDto.Name,
+                PhoneNumber = restaurantCreationDto.PhoneNumber,
+                Email = restaurantCreationDto.Email,
+                Base64Image = restaurantCreationDto.Base64Image,
+                Base64Logo = restaurantCreationDto.Base64Logo,
+                IsEmailConfirmed = false,
+                EmailConfirmationDateTime = null,
+                IsOpen = restaurantCreationDto.IsOpen ?? false,
+                CreationDateTime = DateTime.Now,
+                ZipCode = restaurantCreationDto.ZipCode,
+                Country = restaurantCreationDto.Country,
+                City = restaurantCreationDto.City,
+                StreetNumber = restaurantCreationDto.StreetNumber,
+                StreetName = restaurantCreationDto.StreetName,
+                AddressExtraInformation = restaurantCreationDto.AddressExtraInformation,
+                OwnerId = user.Id,
+                Owner = user.RestaurantUser as RestaurantOwner,
+
+                ClosingDates = restaurantCreationDto.ClosingDates.Select(x => ClosingDate.Create(x, restaurantId)).ToList(),
+
+                WeekOpeningTimes = restaurantCreationDto.WeekOpeningTimes.Select(x =>
+                    DayOpeningTimes.Create(x, restaurantId)
+                ).ToList(),
+
+                Categories = restaurantCreationDto.Categories
+                    .Select(x =>
+                    {
+                        var existingCategory = allRestaurantCategories.FirstOrDefault(y => y.Name.Equals(x.Name));
+                        return existingCategory ?? x.CreateRestaurantCategory();
+                    })
+                    .ToList()
+            };
+        }
     }
 }

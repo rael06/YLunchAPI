@@ -37,45 +37,5 @@ namespace YnovEat.Domain.DTO.RestaurantModels
 
         public ICollection<RestaurantCategoryCreationDto> Categories { get; set; } =
             new List<RestaurantCategoryCreationDto>();
-
-        public Restaurant CreateRestaurant(CurrentUser user, ICollection<RestaurantCategory> allRestaurantCategories)
-        {
-            var restaurantId = Guid.NewGuid().ToString();
-            return new Restaurant
-            {
-                Id = restaurantId,
-                Name = Name,
-                PhoneNumber = PhoneNumber,
-                Email = Email,
-                Base64Image = Base64Image,
-                Base64Logo = Base64Logo,
-                IsEmailConfirmed = false,
-                EmailConfirmationDateTime = null,
-                IsOpen = IsOpen ?? false,
-                CreationDateTime = DateTime.Now,
-                ZipCode = ZipCode,
-                Country = Country,
-                City = City,
-                StreetNumber = StreetNumber,
-                StreetName = StreetName,
-                AddressExtraInformation = AddressExtraInformation,
-                OwnerId = user.Id,
-                Owner = user.RestaurantUser as RestaurantOwner,
-
-                ClosingDates = ClosingDates.Select(x => x.CreateClosingDate(restaurantId)).ToList(),
-
-                WeekOpeningTimes = WeekOpeningTimes.Select(day =>
-                    day.CreateDayOpeningTimes(restaurantId)
-                ).ToList(),
-
-                Categories = Categories
-                    .Select(x =>
-                    {
-                        var existingCategory = allRestaurantCategories.FirstOrDefault(y => y.Name.Equals(x.Name));
-                        return existingCategory ?? x.CreateRestaurantCategory();
-                    })
-                    .ToList()
-            };
-        }
     }
 }

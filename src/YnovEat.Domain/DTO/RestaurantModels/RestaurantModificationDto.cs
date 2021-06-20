@@ -54,9 +54,9 @@ namespace YnovEat.Domain.DTO.RestaurantModels
                                                  restaurant.AddressExtraInformation;
             restaurant.LastUpdateDateTime = DateTime.Now;
             restaurant.ClosingDates = ClosingDates?
-                .Select(x => x.CreateClosingDate(restaurant.Id)).ToList() ?? restaurant.ClosingDates;
-            restaurant.WeekOpeningTimes = WeekOpeningTimes?.Select(day =>
-                day.CreateDayOpeningTimes(restaurant.Id)
+                .Select(x => ClosingDate.Create(x, restaurant.Id)).ToList() ?? restaurant.ClosingDates;
+            restaurant.WeekOpeningTimes = WeekOpeningTimes?.Select(x =>
+                DayOpeningTimes.Create(x, restaurant.Id)
             ).ToList() ?? restaurant.WeekOpeningTimes;
             restaurant.Categories = Categories?
                 .Select(x =>

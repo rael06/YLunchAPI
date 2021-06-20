@@ -50,7 +50,7 @@ namespace YnovEat.Application.Services
         {
             var allRestaurantCategories = await _restaurantRepository.GetAllRestaurantCategories();
             var savedRestaurant =
-                await _restaurantRepository.CreateRestaurant(restaurantCreationDto.CreateRestaurant(user, allRestaurantCategories));
+                await _restaurantRepository.CreateRestaurant(Restaurant.Create(restaurantCreationDto, user, allRestaurantCategories));
             return new RestaurantReadDto(savedRestaurant);
         }
 
