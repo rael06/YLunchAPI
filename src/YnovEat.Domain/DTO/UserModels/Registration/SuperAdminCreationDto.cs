@@ -1,6 +1,6 @@
 namespace YnovEat.Domain.DTO.UserModels.Registration
 {
-    public class RegisterEmployeeDto : RegisterUserDto
+    public class SuperAdminCreationDto : UserCreationDto
     {
 
     }

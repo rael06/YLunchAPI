@@ -26,65 +26,65 @@ namespace YnovEat.Application.Services
             _restaurantRepository = restaurantRepository;
         }
 
-        private async Task<UserReadDto> Register(RegisterSuperAdminDto registerUserDto)
+        private async Task<UserReadDto> Register(SuperAdminCreationDto userCreationDto)
         {
             var user = new User
             {
                 SecurityStamp = Guid.NewGuid().ToString(),
-                UserName = registerUserDto.Username,
-                Lastname = registerUserDto.Lastname,
-                Firstname = registerUserDto.Firstname,
+                UserName = userCreationDto.Username,
+                Lastname = userCreationDto.Lastname,
+                Firstname = userCreationDto.Firstname,
                 CreationDateTime = DateTime.Now,
             };
 
-            await _userRepository.Register(user, registerUserDto.Password, UserRoles.SuperAdmin);
+            await _userRepository.Register(user, userCreationDto.Password, UserRoles.SuperAdmin);
 
             return new UserReadDto(user);
         }
 
-        private async Task<UserReadDto> Register(RegisterRestaurantAdminDto registerUserDto)
+        private async Task<UserReadDto> Register(RestaurantAdminCreationDto userCreationDto)
         {
             var user = new User
             {
                 SecurityStamp = Guid.NewGuid().ToString(),
-                UserName = registerUserDto.Username,
-                Lastname = registerUserDto.Lastname,
-                Firstname = registerUserDto.Firstname,
+                UserName = userCreationDto.Username,
+                Lastname = userCreationDto.Lastname,
+                Firstname = userCreationDto.Firstname,
                 CreationDateTime = DateTime.Now,
             };
 
-            await _userRepository.Register(user, registerUserDto.Password, UserRoles.RestaurantAdmin);
+            await _userRepository.Register(user, userCreationDto.Password, UserRoles.RestaurantAdmin);
             await _restaurantRepository.AddAdmin(user);
 
             return new UserReadDto(user);
         }
 
-        private async Task<UserReadDto> Register(RegisterEmployeeDto registerUserDto)
+        private async Task<UserReadDto> Register(EmployeeCreationDto userCreationDto)
         {
             var user = new User
             {
                 SecurityStamp = Guid.NewGuid().ToString(),
-                UserName = registerUserDto.Username,
-                Lastname = registerUserDto.Lastname,
-                Firstname = registerUserDto.Firstname,
+                UserName = userCreationDto.Username,
+                Lastname = userCreationDto.Lastname,
+                Firstname = userCreationDto.Firstname,
                 CreationDateTime = DateTime.Now,
             };
 
-            await _userRepository.Register(user, registerUserDto.Password, UserRoles.Employee);
+            await _userRepository.Register(user, userCreationDto.Password, UserRoles.Employee);
 
             return new UserReadDto(user);
         }
 
-        private async Task<UserReadDto> Register(RegisterCustomerDto registerUserDto)
+        private async Task<UserReadDto> Register(CustomerCreationDto userCreationDto)
         {
             var user = new User
             {
                 SecurityStamp = Guid.NewGuid().ToString(),
-                UserName = registerUserDto.Username,
-                Lastname = registerUserDto.Lastname,
-                Firstname = registerUserDto.Firstname,
-                Email = registerUserDto.Username,
-                PhoneNumber = registerUserDto.PhoneNumber,
+                UserName = userCreationDto.Username,
+                Lastname = userCreationDto.Lastname,
+                Firstname = userCreationDto.Firstname,
+                Email = userCreationDto.Username,
+                PhoneNumber = userCreationDto.PhoneNumber,
                 CreationDateTime = DateTime.Now,
             };
 
@@ -94,19 +94,19 @@ namespace YnovEat.Application.Services
                 UserId = user.Id
             };
 
-            await _userRepository.Register(user, registerUserDto.Password, UserRoles.Customer);
+            await _userRepository.Register(user, userCreationDto.Password, UserRoles.Customer);
 
             return new UserReadDto(user);
         }
 
-        public async Task<UserReadDto> Register<T>(T registerUserDto) where T : RegisterUserDto
+        public async Task<UserReadDto> Register<T>(T userCreationDto) where T : UserCreationDto
         {
-            return registerUserDto switch
+            return userCreationDto switch
             {
-                RegisterSuperAdminDto registerSuperAdminDto => await Register(registerSuperAdminDto),
-                RegisterRestaurantAdminDto registerRestaurantAdminDto => await Register(registerRestaurantAdminDto),
-                RegisterEmployeeDto registerEmployeeDto => await Register(registerEmployeeDto),
-                RegisterCustomerDto registerCustomerDto => await Register(registerCustomerDto),
+                SuperAdminCreationDto registerSuperAdminDto => await Register(registerSuperAdminDto),
+                RestaurantAdminCreationDto registerRestaurantAdminDto => await Register(registerRestaurantAdminDto),
+                EmployeeCreationDto registerEmployeeDto => await Register(registerEmployeeDto),
+                CustomerCreationDto registerCustomerDto => await Register(registerCustomerDto),
                 _ => throw new UserRegistrationException()
             };
         }

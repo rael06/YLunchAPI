@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace YnovEat.Domain.DTO.UserModels.Registration
 {
-    public abstract class RegisterUserDto
+    public abstract class UserCreationDto
     {
         [Required(ErrorMessage = "UserName is required")]
         public string Username { get; set; }

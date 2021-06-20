@@ -75,7 +75,7 @@ namespace YnovEat.Api.Controllers
         }
 
         [HttpPost("init-super-admin/{pass}")]
-        public async Task<IActionResult> InitSuperAdmin([FromRoute] string pass, [FromBody] RegisterSuperAdminDto model)
+        public async Task<IActionResult> InitSuperAdmin([FromRoute] string pass, [FromBody] SuperAdminCreationDto model)
         {
             if (pass != Configuration["InitAdminPass"]) return Unauthorized();
 
@@ -84,28 +84,28 @@ namespace YnovEat.Api.Controllers
 
         [HttpPost("register-super-admin")]
         [Core.Authorize(Roles = UserRoles.SuperAdmin)]
-        public async Task<IActionResult> RegisterSuperAdmin([FromBody] RegisterSuperAdminDto model)
+        public async Task<IActionResult> RegisterSuperAdmin([FromBody] SuperAdminCreationDto model)
         {
             return await RegisterUser(model);
         }
 
         [HttpPost("register-restaurantAdmin")]
         [AllowAnonymous]
-        public async Task<IActionResult> RegisterRestaurantAdmin([FromBody] RegisterRestaurantAdminDto model)
+        public async Task<IActionResult> RegisterRestaurantAdmin([FromBody] RestaurantAdminCreationDto model)
         {
             return await RegisterUser(model);
         }
 
         [HttpPost("register-employee")]
         [Core.Authorize(Roles = UserRoles.RestaurantAdmin)]
-        public async Task<IActionResult> RegisterEmployee([FromBody] RegisterEmployeeDto model)
+        public async Task<IActionResult> RegisterEmployee([FromBody] EmployeeCreationDto model)
         {
             return await RegisterUser(model);
         }
 
         [HttpPost("register-customer")]
         [AllowAnonymous]
-        public async Task<IActionResult> RegisterCustomer([FromBody] RegisterCustomerDto model)
+        public async Task<IActionResult> RegisterCustomer([FromBody] CustomerCreationDto model)
         {
             return await RegisterUser(model);
         }
@@ -130,7 +130,7 @@ namespace YnovEat.Api.Controllers
             if (userExists != null) throw new Exception("User already exists");
         }
 
-        private async Task<IActionResult> RegisterUser<T>(T model) where T : RegisterUserDto
+        private async Task<IActionResult> RegisterUser<T>(T model) where T : UserCreationDto
         {
             try
             {
