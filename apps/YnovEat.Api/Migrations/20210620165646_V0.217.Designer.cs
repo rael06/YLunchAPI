@@ -9,8 +9,8 @@ using YnovEat.Infrastructure.Database;
 namespace YnovEat.Api.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20210617140613_V0.215")]
-    partial class V0215
+    [Migration("20210620165646_V0.217")]
+    partial class V0217
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -193,7 +193,7 @@ namespace YnovEat.Api.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("varchar(255)");
 
-                    b.Property<string>("CartId")
+                    b.Property<string>("CartUserId")
                         .HasColumnType("varchar(255)");
 
                     b.Property<DateTime>("CreationDateTime")
@@ -206,23 +206,21 @@ namespace YnovEat.Api.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<int?>("OrderId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("OrderId1")
+                    b.Property<string>("OrderId")
                         .HasColumnType("varchar(255)");
 
                     b.Property<double>("Price")
                         .HasColumnType("double");
 
-                    b.Property<int>("RestaurantProductId")
-                        .HasColumnType("int");
+                    b.Property<string>("RestaurantProductId")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CartId");
+                    b.HasIndex("CartUserId");
 
-                    b.HasIndex("OrderId1");
+                    b.HasIndex("OrderId");
 
                     b.ToTable("CustomerProducts");
                 });
@@ -684,15 +682,13 @@ namespace YnovEat.Api.Migrations
 
             modelBuilder.Entity("YnovEat.Domain.ModelsAggregate.CustomerAggregate.CustomerProduct", b =>
                 {
-                    b.HasOne("YnovEat.Domain.ModelsAggregate.CustomerAggregate.Cart", "Cart")
+                    b.HasOne("YnovEat.Domain.ModelsAggregate.CustomerAggregate.Cart", null)
                         .WithMany("Products")
-                        .HasForeignKey("CartId");
+                        .HasForeignKey("CartUserId");
 
                     b.HasOne("YnovEat.Domain.ModelsAggregate.RestaurantAggregate.Order", "Order")
                         .WithMany("CustomerProducts")
-                        .HasForeignKey("OrderId1");
-
-                    b.Navigation("Cart");
+                        .HasForeignKey("OrderId");
 
                     b.Navigation("Order");
                 });

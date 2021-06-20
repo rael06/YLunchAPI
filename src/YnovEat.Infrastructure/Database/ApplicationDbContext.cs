@@ -99,9 +99,18 @@ namespace YnovEat.Infrastructure.Database
             {
                 x.HasKey(ro => ro.UserId);
 
+                x.HasDiscriminator<string>("Discriminator")
+                    .HasValue<RestaurantOwner>("RestaurantOwner")
+                    .HasValue<RestaurantAdmin>("RestaurantAdmin")
+                    .HasValue<RestaurantEmployee>("RestaurantEmployee");
+
                 x.HasOne(ru => ru.User)
                     .WithOne(u => u.RestaurantUser)
                     .HasForeignKey<RestaurantUser>(u => u.UserId);
+
+                x.HasOne(ru => ru.Restaurant)
+                    .WithMany(r => r.RestaurantUsers)
+                    .HasForeignKey(ru => ru.RestaurantId);
             });
 
             builder.Entity<Customer>(x =>

@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace YnovEat.Api.Migrations
 {
-    public partial class V0214 : Migration
+    public partial class V0217 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -263,12 +263,12 @@ namespace YnovEat.Api.Migrations
                 {
                     Id = table.Column<string>(type: "varchar(255)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    CustomerId = table.Column<string>(type: "varchar(255)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
                     IsDeleted = table.Column<bool>(type: "tinyint(1)", nullable: false),
                     Comment = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    AcceptationDateTime = table.Column<DateTime>(type: "datetime(6)", nullable: true)
+                    AcceptationDateTime = table.Column<DateTime>(type: "datetime(6)", nullable: true),
+                    CustomerId = table.Column<string>(type: "varchar(255)", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
                 {
@@ -294,25 +294,25 @@ namespace YnovEat.Api.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Price = table.Column<double>(type: "double", nullable: false),
                     CreationDateTime = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    RestaurantProductId = table.Column<int>(type: "int", nullable: false),
-                    CartId = table.Column<string>(type: "varchar(255)", nullable: true)
+                    RestaurantProductId = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    OrderId = table.Column<int>(type: "int", nullable: true),
-                    OrderId1 = table.Column<string>(type: "varchar(255)", nullable: true)
+                    OrderId = table.Column<string>(type: "varchar(255)", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    CartUserId = table.Column<string>(type: "varchar(255)", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_CustomerProducts", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_CustomerProducts_Carts_CartId",
-                        column: x => x.CartId,
+                        name: "FK_CustomerProducts_Carts_CartUserId",
+                        column: x => x.CartUserId,
                         principalTable: "Carts",
                         principalColumn: "UserId",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_CustomerProducts_Orders_OrderId1",
-                        column: x => x.OrderId1,
+                        name: "FK_CustomerProducts_Orders_OrderId",
+                        column: x => x.OrderId,
                         principalTable: "Orders",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -607,14 +607,14 @@ namespace YnovEat.Api.Migrations
                 column: "RestaurantId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_CustomerProducts_CartId",
+                name: "IX_CustomerProducts_CartUserId",
                 table: "CustomerProducts",
-                column: "CartId");
+                column: "CartUserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_CustomerProducts_OrderId1",
+                name: "IX_CustomerProducts_OrderId",
                 table: "CustomerProducts",
-                column: "OrderId1");
+                column: "OrderId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_DaysOpeningTimes_RestaurantId",

@@ -9,8 +9,8 @@ using YnovEat.Infrastructure.Database;
 namespace YnovEat.Api.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20210620080819_V0.217")]
-    partial class V0217
+    [Migration("20210620173230_V0.218")]
+    partial class V0218
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -378,6 +378,9 @@ namespace YnovEat.Api.Migrations
                         .HasColumnType("longtext");
 
                     b.Property<string>("OwnerId")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("OwnerUserId")
                         .HasColumnType("varchar(255)");
 
                     b.Property<string>("PhoneNumber")
@@ -394,8 +397,7 @@ namespace YnovEat.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("OwnerId")
-                        .IsUnique();
+                    b.HasIndex("OwnerUserId");
 
                     b.ToTable("Restaurants");
                 });
@@ -585,6 +587,20 @@ namespace YnovEat.Api.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
+            modelBuilder.Entity("YnovEat.Domain.ModelsAggregate.RestaurantAggregate.RestaurantAdmin", b =>
+                {
+                    b.HasBaseType("YnovEat.Domain.ModelsAggregate.RestaurantAggregate.RestaurantUser");
+
+                    b.HasDiscriminator().HasValue("RestaurantAdmin");
+                });
+
+            modelBuilder.Entity("YnovEat.Domain.ModelsAggregate.RestaurantAggregate.RestaurantEmployee", b =>
+                {
+                    b.HasBaseType("YnovEat.Domain.ModelsAggregate.RestaurantAggregate.RestaurantUser");
+
+                    b.HasDiscriminator().HasValue("RestaurantEmployee");
+                });
+
             modelBuilder.Entity("YnovEat.Domain.ModelsAggregate.RestaurantAggregate.RestaurantOwner", b =>
                 {
                     b.HasBaseType("YnovEat.Domain.ModelsAggregate.RestaurantAggregate.RestaurantUser");
@@ -742,8 +758,8 @@ namespace YnovEat.Api.Migrations
             modelBuilder.Entity("YnovEat.Domain.ModelsAggregate.RestaurantAggregate.Restaurant", b =>
                 {
                     b.HasOne("YnovEat.Domain.ModelsAggregate.RestaurantAggregate.RestaurantOwner", "Owner")
-                        .WithOne("Restaurant")
-                        .HasForeignKey("YnovEat.Domain.ModelsAggregate.RestaurantAggregate.Restaurant", "OwnerId");
+                        .WithMany()
+                        .HasForeignKey("OwnerUserId");
 
                     b.Navigation("Owner");
                 });
@@ -766,7 +782,7 @@ namespace YnovEat.Api.Migrations
 
             modelBuilder.Entity("YnovEat.Domain.ModelsAggregate.RestaurantAggregate.RestaurantUser", b =>
                 {
-                    b.HasOne("YnovEat.Domain.ModelsAggregate.RestaurantAggregate.Restaurant", null)
+                    b.HasOne("YnovEat.Domain.ModelsAggregate.RestaurantAggregate.Restaurant", "Restaurant")
                         .WithMany("RestaurantUsers")
                         .HasForeignKey("RestaurantId");
 
@@ -775,6 +791,8 @@ namespace YnovEat.Api.Migrations
                         .HasForeignKey("YnovEat.Domain.ModelsAggregate.RestaurantAggregate.RestaurantUser", "UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Restaurant");
 
                     b.Navigation("User");
                 });
@@ -824,11 +842,6 @@ namespace YnovEat.Api.Migrations
                     b.Navigation("Customer");
 
                     b.Navigation("RestaurantUser");
-                });
-
-            modelBuilder.Entity("YnovEat.Domain.ModelsAggregate.RestaurantAggregate.RestaurantOwner", b =>
-                {
-                    b.Navigation("Restaurant");
                 });
 #pragma warning restore 612, 618
         }

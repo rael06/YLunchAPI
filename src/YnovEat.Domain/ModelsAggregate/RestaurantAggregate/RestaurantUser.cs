@@ -15,7 +15,7 @@ namespace YnovEat.Domain.ModelsAggregate.RestaurantAggregate
             return new()
             {
                 UserId = userId,
-                Discriminator = nameof(RestaurantEmployee)
+                Discriminator = nameof(RestaurantOwner)
             };
         }
 

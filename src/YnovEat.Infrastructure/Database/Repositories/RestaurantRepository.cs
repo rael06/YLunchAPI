@@ -37,12 +37,6 @@ namespace YnovEat.Infrastructure.Database.Repositories
                     .Any(y => y.UserId.Equals(id))
                 );
 
-        public async Task AddAdmin(User user)
-        {
-            await _context.RestaurantUsers.AddAsync(RestaurantUser.CreateOwner(user.Id));
-            await _context.SaveChangesAsync();
-        }
-
         public async Task<ICollection<RestaurantCategory>> GetAllRestaurantCategories()
         {
             return await _context.RestaurantCategories.ToListAsync();
