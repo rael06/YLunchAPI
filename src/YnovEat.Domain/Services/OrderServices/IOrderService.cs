@@ -7,6 +7,6 @@ namespace YnovEat.Domain.Services.OrderServices
 {
     public interface IOrderService
     {
-        Task<Order> Create(OrderCreationDto orderCreationDto, Customer customer);
+        Task<OrderReadDto> Create(OrderCreationDto orderCreationDto, Customer customer);
     }
 }

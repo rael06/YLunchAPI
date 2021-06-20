@@ -33,7 +33,7 @@ namespace YnovEat.Api.Controllers
         {
             var currentUser = await GetAuthenticatedUser();
             var order = await _orderService.Create(orderCreationDto, currentUser.Customer);
-            return Ok("order create");
+            return Ok(order);
         }
     }
 }
