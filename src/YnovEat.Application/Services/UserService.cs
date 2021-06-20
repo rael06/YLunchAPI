@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using YnovEat.Domain.DTO.UserModels;
+using YnovEat.Domain.ModelsAggregate.UserAggregate;
 using YnovEat.Domain.Services.Database.Repositories;
 using YnovEat.Domain.Services.UserServices;
 
@@ -23,6 +24,12 @@ namespace YnovEat.Application.Services
         {
             var users = await _userRepository.GetFullUsers();
             return users.Select(x => new UserReadDto(x)).ToList();
+        }
+
+        public async Task<UserAsCustomerDetailsReadDto> GetAsCustomerById(string id)
+        {
+            User user = await _userRepository.GetAsCustomerById(id);
+            return new UserAsCustomerDetailsReadDto(user);
         }
     }
 }

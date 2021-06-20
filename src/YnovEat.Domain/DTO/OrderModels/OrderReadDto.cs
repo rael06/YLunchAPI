@@ -14,11 +14,13 @@ namespace YnovEat.Domain.DTO.OrderModels
     {
         public string Id { get; set; }
         public bool IsDeleted { get; set; }
-        public string Comment { get; set; }
+        public string CustomerComment { get; set; }
+        public string RestaurantComment { get; set; }
         public DateTime? CreationDateTime { get; set; }
         public DateTime? AcceptationDateTime { get; set; }
         public bool IsAccepted { get; set; }
         public string CustomerId { get; set; }
+        public string RestaurantId { get; set; }
         public ICollection<OrderStatusReadDto> OrderStatuses { get; set; }
         public OrderStatusReadDto CurrentOrderStatus { get; set; }
         public bool IsAcknowledged { get; set; }
@@ -29,11 +31,13 @@ namespace YnovEat.Domain.DTO.OrderModels
         {
             Id = order.Id;
             IsDeleted = order.IsDeleted;
-            Comment = order.Comment;
+            CustomerComment = order.CustomerComment;
+            RestaurantComment = order.RestaurantComment;
             CreationDateTime = order.CreationDateTime;
             AcceptationDateTime = order.AcceptationDateTime;
             IsAccepted = order.IsAccepted;
             CustomerId = order.CustomerId;
+            RestaurantId = order.RestaurantId;
             OrderStatuses = order.OrderStatuses.Select(x=>new OrderStatusReadDto(x)).ToList();
             CurrentOrderStatus = new OrderStatusReadDto(order.CurrentOrderStatus);
             IsAcknowledged = order.IsAcknowledged;

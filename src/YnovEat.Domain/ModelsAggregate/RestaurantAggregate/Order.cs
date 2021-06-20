@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using YnovEat.Domain.DTO.OrderModels;
 using YnovEat.Domain.ModelsAggregate.CustomerAggregate;
@@ -11,7 +12,8 @@ namespace YnovEat.Domain.ModelsAggregate.RestaurantAggregate
     {
         public string Id { get; set; }
         public bool IsDeleted { get; set; }
-        public string Comment { get; set; }
+        public string CustomerComment { get; set; }
+        public string RestaurantComment { get; set; }
 
         public DateTime? CreationDateTime => OrderStatuses.FirstOrDefault()?.DateTime;
         public DateTime? AcceptationDateTime { get; set; }
@@ -24,25 +26,38 @@ namespace YnovEat.Domain.ModelsAggregate.RestaurantAggregate
 
         public bool IsAcknowledged =>
             OrderStatuses.Any(os => os.Status.Equals(OrderState.Acknowledged));
+
         public string CustomerId { get; set; }
         public virtual Customer Customer { get; set; }
 
         public virtual ICollection<CustomerProduct> CustomerProducts { get; set; } =
             new List<CustomerProduct>();
 
-        public ICollection<RestaurantProduct> RestaurantProducts => new List<RestaurantProduct>();
+        [NotMapped]
+        public ICollection<RestaurantProduct> RestaurantProducts { get; set; } =
+            new List<RestaurantProduct>();
 
-        public static Order Create(string id, OrderCreationDto orderCreationDto, Customer customer, ICollection<CustomerProduct> customerProducts)
+        public string RestaurantId => CustomerProducts.First().RestaurantId;
+
+        public static Order Create(
+            string id,
+            OrderCreationDto orderCreationDto,
+            Customer customer,
+            ICollection<CustomerProduct> customerProducts,
+            ICollection<RestaurantProduct> restaurantProducts
+        )
         {
             return new Order
             {
                 Id = id,
-                Comment = orderCreationDto.Comment,
+                CustomerComment = orderCreationDto.CustomerComment,
+                RestaurantComment = orderCreationDto.RestaurantComment,
                 CustomerId = customer.UserId,
                 Customer = customer,
                 CustomerProducts = customerProducts,
+                RestaurantProducts = restaurantProducts,
                 IsDeleted = false,
-                OrderStatuses = new List<OrderStatus> {new OrderStatus(id)}
+                OrderStatuses = new List<OrderStatus> {new(id)}
             };
         }
     }

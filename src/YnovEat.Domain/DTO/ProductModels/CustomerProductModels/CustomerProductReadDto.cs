@@ -13,6 +13,7 @@ namespace YnovEat.Domain.DTO.ProductModels.CustomerProductModels
         public double Price { get; set; }
         public DateTime CreationDateTime { get; set; }
         public string RestaurantProductId { get; set; }
+        public string RestaurantId { get; set; }
         public string OrderId { get; set; }
 
         public CustomerProductReadDto(CustomerProduct customerProduct)
@@ -23,6 +24,7 @@ namespace YnovEat.Domain.DTO.ProductModels.CustomerProductModels
             Price = customerProduct.Price;
             CreationDateTime = customerProduct.CreationDateTime;
             RestaurantProductId = customerProduct.RestaurantProductId;
+            RestaurantId = customerProduct.RestaurantId;
             OrderId = customerProduct.OrderId;
         }
     }

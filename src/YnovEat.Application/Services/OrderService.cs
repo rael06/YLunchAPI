@@ -30,7 +30,7 @@ namespace YnovEat.Application.Services
             var customerProducts = restaurantProducts
                 .Select(x => CustomerProduct.Create(x, orderId)).ToList();
 
-            var order = Order.Create(orderId, orderCreationDto, customer, customerProducts);
+            var order = Order.Create(orderId, orderCreationDto, customer, customerProducts, restaurantProducts);
             await _orderRepository.Create(order);
             return new OrderReadDto(order);
         }

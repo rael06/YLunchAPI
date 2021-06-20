@@ -67,5 +67,14 @@ namespace YnovEat.Infrastructure.Database.Repositories
                 .Include(x => x.RestaurantUser)
                 .ToListAsync();
         }
+
+        public async Task<User> GetAsCustomerById(string id)
+        {
+            var user = await _context.Users
+                .Include(x => x.Customer)
+                .FirstOrDefaultAsync(x => x.Id.Equals(id));
+
+            return user;
+        }
     }
 }

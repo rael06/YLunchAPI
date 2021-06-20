@@ -12,6 +12,7 @@ namespace YnovEat.Domain.ModelsAggregate.CustomerAggregate
         public double Price { get; set; }
         public DateTime CreationDateTime { get; set; }
         public string RestaurantProductId { get; set; }
+        public string RestaurantId { get; set; }
         public string OrderId { get; set; }
         public virtual Order Order { get; set; }
 
@@ -25,6 +26,7 @@ namespace YnovEat.Domain.ModelsAggregate.CustomerAggregate
                 Price = restaurantProduct.Price,
                 CreationDateTime = restaurantProduct.CreationDateTime,
                 RestaurantProductId = restaurantProduct.Id,
+                RestaurantId = restaurantProduct.RestaurantId,
                 OrderId = orderId
             };
         }

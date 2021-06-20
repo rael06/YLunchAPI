@@ -12,6 +12,7 @@ using YnovEat.Domain.ModelsAggregate.UserAggregate;
 using YnovEat.Domain.ModelsAggregate.UserAggregate.Roles;
 using YnovEat.Domain.Services.Database.Repositories;
 using YnovEat.Domain.Services.RestaurantServices;
+using YnovEat.Domain.Services.UserServices;
 
 namespace YnovEat.Api.Controllers
 {
@@ -21,17 +22,20 @@ namespace YnovEat.Api.Controllers
     {
         private readonly IRestaurantService _restaurantService;
         private readonly IRestaurantRepository _restaurantRepository;
+        private readonly IUserService _userService;
 
         public RestaurantController(
             UserManager<User> userManager,
             IUserRepository userRepository,
             IConfiguration configuration,
             IRestaurantService restaurantService,
-            IRestaurantRepository restaurantRepository
+            IRestaurantRepository restaurantRepository,
+            IUserService userService
         ) : base(userManager, userRepository, configuration)
         {
             _restaurantService = restaurantService;
             _restaurantRepository = restaurantRepository;
+            _userService = userService;
         }
 
         [HttpPost("create")]
@@ -105,6 +109,28 @@ namespace YnovEat.Api.Controllers
             {
                 var currentUser = await GetAuthenticatedUser();
                 return Ok(await _restaurantService.GetByUserId(currentUser.Id));
+            }
+            catch (NotFoundException e)
+            {
+                return NotFound(e.Message);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(
+                    StatusCodes.Status500InternalServerError,
+                    e
+                );
+            }
+        }
+
+        [HttpGet("get-customer-details/{customerId}")]
+        [Authorize(Roles = UserRoles.RestaurantAdmin)]
+        public async Task<IActionResult> GetCustomerDetails(string customerId)
+        {
+            try
+            {
+                var customer = await _userService.GetAsCustomerById(customerId);
+                return Ok(customer);
             }
             catch (NotFoundException e)
             {
