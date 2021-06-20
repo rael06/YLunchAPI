@@ -15,7 +15,7 @@ namespace YnovEat.Domain.ModelsAggregate.RestaurantAggregate
         public string CustomerComment { get; set; }
         public string RestaurantComment { get; set; }
 
-        public DateTime? CreationDateTime => OrderStatuses.FirstOrDefault()?.DateTime;
+        public DateTime CreationDateTime { get; set; }
         public DateTime? AcceptationDateTime { get; set; }
         public bool IsAccepted => AcceptationDateTime != null;
 
@@ -37,7 +37,9 @@ namespace YnovEat.Domain.ModelsAggregate.RestaurantAggregate
         public ICollection<RestaurantProduct> RestaurantProducts { get; set; } =
             new List<RestaurantProduct>();
 
-        public string RestaurantId => CustomerProducts.First().RestaurantId;
+        public string RestaurantId { get; set; }
+        public virtual Restaurant Restaurant { get; set; }
+        public double TotalPrice { get; set; }
 
         public static Order Create(
             string id,
@@ -52,7 +54,10 @@ namespace YnovEat.Domain.ModelsAggregate.RestaurantAggregate
                 Id = id,
                 CustomerComment = orderCreationDto.CustomerComment,
                 RestaurantComment = orderCreationDto.RestaurantComment,
+                TotalPrice = customerProducts.Sum(x => x.Price),
+                CreationDateTime = DateTime.Now,
                 CustomerId = customer.UserId,
+                RestaurantId = customerProducts.First().RestaurantId,
                 Customer = customer,
                 CustomerProducts = customerProducts,
                 RestaurantProducts = restaurantProducts,

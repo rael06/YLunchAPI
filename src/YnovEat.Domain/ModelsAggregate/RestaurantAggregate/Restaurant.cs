@@ -51,6 +51,8 @@ namespace YnovEat.Domain.ModelsAggregate.RestaurantAggregate
 
         public virtual ICollection<RestaurantProduct> RestaurantProducts { get; set; } = new List<RestaurantProduct>();
 
+        public virtual ICollection<Order> Orders { get; set; } = new List<Order>();
+
         public static Restaurant Create(RestaurantCreationDto restaurantCreationDto, CurrentUser user, IEnumerable<RestaurantCategory> allRestaurantCategories)
         {
             var restaurantId = Guid.NewGuid().ToString();

@@ -90,6 +90,9 @@ namespace YnovEat.Infrastructure.Database
                 x.HasMany(r => r.RestaurantProducts)
                     .WithOne(p => p.Restaurant);
 
+                x.HasMany(r => r.Orders)
+                    .WithOne(o => o.Restaurant);
+
                 x.HasOne(r => r.Owner)
                     .WithOne(ru => ru.Restaurant)
                     .HasForeignKey<Restaurant>(r => r.OwnerId);

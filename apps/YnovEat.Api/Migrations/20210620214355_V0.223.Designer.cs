@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using YnovEat.Infrastructure.Database;
 
 namespace YnovEat.Api.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210620214355_V0.223")]
+    partial class V0223
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -313,7 +315,7 @@ namespace YnovEat.Api.Migrations
                         .HasColumnType("longtext");
 
                     b.Property<string>("RestaurantId")
-                        .HasColumnType("varchar(255)");
+                        .HasColumnType("longtext");
 
                     b.Property<double>("TotalPrice")
                         .HasColumnType("double");
@@ -321,8 +323,6 @@ namespace YnovEat.Api.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CustomerId");
-
-                    b.HasIndex("RestaurantId");
 
                     b.ToTable("Orders");
                 });
@@ -761,13 +761,7 @@ namespace YnovEat.Api.Migrations
                         .WithMany("Orders")
                         .HasForeignKey("CustomerId");
 
-                    b.HasOne("YnovEat.Domain.ModelsAggregate.RestaurantAggregate.Restaurant", "Restaurant")
-                        .WithMany("Orders")
-                        .HasForeignKey("RestaurantId");
-
                     b.Navigation("Customer");
-
-                    b.Navigation("Restaurant");
                 });
 
             modelBuilder.Entity("YnovEat.Domain.ModelsAggregate.RestaurantAggregate.OrderStatus", b =>
@@ -848,8 +842,6 @@ namespace YnovEat.Api.Migrations
             modelBuilder.Entity("YnovEat.Domain.ModelsAggregate.RestaurantAggregate.Restaurant", b =>
                 {
                     b.Navigation("ClosingDates");
-
-                    b.Navigation("Orders");
 
                     b.Navigation("RestaurantProducts");
 

@@ -26,6 +26,7 @@ namespace YnovEat.Domain.DTO.OrderModels
         public bool IsAcknowledged { get; set; }
         public ICollection<CustomerProductReadDto> CustomerProducts { get; set; }
         public ICollection<RestaurantProductReadDto> RestaurantProducts { get; set; }
+        public double TotalPrice { get; set; }
 
         public OrderReadDto(Order order)
         {
@@ -34,6 +35,7 @@ namespace YnovEat.Domain.DTO.OrderModels
             CustomerComment = order.CustomerComment;
             RestaurantComment = order.RestaurantComment;
             CreationDateTime = order.CreationDateTime;
+            TotalPrice = order.TotalPrice;
             AcceptationDateTime = order.AcceptationDateTime;
             IsAccepted = order.IsAccepted;
             CustomerId = order.CustomerId;
