@@ -10,6 +10,7 @@ namespace YnovEat.Domain.ModelsAggregate.RestaurantAggregate
         public string Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
+        public string Image { get; set; }
         public double Price { get; set; }
         public int? Quantity { get; set; }
         public bool IsActive { get; set; }
@@ -33,6 +34,7 @@ namespace YnovEat.Domain.ModelsAggregate.RestaurantAggregate
                     Id = restaurantProductId,
                     Name = restaurantProductCreationDto.Name,
                     Description = restaurantProductCreationDto.Description,
+                    Image = restaurantProductCreationDto.Image,
                     Price = restaurantProductCreationDto.Price,
                     Quantity = restaurantProductCreationDto.Quantity,
                     IsActive = restaurantProductCreationDto.IsActive ?? false,
