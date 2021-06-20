@@ -39,11 +39,7 @@ namespace YnovEat.Infrastructure.Database.Repositories
 
         public async Task AddAdmin(User user)
         {
-            await _context.RestaurantUsers.AddAsync(new RestaurantOwner
-            {
-                UserId = user.Id,
-                User = user
-            });
+            await _context.RestaurantUsers.AddAsync(RestaurantUser.CreateAdmin(user.Id));
             await _context.SaveChangesAsync();
         }
 
@@ -54,19 +50,16 @@ namespace YnovEat.Infrastructure.Database.Repositories
 
         public async Task<ICollection<Restaurant>> GetAllForCustomer()
         {
+            // Todo validate restaurant in creation and update and allow this line
+            // .Where(x=>x.IsPublished)
             return await QueryEnrichedRestaurants
                 .ToListAsync();
         }
 
         public async Task<ICollection<Restaurant>> GetAll()
         {
-            return await _context.Restaurants
-                .Include(x => x.ClosingDates)
-                .Include(x => x.Categories)
-                .Include(x => x.WeekOpeningTimes.OrderBy(y => y.DayOfWeek))
-                .ThenInclude(x => x.OpeningTimes)
-                // Todo validate restaurant in creation and update and allow this line
-                // .Where(x=>x.IsPublished)
+            return await QueryEnrichedRestaurants
+                .Include(x=>x.RestaurantUsers)
                 .ToListAsync();
         }
 

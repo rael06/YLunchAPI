@@ -20,27 +20,9 @@ namespace YnovEat.Domain.ModelsAggregate.UserAggregate
         public virtual RestaurantUser RestaurantUser { get; set; }
         public virtual Customer Customer { get; set; }
 
-        public User()
-        {
-        }
-
-        public User(User user)
-        {
-            Firstname = user.Firstname;
-            Lastname = user.Lastname;
-            CreationDateTime = user.CreationDateTime;
-            ConfirmationDateTime = user.ConfirmationDateTime;
-            LastUpdateDateTime = user.LastUpdateDateTime;
-            PhoneNumberConfirmationDateTime = user.PhoneNumberConfirmationDateTime;
-            EmailConfirmationDateTime = user.EmailConfirmationDateTime;
-            IsAccountActivated = user.IsAccountActivated;
-            RestaurantUser = user.RestaurantUser;
-            Customer = user.Customer;
-        }
-
         public static User Create(EmployeeCreationDto userCreationDto)
         {
-            return new()
+            var user = new User
             {
                 SecurityStamp = Guid.NewGuid().ToString(),
                 UserName = userCreationDto.Username,
@@ -48,11 +30,14 @@ namespace YnovEat.Domain.ModelsAggregate.UserAggregate
                 Firstname = userCreationDto.Firstname,
                 CreationDateTime = DateTime.Now,
             };
+
+            user.RestaurantUser = RestaurantUser.CreateEmployee(user.Id, user.RestaurantUser.RestaurantId);
+            return user;
         }
 
         public static User Create(RestaurantAdminCreationDto userCreationDto)
         {
-            return new()
+            var user = new User
             {
                 SecurityStamp = Guid.NewGuid().ToString(),
                 UserName = userCreationDto.Username,
@@ -60,6 +45,9 @@ namespace YnovEat.Domain.ModelsAggregate.UserAggregate
                 Firstname = userCreationDto.Firstname,
                 CreationDateTime = DateTime.Now,
             };
+
+            user.RestaurantUser = RestaurantUser.CreateAdmin(user.Id);
+            return user;
         }
 
         public static User Create(SuperAdminCreationDto userCreationDto)
@@ -85,7 +73,6 @@ namespace YnovEat.Domain.ModelsAggregate.UserAggregate
                 Email = userCreationDto.Username,
                 PhoneNumber = userCreationDto.PhoneNumber,
                 CreationDateTime = DateTime.Now,
-
             };
             user.Customer = Customer.Create(user.Id);
             return user;

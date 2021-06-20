@@ -40,7 +40,6 @@ namespace YnovEat.Application.Services
             var user = User.Create(userCreationDto);
 
             await _userRepository.Register(user, userCreationDto.Password, UserRoles.RestaurantAdmin);
-            await _restaurantRepository.AddAdmin(user);
 
             return new UserReadDto(user);
         }

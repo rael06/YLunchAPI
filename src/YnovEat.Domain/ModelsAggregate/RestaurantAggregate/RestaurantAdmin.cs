@@ -1,7 +1,7 @@
 namespace YnovEat.Domain.ModelsAggregate.RestaurantAggregate
 {
-    public class RestaurantAdmin
+    public class RestaurantAdmin : RestaurantUser
     {
-        
+
     }
 }
