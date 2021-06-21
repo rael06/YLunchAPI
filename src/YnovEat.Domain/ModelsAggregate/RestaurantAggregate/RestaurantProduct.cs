@@ -24,7 +24,7 @@ namespace YnovEat.Domain.ModelsAggregate.RestaurantAggregate
 
         public virtual Restaurant Restaurant { get; set; }
 
-        public ProductFamilies ProductFamily { get; set; }
+        public ProductFamily ProductFamily { get; set; }
 
         public static RestaurantProduct Create(RestaurantProductCreationDto restaurantProductCreationDto, string restaurantId)
         {
@@ -40,7 +40,7 @@ namespace YnovEat.Domain.ModelsAggregate.RestaurantAggregate
                     IsActive = restaurantProductCreationDto.IsActive ?? false,
                     ExpirationDateTime = restaurantProductCreationDto.ExpirationDateTime,
                     CreationDateTime = DateTime.Now,
-                    ProductFamily = restaurantProductCreationDto.ProductFamily ?? ProductFamilies.Other,
+                    ProductFamily = restaurantProductCreationDto.ProductFamily ?? ProductFamily.Other,
                     RestaurantProductTags = new List<RestaurantProductTag>(),
                     RestaurantId = restaurantId
                 };

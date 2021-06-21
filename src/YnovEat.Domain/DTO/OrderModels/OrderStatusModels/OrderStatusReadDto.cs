@@ -14,7 +14,7 @@ namespace YnovEat.Domain.DTO.OrderModels.OrderStatusModels
         public OrderStatusReadDto(OrderStatus orderStatus)
         {
             Id = orderStatus.Id;
-            Status = orderStatus.Status;
+            Status = orderStatus.State;
             DateTime = orderStatus.DateTime;
             OrderId = orderStatus.OrderId;
         }

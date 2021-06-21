@@ -17,7 +17,7 @@ namespace YnovEat.Domain.DTO.ProductModels.RestaurantProductModels
         public bool? IsActive { get; set; }
         public DateTime? ExpirationDateTime { get; set; }
 
-        [Range(0, ProductFamiliesUtils.Count, ErrorMessage = "ProductFamily is out of range")]
-        public ProductFamilies? ProductFamily { get; set; }
+        [Range(0, ProductFamilyUtils.Count, ErrorMessage = "ProductFamily is out of range")]
+        public ProductFamily? ProductFamily { get; set; }
     }
 }

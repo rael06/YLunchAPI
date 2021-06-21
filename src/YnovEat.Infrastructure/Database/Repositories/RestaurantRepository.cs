@@ -56,16 +56,6 @@ namespace YnovEat.Infrastructure.Database.Repositories
                 .ToListAsync();
         }
 
-        public async Task<ICollection<Order>> GetOrdersByRestaurantId(string restaurantId)
-        {
-            return await _context.Orders
-                .Include(x=>x.OrderStatuses)
-                .Include(x=>x.CustomerProducts)
-                .Where(o => o.RestaurantId.Equals(restaurantId))
-                .Where(o => o.CreationDateTime > DateTime.Today)
-                .ToListAsync();
-        }
-
         public async Task<Restaurant> CreateRestaurant(Restaurant restaurant)
         {
             var owner = await _context.RestaurantUsers.FirstAsync(x => x.User.Id.Equals(restaurant.OwnerId));

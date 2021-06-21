@@ -54,7 +54,7 @@ namespace YnovEat.Infrastructure.Database
 
             builder.Entity<OrderStatus>(x =>
             {
-                x.Property(os => os.Status).IsRequired();
+                x.Property(os => os.State).IsRequired();
                 x.Property(os => os.DateTime).IsRequired();
             });
 

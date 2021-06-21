@@ -18,7 +18,7 @@ namespace YnovEat.Domain.DTO.ProductModels.RestaurantProductModels
         public DateTime CreationDateTime { get; set; }
         public DateTime? ExpirationDateTime { get; set; }
         public string RestaurantId { get; set; }
-        public ProductFamilies ProductFamily { get; set; }
+        public ProductFamily ProductFamily { get; set; }
 
         public RestaurantProductReadDto(RestaurantProduct restaurantProduct)
         {

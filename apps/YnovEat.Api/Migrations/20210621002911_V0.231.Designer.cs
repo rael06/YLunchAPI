@@ -9,8 +9,8 @@ using YnovEat.Infrastructure.Database;
 namespace YnovEat.Api.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20210620233017_V0.230")]
-    partial class V0230
+    [Migration("20210621002911_V0.231")]
+    partial class V0231
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -343,7 +343,7 @@ namespace YnovEat.Api.Migrations
                     b.Property<string>("OrderId")
                         .HasColumnType("varchar(255)");
 
-                    b.Property<int>("Status")
+                    b.Property<int>("State")
                         .HasColumnType("int");
 
                     b.HasKey("Id");

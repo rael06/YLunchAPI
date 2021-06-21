@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using YnovEat.Api.Core;
 using YnovEat.Domain.DTO.OrderModels;
+using YnovEat.Domain.DTO.OrderModels.OrderStatusModels;
 using YnovEat.Domain.ModelsAggregate.UserAggregate;
 using YnovEat.Domain.ModelsAggregate.UserAggregate.Roles;
 using YnovEat.Domain.Services.Database.Repositories;
@@ -33,6 +34,14 @@ namespace YnovEat.Api.Controllers
         {
             var currentUser = await GetAuthenticatedUser();
             var orderReadDto = await _orderService.Create(orderCreationDto, currentUser.Customer);
+            return Ok(orderReadDto);
+        }
+
+        [HttpPost("add-status")]
+        [Authorize(Roles = UserRoles.RestaurantAdmin + "," + UserRoles.Employee)]
+        public async Task<IActionResult> AddStatus([FromBody] OrderStatusCreationDto orderStatusCreationDto)
+        {
+            var orderReadDto = await _orderService.AddStatus(orderStatusCreationDto);
             return Ok(orderReadDto);
         }
     }

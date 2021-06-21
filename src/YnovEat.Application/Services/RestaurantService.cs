@@ -7,6 +7,7 @@ using YnovEat.Domain.DTO.RestaurantModels;
 using YnovEat.Domain.DTO.UserModels;
 using YnovEat.Domain.ModelsAggregate.RestaurantAggregate;
 using YnovEat.Domain.Services.Database.Repositories;
+using YnovEat.Domain.Services.OrderServices;
 using YnovEat.Domain.Services.RestaurantServices;
 
 namespace YnovEat.Application.Services
@@ -14,12 +15,15 @@ namespace YnovEat.Application.Services
     public class RestaurantService : IRestaurantService
     {
         private readonly IRestaurantRepository _restaurantRepository;
+        private readonly IOrderRepository _orderRepository;
 
         public RestaurantService(
-            IRestaurantRepository restaurantRepository
+            IRestaurantRepository restaurantRepository,
+            IOrderRepository orderRepository
         )
         {
             _restaurantRepository = restaurantRepository;
+            _orderRepository = orderRepository;
         }
 
         public async Task<RestaurantReadDto> GetById(string id)
@@ -49,7 +53,7 @@ namespace YnovEat.Application.Services
 
         public async Task<ICollection<OrderReadDto>> GetTodayOrders(string restaurantId)
         {
-            var orders = await _restaurantRepository.GetOrdersByRestaurantId(restaurantId);
+            var orders = await _orderRepository.GetAllByRestaurantId(restaurantId);
             return orders.Select(x => new OrderReadDto(x)).ToList();
         }
 

@@ -5,7 +5,7 @@ using System.Reflection;
 namespace YnovEat.DomainShared.RestaurantAggregate.Enums
 {
     // !!! IMPORTANT: Update Count of ProductFamiliesUtils when add value !!!
-    public enum ProductFamilies
+    public enum ProductFamily
     {
         Starter,
         Main,
@@ -17,7 +17,7 @@ namespace YnovEat.DomainShared.RestaurantAggregate.Enums
         Other
     }
 
-    public static class ProductFamiliesUtils
+    public static class ProductFamilyUtils
     {
         public const int Count = 8;
     }

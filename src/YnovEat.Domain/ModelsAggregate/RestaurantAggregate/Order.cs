@@ -24,7 +24,7 @@ namespace YnovEat.Domain.ModelsAggregate.RestaurantAggregate
         public OrderStatus CurrentOrderStatus => OrderStatuses.Last();
 
         public bool IsAcknowledged =>
-            OrderStatuses.Any(os => os.Status.Equals(OrderState.Acknowledged));
+            OrderStatuses.Any(os => os.State.Equals(OrderState.Acknowledged));
 
         public string CustomerId { get; set; }
         public virtual Customer Customer { get; set; }
@@ -55,7 +55,7 @@ namespace YnovEat.Domain.ModelsAggregate.RestaurantAggregate
                 Customer = customer,
                 CustomerProducts = customerProducts,
                 IsDeleted = false,
-                OrderStatuses = new List<OrderStatus> {new(id)}
+                OrderStatuses = new List<OrderStatus> {OrderStatus.Create(id)}
             };
         }
     }
