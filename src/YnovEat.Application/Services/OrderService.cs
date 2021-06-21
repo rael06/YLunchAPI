@@ -1,6 +1,8 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using YnovEat.Application.Exceptions;
 using YnovEat.Domain.DTO.OrderModels;
 using YnovEat.Domain.DTO.OrderModels.OrderStatusModels;
 using YnovEat.Domain.ModelsAggregate.CustomerAggregate;
@@ -41,6 +43,24 @@ namespace YnovEat.Application.Services
             order.OrderStatuses.Add(OrderStatus.Create(orderStatusCreationDto));
             await _orderRepository.Update();
             return new OrderReadDto(order);
+        }
+
+        public async Task<ICollection<OrderReadDto>> AddStatusToMultipleOrders(
+            AddOrderStatusToMultipleOrdersDto addOrderStatusToMultipleOrdersDto)
+        {
+            ICollection<Order> orders =
+                await _orderRepository.GetallById(addOrderStatusToMultipleOrdersDto.OrdersId);
+
+            foreach (var o in orders)
+            {
+                if (o.CurrentOrderStatus.State != addOrderStatusToMultipleOrdersDto.State - 1)
+                    throw new BadNewOrderStateException($"order: {o.Id} is not in the previous state the new requested state");
+                var newStatus = OrderStatus.Create(o.Id, addOrderStatusToMultipleOrdersDto.State);
+                o.OrderStatuses.Add(newStatus);
+            }
+
+            await _orderRepository.Update();
+            return orders.Select(x => new OrderReadDto(x)).ToList();
         }
     }
 }

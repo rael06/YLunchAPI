@@ -44,5 +44,13 @@ namespace YnovEat.Infrastructure.Database.Repositories
         {
             await _context.SaveChangesAsync();
         }
+
+        public async Task<ICollection<Order>> GetallById(ICollection<string> ordersId)
+        {
+            return await _context.Orders
+                .Include(x => x.OrderStatuses)
+                .Where(o=>ordersId.Contains(o.Id))
+                .ToListAsync();
+        }
     }
 }

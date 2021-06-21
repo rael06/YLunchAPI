@@ -1,8 +1,11 @@
+using System;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using YnovEat.Api.Core;
+using YnovEat.Application.Exceptions;
 using YnovEat.Domain.DTO.OrderModels;
 using YnovEat.Domain.DTO.OrderModels.OrderStatusModels;
 using YnovEat.Domain.ModelsAggregate.UserAggregate;
@@ -43,6 +46,27 @@ namespace YnovEat.Api.Controllers
         {
             var orderReadDto = await _orderService.AddStatus(orderStatusCreationDto);
             return Ok(orderReadDto);
+        }
+
+        [HttpPost("add-status-to-orders")]
+        [Authorize(Roles = UserRoles.RestaurantAdmin + "," + UserRoles.Employee)]
+        public async Task<IActionResult> AddStatusToMultipleOrders(
+            [FromBody] AddOrderStatusToMultipleOrdersDto addOrderStatusToMultipleOrdersDto)
+        {
+            try
+            {
+                var orderReadDtoCollection =
+                    await _orderService.AddStatusToMultipleOrders(addOrderStatusToMultipleOrdersDto);
+                return Ok(orderReadDtoCollection);
+            }
+            catch (BadNewOrderStateException e)
+            {
+                return StatusCode(StatusCodes.Status403Forbidden, e.Message);
+            }
+            catch (Exception e1)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, e1.Message);
+            }
         }
     }
 }

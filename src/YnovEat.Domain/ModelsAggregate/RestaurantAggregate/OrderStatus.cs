@@ -33,5 +33,16 @@ namespace YnovEat.Domain.ModelsAggregate.RestaurantAggregate
                 OrderId = orderStatusCreationDto.OrderId
             };
         }
+
+        public static OrderStatus Create(string orderId, OrderState state)
+        {
+            return new ()
+            {
+                Id = Guid.NewGuid().ToString(),
+                State = state,
+                DateTime = DateTime.Now,
+                OrderId = orderId
+            };
+        }
     }
 }

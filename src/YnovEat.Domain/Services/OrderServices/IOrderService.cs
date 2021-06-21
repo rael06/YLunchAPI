@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using YnovEat.Domain.DTO.OrderModels;
 using YnovEat.Domain.DTO.OrderModels.OrderStatusModels;
@@ -10,5 +11,8 @@ namespace YnovEat.Domain.Services.OrderServices
     {
         Task<OrderReadDto> Create(OrderCreationDto orderCreationDto, Customer customer);
         Task<OrderReadDto> AddStatus(OrderStatusCreationDto orderStatusCreationDto);
+
+        Task<ICollection<OrderReadDto>> AddStatusToMultipleOrders(
+            AddOrderStatusToMultipleOrdersDto addOrderStatusToMultipleOrdersDto);
     }
 }
