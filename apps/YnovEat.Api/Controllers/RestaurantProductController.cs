@@ -91,9 +91,9 @@ namespace YnovEat.Api.Controllers
             }
         }
 
-        [HttpGet("get-all/{restaurantId}")]
+        [HttpGet("get-all")]
         [Authorize(Roles = UserRoles.RestaurantAdmin)]
-        public async Task<IActionResult> GetAll(string restaurantId)
+        public async Task<IActionResult> GetAll()
         {
             try
             {
