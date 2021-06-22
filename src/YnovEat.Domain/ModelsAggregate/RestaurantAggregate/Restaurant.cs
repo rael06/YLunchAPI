@@ -90,6 +90,9 @@ namespace YnovEat.Domain.ModelsAggregate.RestaurantAggregate
                         return existingCategory ?? RestaurantCategory.Create(x);
                     })
                     .ToList()
+
+                // Todo add isPublishable property related to restaurant validation
+                // Todo allow isPublish value to be controlled by the restaurant
             };
         }
 
@@ -123,6 +126,9 @@ namespace YnovEat.Domain.ModelsAggregate.RestaurantAggregate
                     return existingCategory ?? RestaurantCategory.Create(x);
                 })
                 .ToList() ?? Categories;
+
+            // Todo add or update isPublishable property related to restaurant validation
+            // Todo allow isPublish value to be controlled by the restaurant
         }
     }
 }
