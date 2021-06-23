@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace YnovEat.Api.Migrations
 {
-    public partial class V0231 : Migration
+    public partial class V035 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -299,7 +299,7 @@ namespace YnovEat.Api.Migrations
                     IsEmailConfirmed = table.Column<bool>(type: "tinyint(1)", nullable: false),
                     EmailConfirmationDateTime = table.Column<DateTime>(type: "datetime(6)", nullable: true),
                     IsOpen = table.Column<bool>(type: "tinyint(1)", nullable: false),
-                    IsPublished = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    IsPublic = table.Column<bool>(type: "tinyint(1)", nullable: false),
                     CreationDateTime = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     LastUpdateDateTime = table.Column<DateTime>(type: "datetime(6)", nullable: true),
                     ZipCode = table.Column<string>(type: "longtext", nullable: true)

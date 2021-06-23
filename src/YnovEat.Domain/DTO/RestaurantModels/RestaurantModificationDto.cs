@@ -19,6 +19,7 @@ namespace YnovEat.Domain.DTO.RestaurantModels
         public string Base64Image { get; set; }
         public string Base64Logo { get; set; }
         public bool? IsOpen { get; set; }
+        public bool? IsPublic { get; set; }
 
         // address
         public string ZipCode { get; set; }

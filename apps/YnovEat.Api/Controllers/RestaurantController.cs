@@ -72,7 +72,7 @@ namespace YnovEat.Api.Controllers
             try
             {
                 var currentUser = await GetAuthenticatedUser();
-                var restaurant = await _restaurantRepository.GetById(model.Id);
+                var restaurant = await _restaurantRepository.GetByIdIncludingProducts(model.Id);
 
                 if (restaurant == null)
                     return StatusCode(

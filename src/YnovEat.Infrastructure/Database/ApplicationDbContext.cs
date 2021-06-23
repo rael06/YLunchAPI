@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Migrations;
 using YnovEat.Domain.ModelsAggregate.CustomerAggregate;
 using YnovEat.Domain.ModelsAggregate.RestaurantAggregate;
 using YnovEat.Domain.ModelsAggregate.UserAggregate;

@@ -60,10 +60,9 @@ namespace YnovEat.Application.Services
         public async Task<RestaurantReadDto> Create(RestaurantCreationDto restaurantCreationDto, CurrentUser user)
         {
             var allRestaurantCategories = await _restaurantRepository.GetAllRestaurantCategories();
-            var savedRestaurant =
-                await _restaurantRepository.CreateRestaurant(Restaurant.Create(restaurantCreationDto, user,
-                    allRestaurantCategories));
-            return new RestaurantReadDto(savedRestaurant);
+            var restaurant = Restaurant.Create(restaurantCreationDto, user, allRestaurantCategories);
+            await _restaurantRepository.Create(restaurant);
+            return new RestaurantReadDto(restaurant);
         }
 
         public async Task<RestaurantReadDto> Update(RestaurantModificationDto restaurantModificationDto,
@@ -71,9 +70,16 @@ namespace YnovEat.Application.Services
         {
             var allRestaurantCategories = await _restaurantRepository.GetAllRestaurantCategories();
             restaurant.Update(restaurantModificationDto, allRestaurantCategories);
-            var savedRestaurant = await _restaurantRepository.UpdateRestaurant(restaurant);
+            await _restaurantRepository.Update();
 
-            return new RestaurantReadDto(savedRestaurant);
+            return new RestaurantReadDto(restaurant);
+        }
+
+        public async Task UpdateIsPublished(string restaurantId)
+        {
+            var restaurant = await _restaurantRepository.GetById(restaurantId);
+            restaurant.UpdateIsPublished();
+            await _restaurantRepository.Update();
         }
     }
 }

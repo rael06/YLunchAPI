@@ -1,12 +1,8 @@
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
-using System.Net.Sockets;
 using YnovEat.Domain.DTO.RestaurantModels;
 using YnovEat.Domain.DTO.UserModels;
-using YnovEat.Domain.ModelsAggregate.UserAggregate;
 
 namespace YnovEat.Domain.ModelsAggregate.RestaurantAggregate
 {
@@ -21,11 +17,13 @@ namespace YnovEat.Domain.ModelsAggregate.RestaurantAggregate
         public bool IsEmailConfirmed { get; set; }
         public DateTime? EmailConfirmationDateTime { get; set; }
         public bool IsOpen { get; set; }
+
         public bool IsCurrentlyOpenToOrder =>
             IsOpen &&
             // Todo set also based on order limit time
             !ClosingDates.Any(x => x.ClosingDateTime.Date.Equals(DateTime.Now.Date));
 
+        public bool IsPublic { get; set; }
         public bool IsPublished { get; set; }
         public DateTime CreationDateTime { get; set; }
         public DateTime? LastUpdateDateTime { get; set; }
@@ -53,10 +51,25 @@ namespace YnovEat.Domain.ModelsAggregate.RestaurantAggregate
 
         public virtual ICollection<Order> Orders { get; set; } = new List<Order>();
 
-        public static Restaurant Create(RestaurantCreationDto restaurantCreationDto, CurrentUser user, IEnumerable<RestaurantCategory> allRestaurantCategories)
+        private bool CanPublish =>
+            IsPublic &&
+            Name != null && !Name.Equals("") &&
+            PhoneNumber != null && !PhoneNumber.Equals("") &&
+            Email != null && !Email.Equals("") &&
+            ZipCode != null && !ZipCode.Equals("") &&
+            Country != null && !Country.Equals("") &&
+            City != null && !City.Equals("") &&
+            StreetNumber != null && !StreetNumber.Equals("") &&
+            StreetName != null && !StreetName.Equals("") &&
+            OwnerId != null && !OwnerId.Equals("") &&
+            WeekOpeningTimes.Count > 0 &&
+            RestaurantProducts.Any(x => x.IsActive);
+
+        public static Restaurant Create(RestaurantCreationDto restaurantCreationDto, CurrentUser user,
+            IEnumerable<RestaurantCategory> allRestaurantCategories)
         {
             var restaurantId = Guid.NewGuid().ToString();
-            return new Restaurant
+            return new Restaurant()
             {
                 Id = restaurantId,
                 Name = restaurantCreationDto.Name,
@@ -67,6 +80,7 @@ namespace YnovEat.Domain.ModelsAggregate.RestaurantAggregate
                 IsEmailConfirmed = false,
                 EmailConfirmationDateTime = null,
                 IsOpen = restaurantCreationDto.IsOpen ?? false,
+                IsPublic = restaurantCreationDto.IsPublic ?? false,
                 CreationDateTime = DateTime.Now,
                 ZipCode = restaurantCreationDto.ZipCode,
                 Country = restaurantCreationDto.Country,
@@ -77,7 +91,8 @@ namespace YnovEat.Domain.ModelsAggregate.RestaurantAggregate
                 OwnerId = user.Id,
                 Owner = user.RestaurantUser as RestaurantOwner,
 
-                ClosingDates = restaurantCreationDto.ClosingDates.Select(x => ClosingDate.Create(x, restaurantId)).ToList(),
+                ClosingDates = restaurantCreationDto.ClosingDates.Select(x => ClosingDate.Create(x, restaurantId))
+                    .ToList(),
 
                 WeekOpeningTimes = restaurantCreationDto.WeekOpeningTimes.Select(x =>
                     DayOpeningTimes.Create(x, restaurantId)
@@ -89,14 +104,12 @@ namespace YnovEat.Domain.ModelsAggregate.RestaurantAggregate
                         var existingCategory = allRestaurantCategories.FirstOrDefault(y => y.Name.Equals(x.Name));
                         return existingCategory ?? RestaurantCategory.Create(x);
                     })
-                    .ToList()
-
-                // Todo add isPublishable property related to restaurant validation
-                // Todo allow isPublish value to be controlled by the restaurant
+                    .ToList(),
             };
         }
 
-        public void Update(RestaurantModificationDto restaurantModificationDto, ICollection<RestaurantCategory> allRestaurantCategories)
+        public void Update(RestaurantModificationDto restaurantModificationDto,
+            ICollection<RestaurantCategory> allRestaurantCategories)
         {
             Name = restaurantModificationDto.Name ?? Name;
             PhoneNumber = restaurantModificationDto.PhoneNumber ?? PhoneNumber;
@@ -104,13 +117,14 @@ namespace YnovEat.Domain.ModelsAggregate.RestaurantAggregate
             Base64Image = restaurantModificationDto.Base64Image ?? Base64Image;
             Base64Logo = restaurantModificationDto.Base64Logo ?? Base64Logo;
             IsOpen = restaurantModificationDto.IsOpen ?? IsOpen;
+            IsPublic = restaurantModificationDto.IsPublic ?? IsPublic;
             ZipCode = restaurantModificationDto.ZipCode ?? ZipCode;
             Country = restaurantModificationDto.Country ?? Country;
             City = restaurantModificationDto.City ?? City;
             StreetNumber = restaurantModificationDto.StreetNumber ?? StreetNumber;
             StreetName = restaurantModificationDto.StreetName ?? StreetName;
             AddressExtraInformation = restaurantModificationDto.AddressExtraInformation ??
-                                                 AddressExtraInformation;
+                                      AddressExtraInformation;
             LastUpdateDateTime = DateTime.Now;
             ClosingDates = restaurantModificationDto.ClosingDates?
                 .Select(x => ClosingDate.Create(x, Id)).ToList() ?? ClosingDates;
@@ -127,8 +141,12 @@ namespace YnovEat.Domain.ModelsAggregate.RestaurantAggregate
                 })
                 .ToList() ?? Categories;
 
-            // Todo add or update isPublishable property related to restaurant validation
-            // Todo allow isPublish value to be controlled by the restaurant
+            IsPublished = CanPublish;
+        }
+
+        public void UpdateIsPublished()
+        {
+            IsPublished = CanPublish;
         }
     }
 }

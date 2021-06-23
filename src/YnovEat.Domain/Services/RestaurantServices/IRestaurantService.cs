@@ -12,6 +12,7 @@ namespace YnovEat.Domain.Services.RestaurantServices
         Task<RestaurantReadDto> Create(RestaurantCreationDto restaurantCreationDto, CurrentUser currentUser);
         Task<RestaurantReadDto> Update(RestaurantModificationDto restaurantModificationDto,
             Restaurant restaurantReadDto);
+        Task UpdateIsPublished(string restaurantId);
         Task<RestaurantReadDto> GetById(string id);
         Task<RestaurantReadDto> GetByUserId(string currentUserId);
         Task<ICollection<RestaurantReadDto>> GetAllForCustomer();

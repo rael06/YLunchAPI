@@ -24,6 +24,7 @@ namespace YnovEat.Domain.DTO.RestaurantModels
         public DateTime? EmailConfirmationDateTime { get; set; }
         public bool IsOpen { get; set; }
         public bool IsCurrentlyOpenToOrder { get; set; }
+        public bool IsPublic { get; set; }
         public bool IsPublished { get; set; }
         public DateTime CreationDateTime { get; set; }
         public DateTime? LastUpdateDateTime { get; set; }
@@ -55,6 +56,7 @@ namespace YnovEat.Domain.DTO.RestaurantModels
             IsEmailConfirmed = entity.IsEmailConfirmed;
             EmailConfirmationDateTime = entity.EmailConfirmationDateTime;
             IsOpen = entity.IsOpen;
+            IsPublic = entity.IsPublic;
             IsPublished = entity.IsPublished;
             IsCurrentlyOpenToOrder = entity.IsCurrentlyOpenToOrder;
             CreationDateTime = entity.CreationDateTime;

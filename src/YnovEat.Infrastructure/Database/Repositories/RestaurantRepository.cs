@@ -18,17 +18,21 @@ namespace YnovEat.Infrastructure.Database.Repositories
             _context = context;
         }
 
+        private IIncludableQueryable<Restaurant, ICollection<OpeningTime>> QueryEnrichedRestaurants =>
+            _context.Restaurants
+                .Include(x => x.ClosingDates)
+                .Include(x => x.Categories)
+                .Include(x => x.WeekOpeningTimes.OrderBy(y => y.DayOfWeek))
+                .ThenInclude(x => x.OpeningTimes);
+
         public async Task<Restaurant> GetById(string id) =>
             await QueryEnrichedRestaurants
                 .FirstOrDefaultAsync(x => x.Id.Equals(id));
 
-        private IIncludableQueryable<Restaurant, ICollection<OpeningTime>> QueryEnrichedRestaurants =>
-            _context.Restaurants
-                .Include(x => x.ClosingDates)
-                .Include(x => x.RestaurantUsers)
-                .Include(x => x.Categories)
-                .Include(x => x.WeekOpeningTimes.OrderBy(y => y.DayOfWeek))
-                .ThenInclude(x => x.OpeningTimes);
+        public async Task<Restaurant> GetByIdIncludingProducts(string id) =>
+            await QueryEnrichedRestaurants
+                .Include(x=>x.RestaurantProducts)
+                .FirstOrDefaultAsync(x => x.Id.Equals(id));
 
         public async Task<Restaurant> GetByUserId(string id) =>
             await QueryEnrichedRestaurants
@@ -43,29 +47,27 @@ namespace YnovEat.Infrastructure.Database.Repositories
 
         public async Task<ICollection<Restaurant>> GetAllForCustomer()
         {
-            // Todo validate restaurant in creation and update and allow this line
-            // .Where(x=>x.IsPublished)
             return await QueryEnrichedRestaurants
+                .Where(x => x.IsPublic)
                 .ToListAsync();
         }
 
         public async Task<ICollection<Restaurant>> GetAll()
         {
             return await QueryEnrichedRestaurants
-                .Include(x=>x.RestaurantUsers)
+                .Include(x => x.RestaurantUsers)
                 .ToListAsync();
         }
 
-        public async Task<Restaurant> CreateRestaurant(Restaurant restaurant)
+        public async Task Create(Restaurant restaurant)
         {
             var owner = await _context.RestaurantUsers.FirstAsync(x => x.User.Id.Equals(restaurant.OwnerId));
             owner.RestaurantId = restaurant.Id;
             await _context.Restaurants.AddAsync(restaurant);
             await _context.SaveChangesAsync();
-            return restaurant;
         }
 
-        public async Task<Restaurant> UpdateRestaurant(Restaurant restaurant)
+        public async Task Update()
         {
             var uselessCategories =
                 await _context.RestaurantCategories
@@ -73,7 +75,6 @@ namespace YnovEat.Infrastructure.Database.Repositories
             _context.RemoveRange(uselessCategories);
 
             await _context.SaveChangesAsync();
-            return restaurant;
         }
     }
 }

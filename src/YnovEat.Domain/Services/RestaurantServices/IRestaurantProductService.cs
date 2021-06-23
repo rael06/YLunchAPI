@@ -12,6 +12,7 @@ namespace YnovEat.Domain.Services.RestaurantServices
             RestaurantProduct restaurantProduct);
 
         Task<ICollection<RestaurantProductReadDto>> GetAllByRestaurantId(string restaurantId);
+        Task<ICollection<RestaurantProductReadDto>> GetAllForCustomerByRestaurantId(string restaurantId);
         Task Delete(string restaurantProductId);
     }
 }

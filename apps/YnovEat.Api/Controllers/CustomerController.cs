@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -30,7 +31,7 @@ namespace YnovEat.Api.Controllers
         }
 
         [HttpGet("get-all-restaurants")]
-        [Authorize(Roles = UserRoles.Customer)]
+        [AllowAnonymous]
         public async Task<IActionResult> GetAllRestaurants()
         {
             try

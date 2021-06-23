@@ -20,17 +20,20 @@ namespace YnovEat.Api.Controllers
     {
         private readonly IRestaurantProductService _restaurantProductService;
         private readonly IRestaurantProductRepository _restaurantProductRepository;
+        private readonly IRestaurantService _restaurantService;
 
         public RestaurantProductController(
             UserManager<User> userManager,
             IUserRepository userRepository,
             IConfiguration configuration,
             IRestaurantProductService restaurantProductService,
-            IRestaurantProductRepository restaurantProductRepository
+            IRestaurantProductRepository restaurantProductRepository,
+            IRestaurantService restaurantService
         ) : base(userManager, userRepository, configuration)
         {
             _restaurantProductService = restaurantProductService;
             _restaurantProductRepository = restaurantProductRepository;
+            _restaurantService = restaurantService;
         }
 
         [HttpPost]
@@ -45,7 +48,9 @@ namespace YnovEat.Api.Controllers
                         StatusCodes.Status403Forbidden,
                         "User has not a restaurant"
                     );
-                return Ok(await _restaurantProductService.Create(model, currentUser.RestaurantUser.RestaurantId));
+                var restaurantProduct =
+                    await _restaurantProductService.Create(model, currentUser.RestaurantUser.RestaurantId);
+                return Ok(restaurantProduct);
             }
             catch (Exception e)
             {
@@ -180,6 +185,7 @@ namespace YnovEat.Api.Controllers
                     );
 
                 await _restaurantProductService.Delete(productId);
+                await _restaurantService.UpdateIsPublished(currentUser.RestaurantUser.RestaurantId);
 
                 return NoContent();
             }

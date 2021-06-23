@@ -40,7 +40,7 @@ namespace YnovEat.Api.Controllers
             try
             {
                 var restaurantProducts =
-                    await _restaurantProductService.GetAllByRestaurantId(restaurantId);
+                    await _restaurantProductService.GetAllForCustomerByRestaurantId(restaurantId);
 
                 return Ok(restaurantProducts);
             }

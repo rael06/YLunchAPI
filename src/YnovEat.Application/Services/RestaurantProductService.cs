@@ -12,17 +12,25 @@ namespace YnovEat.Application.Services
     public class RestaurantProductService : IRestaurantProductService
     {
         private readonly IRestaurantProductRepository _restaurantProductRepository;
+        private readonly IRestaurantService _restaurantService;
 
-        public RestaurantProductService(IRestaurantProductRepository restaurantProductRepository)
+        public RestaurantProductService(
+            IRestaurantProductRepository restaurantProductRepository,
+            IRestaurantService restaurantService
+        )
         {
             _restaurantProductRepository = restaurantProductRepository;
+            _restaurantService = restaurantService;
         }
 
         public async Task<RestaurantProductReadDto> Create(RestaurantProductCreationDto restaurantProductCreationDto,
             string restaurantId)
         {
-            var restaurantProduct = RestaurantProduct.Create(restaurantProductCreationDto,restaurantId);
+            var restaurantProduct = RestaurantProduct.Create(restaurantProductCreationDto, restaurantId);
             await _restaurantProductRepository.Create(restaurantProduct);
+
+            await _restaurantService.UpdateIsPublished(restaurantId);
+
             return new RestaurantProductReadDto(restaurantProduct);
         }
 
@@ -32,12 +40,20 @@ namespace YnovEat.Application.Services
         {
             restaurantProduct.Update(restaurantProductModificationDto);
             await _restaurantProductRepository.Update();
+            await _restaurantService.UpdateIsPublished(restaurantProduct.RestaurantId);
+
             return new RestaurantProductReadDto(restaurantProduct);
         }
 
         public async Task<ICollection<RestaurantProductReadDto>> GetAllByRestaurantId(string restaurantId)
         {
             var restaurantProducts = await _restaurantProductRepository.GetAllByRestaurantId(restaurantId);
+            return restaurantProducts.Select(x => new RestaurantProductReadDto(x)).ToList();
+        }
+
+        public async Task<ICollection<RestaurantProductReadDto>> GetAllForCustomerByRestaurantId(string restaurantId)
+        {
+            var restaurantProducts = await _restaurantProductRepository.GetAllForCustomerByRestaurantId(restaurantId);
             return restaurantProducts.Select(x => new RestaurantProductReadDto(x)).ToList();
         }
 

@@ -9,8 +9,8 @@ using YnovEat.Infrastructure.Database;
 namespace YnovEat.Api.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20210621002911_V0.231")]
-    partial class V0231
+    [Migration("20210623000208_V0.35")]
+    partial class V035
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -388,7 +388,7 @@ namespace YnovEat.Api.Migrations
                     b.Property<bool>("IsOpen")
                         .HasColumnType("tinyint(1)");
 
-                    b.Property<bool>("IsPublished")
+                    b.Property<bool>("IsPublic")
                         .HasColumnType("tinyint(1)");
 
                     b.Property<DateTime?>("LastUpdateDateTime")

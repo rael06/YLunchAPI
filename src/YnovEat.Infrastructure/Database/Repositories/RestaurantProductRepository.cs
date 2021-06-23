@@ -30,7 +30,16 @@ namespace YnovEat.Infrastructure.Database.Repositories
         public async Task<ICollection<RestaurantProduct>> GetAllByRestaurantId(string restaurantId)
         {
             return await _context.RestaurantProducts
-                .Where(x => x.RestaurantId.Equals(restaurantId)).ToListAsync();
+                .Where(x => x.RestaurantId.Equals(restaurantId))
+                .ToListAsync();
+        }
+
+        public async Task<ICollection<RestaurantProduct>> GetAllForCustomerByRestaurantId(string restaurantId)
+        {
+            return await _context.RestaurantProducts
+                .Where(x => x.RestaurantId.Equals(restaurantId))
+                .Where(x => x.IsActive)
+                .ToListAsync();
         }
 
         public async Task Delete(string restaurantProductId)
