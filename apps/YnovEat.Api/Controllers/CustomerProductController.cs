@@ -1,11 +1,11 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
-using YnovEat.Api.Core;
 using YnovEat.Domain.DTO.ProductModels.RestaurantProductModels;
 using YnovEat.Domain.ModelsAggregate.UserAggregate;
 using YnovEat.Domain.ModelsAggregate.UserAggregate.Roles;
@@ -16,7 +16,7 @@ namespace YnovEat.Api.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize(Roles = UserRoles.Customer)]
+    [Core.Authorize(Roles = UserRoles.Customer)]
     public class CustomerProductController : CustomControllerBase
     {
         private readonly IRestaurantProductService _restaurantProductService;
@@ -34,6 +34,8 @@ namespace YnovEat.Api.Controllers
             _restaurantProductRepository = restaurantProductRepository;
         }
 
+
+        [AllowAnonymous]
         [HttpGet("get-all/{restaurantId}")]
         public async Task<IActionResult> GetAll(string restaurantId)
         {
