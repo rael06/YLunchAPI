@@ -25,7 +25,7 @@ namespace YnovEat.Domain.ModelsAggregate.UserAggregate
             var user = new User
             {
                 SecurityStamp = Guid.NewGuid().ToString(),
-                UserName = userCreationDto.Username,
+                UserName = userCreationDto.UserName,
                 Lastname = userCreationDto.Lastname,
                 Firstname = userCreationDto.Firstname,
                 CreationDateTime = DateTime.Now,
@@ -40,7 +40,7 @@ namespace YnovEat.Domain.ModelsAggregate.UserAggregate
             var user = new User
             {
                 SecurityStamp = Guid.NewGuid().ToString(),
-                UserName = userCreationDto.Username,
+                UserName = userCreationDto.UserName,
                 Lastname = userCreationDto.Lastname,
                 Firstname = userCreationDto.Firstname,
                 CreationDateTime = DateTime.Now,
@@ -55,7 +55,7 @@ namespace YnovEat.Domain.ModelsAggregate.UserAggregate
             var user = new User
             {
                 SecurityStamp = Guid.NewGuid().ToString(),
-                UserName = userCreationDto.Username,
+                UserName = userCreationDto.UserName,
                 Lastname = userCreationDto.Lastname,
                 Firstname = userCreationDto.Firstname,
                 CreationDateTime = DateTime.Now,
@@ -70,7 +70,7 @@ namespace YnovEat.Domain.ModelsAggregate.UserAggregate
             return new()
             {
                 SecurityStamp = Guid.NewGuid().ToString(),
-                UserName = userCreationDto.Username,
+                UserName = userCreationDto.UserName,
                 Lastname = userCreationDto.Lastname,
                 Firstname = userCreationDto.Firstname,
                 CreationDateTime = DateTime.Now,
@@ -82,10 +82,10 @@ namespace YnovEat.Domain.ModelsAggregate.UserAggregate
             var user = new User
             {
                 SecurityStamp = Guid.NewGuid().ToString(),
-                UserName = userCreationDto.Username,
+                UserName = userCreationDto.UserName,
                 Lastname = userCreationDto.Lastname,
                 Firstname = userCreationDto.Firstname,
-                Email = userCreationDto.Username,
+                Email = userCreationDto.UserName,
                 PhoneNumber = userCreationDto.PhoneNumber,
                 CreationDateTime = DateTime.Now,
             };
