@@ -55,6 +55,7 @@ namespace YnovEat.Api.Controllers
             }
         }
 
+        [AllowAnonymous]
         [HttpGet("{restaurantId}/{productId}")]
         public async Task<IActionResult> Get(string restaurantId, string productId)
         {
