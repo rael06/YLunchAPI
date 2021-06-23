@@ -36,9 +36,20 @@ namespace YnovEat.Api.Controllers
         [Authorize(Roles = UserRoles.Customer)]
         public async Task<IActionResult> Create([FromBody] OrderCreationDto orderCreationDto)
         {
-            var currentUser = await GetAuthenticatedUser();
-            var orderReadDto = await _orderService.Create(orderCreationDto, currentUser.Customer);
-            return Ok(orderReadDto);
+            try
+            {
+                var currentUser = await GetAuthenticatedUser();
+                var orderReadDto = await _orderService.Create(orderCreationDto, currentUser.Customer);
+                return Ok(orderReadDto);
+            }
+            catch (NotFoundException e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
+            }
         }
 
         [HttpPost("add-status")]
@@ -79,7 +90,7 @@ namespace YnovEat.Api.Controllers
                 var currentUser = await GetAuthenticatedUser();
                 var orderReadDtoCollection =
                     await _orderService.GetNewOrdersByRestaurantId(currentUser.RestaurantUser.RestaurantId);
-                return Ok(orderReadDtoCollection.Select(x=>x.Id).ToList());
+                return Ok(orderReadDtoCollection.Select(x => x.Id).ToList());
             }
             catch (Exception e)
             {

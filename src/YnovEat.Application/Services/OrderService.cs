@@ -26,11 +26,11 @@ namespace YnovEat.Application.Services
         public async Task<OrderReadDto> Create(OrderCreationDto orderCreationDto, Customer customer)
         {
             var restaurantProducts =
-                    _restaurantProductRepository.GetListByIds(orderCreationDto.ProductsId);
+                _restaurantProductRepository.GetListByIds(orderCreationDto.ProductsId);
             if (restaurantProducts.Count != orderCreationDto.ProductsId.Count)
                 throw new NotFoundException("Not found all products");
 
-                var orderId = Guid.NewGuid().ToString();
+            var orderId = Guid.NewGuid().ToString();
             var customerProducts = restaurantProducts
                 .Select(x => CustomerProduct.Create(x, orderId)).ToList();
 
@@ -56,7 +56,8 @@ namespace YnovEat.Application.Services
             foreach (var o in orders)
             {
                 if (o.CurrentOrderStatus.State != addOrderStatusToMultipleOrdersDto.State - 1)
-                    throw new BadNewOrderStateException($"order: {o.Id} is not in the previous state the new requested state");
+                    throw new BadNewOrderStateException(
+                        $"order: {o.Id} is not in the previous state the new requested state");
                 var newStatus = OrderStatus.Create(o.Id, addOrderStatusToMultipleOrdersDto.State);
                 o.OrderStatuses.Add(newStatus);
             }
