@@ -120,6 +120,12 @@ namespace YnovEat.Api.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> RegisterCustomer([FromBody] CustomerCreationDto model)
         {
+            // todo valid username based on company's email template
+            if (!model.IsValid())
+                return StatusCode(
+                    StatusCodes.Status403Forbidden,
+                    "You must set a username with an Ynov email address"
+                );
             return await RegisterUser(model);
         }
 
@@ -147,7 +153,7 @@ namespace YnovEat.Api.Controllers
         {
             try
             {
-                await CheckUserNonexistence(model.Username);
+                await CheckUserNonexistence(model.UserName);
             }
             catch (Exception e)
             {
