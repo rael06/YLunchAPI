@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -66,6 +67,23 @@ namespace YnovEat.Api.Controllers
             catch (Exception e1)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, e1.Message);
+            }
+        }
+
+        [HttpGet("get-new-orders-ids")]
+        [Authorize(Roles = UserRoles.RestaurantAdmin + "," + UserRoles.Employee)]
+        public async Task<IActionResult> GetNewOrdersIds()
+        {
+            try
+            {
+                var currentUser = await GetAuthenticatedUser();
+                var orderReadDtoCollection =
+                    await _orderService.GetNewOrdersByRestaurantId(currentUser.RestaurantUser.RestaurantId);
+                return Ok(orderReadDtoCollection.Select(x=>x.Id).ToList());
+            }
+            catch (Exception e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
             }
         }
     }

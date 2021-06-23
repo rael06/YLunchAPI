@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using YnovEat.Domain.ModelsAggregate.RestaurantAggregate;
 using YnovEat.Domain.Services.OrderServices;
+using YnovEat.DomainShared.RestaurantAggregate.Enums;
 
 namespace YnovEat.Infrastructure.Database.Repositories
 {
@@ -45,11 +46,20 @@ namespace YnovEat.Infrastructure.Database.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task<ICollection<Order>> GetallById(ICollection<string> ordersId)
+        public async Task<ICollection<Order>> GetAllById(ICollection<string> ordersId)
         {
             return await _context.Orders
                 .Include(x => x.OrderStatuses)
-                .Where(o=>ordersId.Contains(o.Id))
+                .Where(o => ordersId.Contains(o.Id))
+                .ToListAsync();
+        }
+
+        public async Task<ICollection<Order>> GetNewOrdersByRestaurantId(string restaurantId)
+        {
+            return await _context.Orders
+                .Include(x => x.OrderStatuses)
+                .Where(x => x.RestaurantId.Equals(restaurantId))
+                .Where(x => x.OrderStatuses.All(y => y.State == OrderState.Idling))
                 .ToListAsync();
         }
     }

@@ -26,9 +26,11 @@ namespace YnovEat.Application.Services
         public async Task<OrderReadDto> Create(OrderCreationDto orderCreationDto, Customer customer)
         {
             var restaurantProducts =
-                _restaurantProductRepository.GetListByIds(orderCreationDto.ProductsId);
+                    _restaurantProductRepository.GetListByIds(orderCreationDto.ProductsId);
+            if (restaurantProducts.Count != orderCreationDto.ProductsId.Count)
+                throw new NotFoundException("Not found all products");
 
-            var orderId = Guid.NewGuid().ToString();
+                var orderId = Guid.NewGuid().ToString();
             var customerProducts = restaurantProducts
                 .Select(x => CustomerProduct.Create(x, orderId)).ToList();
 
@@ -49,7 +51,7 @@ namespace YnovEat.Application.Services
             AddOrderStatusToMultipleOrdersDto addOrderStatusToMultipleOrdersDto)
         {
             ICollection<Order> orders =
-                await _orderRepository.GetallById(addOrderStatusToMultipleOrdersDto.OrdersId);
+                await _orderRepository.GetAllById(addOrderStatusToMultipleOrdersDto.OrdersId);
 
             foreach (var o in orders)
             {
@@ -60,6 +62,12 @@ namespace YnovEat.Application.Services
             }
 
             await _orderRepository.Update();
+            return orders.Select(x => new OrderReadDto(x)).ToList();
+        }
+
+        public async Task<ICollection<OrderReadDto>> GetNewOrdersByRestaurantId(string restaurantId)
+        {
+            var orders = await _orderRepository.GetNewOrdersByRestaurantId(restaurantId);
             return orders.Select(x => new OrderReadDto(x)).ToList();
         }
     }

@@ -14,5 +14,7 @@ namespace YnovEat.Domain.Services.OrderServices
 
         Task<ICollection<OrderReadDto>> AddStatusToMultipleOrders(
             AddOrderStatusToMultipleOrdersDto addOrderStatusToMultipleOrdersDto);
+
+        Task<ICollection<OrderReadDto>> GetNewOrdersByRestaurantId(string restaurantId);
     }
 }
