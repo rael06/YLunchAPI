@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
-using YnovEat.Domain.DTO.ProductModels.RestaurantProductModels;
 using YnovEat.Domain.ModelsAggregate.UserAggregate;
 using YnovEat.Domain.ModelsAggregate.UserAggregate.Roles;
 using YnovEat.Domain.Services.Database.Repositories;
@@ -20,18 +19,15 @@ namespace YnovEat.Api.Controllers
     public class CustomerProductController : CustomControllerBase
     {
         private readonly IRestaurantProductService _restaurantProductService;
-        private readonly IRestaurantProductRepository _restaurantProductRepository;
 
         public CustomerProductController(
             UserManager<User> userManager,
             IUserRepository userRepository,
             IConfiguration configuration,
-            IRestaurantProductService restaurantProductService,
-            IRestaurantProductRepository restaurantProductRepository
+            IRestaurantProductService restaurantProductService
         ) : base(userManager, userRepository, configuration)
         {
             _restaurantProductService = restaurantProductService;
-            _restaurantProductRepository = restaurantProductRepository;
         }
 
 
