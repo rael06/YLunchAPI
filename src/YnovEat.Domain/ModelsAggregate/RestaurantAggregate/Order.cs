@@ -13,7 +13,7 @@ namespace YnovEat.Domain.ModelsAggregate.RestaurantAggregate
         public bool IsDeleted { get; set; }
         public string CustomerComment { get; set; }
         public string RestaurantComment { get; set; }
-
+        public DateTime ReservedForDateTime { get; set; }
         public DateTime CreationDateTime { get; set; }
         public DateTime? AcceptationDateTime { get; set; }
         public bool IsAccepted => AcceptationDateTime != null;
@@ -48,6 +48,7 @@ namespace YnovEat.Domain.ModelsAggregate.RestaurantAggregate
                 Id = id,
                 CustomerComment = orderCreationDto.CustomerComment,
                 RestaurantComment = orderCreationDto.RestaurantComment,
+                ReservedForDateTime = orderCreationDto.ReservedForDateTime,
                 TotalPrice = Math.Round(customerProducts.Sum(x => x.Price), 2),
                 CreationDateTime = DateTime.Now,
                 CustomerId = customer.UserId,

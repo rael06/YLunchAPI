@@ -9,6 +9,7 @@ using YnovEat.Domain.ModelsAggregate.CustomerAggregate;
 using YnovEat.Domain.ModelsAggregate.RestaurantAggregate;
 using YnovEat.Domain.Services.Database.Repositories;
 using YnovEat.Domain.Services.OrderServices;
+using YnovEat.DomainShared.RestaurantAggregate.Enums;
 
 namespace YnovEat.Application.Services
 {
@@ -43,11 +44,14 @@ namespace YnovEat.Application.Services
             AddOrderStatusToMultipleOrdersDto addOrderStatusToMultipleOrdersDto)
         {
             ICollection<Order> orders =
-                await _orderRepository.GetAllById(addOrderStatusToMultipleOrdersDto.OrdersId);
+                await _orderRepository.GetAllByIds(addOrderStatusToMultipleOrdersDto.OrdersId);
 
             foreach (var o in orders)
             {
-                if (o.CurrentOrderStatus.State != addOrderStatusToMultipleOrdersDto.State - 1)
+                if (o.CurrentOrderStatus.State != OrderState.Canceled &&
+                    o.CurrentOrderStatus.State != OrderState.Rejected &&
+                    o.CurrentOrderStatus.State != OrderState.Other &&
+                    o.CurrentOrderStatus.State != addOrderStatusToMultipleOrdersDto.State - 1)
                     throw new BadNewOrderStateException(
                         $"order: {o.Id} is not in the previous state the new requested state");
                 var newStatus = OrderStatus.Create(o.Id, addOrderStatusToMultipleOrdersDto.State);
@@ -61,7 +65,9 @@ namespace YnovEat.Application.Services
         public async Task<ICollection<OrderReadDto>> GetNewOrdersByRestaurantId(string restaurantId)
         {
             var orders = await _orderRepository.GetNewOrdersByRestaurantId(restaurantId);
-            return orders.Select(x => new OrderReadDto(x)).ToList();
+            return orders
+                .Select(x => new OrderReadDto(x))
+                .ToList();
         }
     }
 }

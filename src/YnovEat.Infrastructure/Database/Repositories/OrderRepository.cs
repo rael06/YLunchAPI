@@ -31,6 +31,7 @@ namespace YnovEat.Infrastructure.Database.Repositories
                 .Include(x => x.CustomerProducts)
                 .Where(o => o.RestaurantId.Equals(restaurantId))
                 .Where(o => o.CreationDateTime > DateTime.Today)
+                .OrderBy(o=>o.ReservedForDateTime)
                 .ToListAsync();
         }
 
@@ -46,11 +47,12 @@ namespace YnovEat.Infrastructure.Database.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task<ICollection<Order>> GetAllById(ICollection<string> ordersId)
+        public async Task<ICollection<Order>> GetAllByIds(ICollection<string> ordersId)
         {
             return await _context.Orders
                 .Include(x => x.OrderStatuses)
                 .Where(o => ordersId.Contains(o.Id))
+                .OrderBy(o=>o.ReservedForDateTime)
                 .ToListAsync();
         }
 
@@ -60,6 +62,7 @@ namespace YnovEat.Infrastructure.Database.Repositories
                 .Include(x => x.OrderStatuses)
                 .Where(x => x.RestaurantId.Equals(restaurantId))
                 .Where(x => x.OrderStatuses.All(y => y.State == OrderState.Idling))
+                .OrderBy(o=>o.ReservedForDateTime)
                 .ToListAsync();
         }
     }

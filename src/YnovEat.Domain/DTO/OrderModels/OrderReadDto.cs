@@ -13,6 +13,7 @@ namespace YnovEat.Domain.DTO.OrderModels
         public bool IsDeleted { get; set; }
         public string CustomerComment { get; set; }
         public string RestaurantComment { get; set; }
+        public DateTime ReservedForDateTime { get; set; }
         public DateTime? CreationDateTime { get; set; }
         public DateTime? AcceptationDateTime { get; set; }
         public bool IsAccepted { get; set; }
@@ -31,6 +32,7 @@ namespace YnovEat.Domain.DTO.OrderModels
             IsDeleted = order.IsDeleted;
             CustomerComment = order.CustomerComment;
             RestaurantComment = order.RestaurantComment;
+            ReservedForDateTime = order.ReservedForDateTime;
             CreationDateTime = order.CreationDateTime;
             TotalPrice = order.TotalPrice;
             AcceptationDateTime = order.AcceptationDateTime;

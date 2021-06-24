@@ -10,7 +10,7 @@ namespace YnovEat.Domain.Services.OrderServices
         Task<ICollection<Order>> GetAllByRestaurantId(string restaurantId);
         Task<Order> GetById(string id);
         Task Update();
-        Task<ICollection<Order>> GetAllById(ICollection<string> ordersId);
+        Task<ICollection<Order>> GetAllByIds(ICollection<string> ordersId);
         Task<ICollection<Order>> GetNewOrdersByRestaurantId(string restaurantId);
     }
 }

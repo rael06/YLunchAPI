@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
@@ -8,5 +9,6 @@ namespace YnovEat.Domain.DTO.OrderModels
         [Required] public ICollection<string> ProductsId { get; set; }
         public string CustomerComment { get; set; }
         public string RestaurantComment { get; set; }
+        public DateTime ReservedForDateTime { get; set; }
     }
 }

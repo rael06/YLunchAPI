@@ -82,7 +82,9 @@ namespace YnovEat.Api.Controllers
                 var currentUser = await GetAuthenticatedUser();
                 var orderReadDtoCollection =
                     await _orderService.GetNewOrdersByRestaurantId(currentUser.RestaurantUser.RestaurantId);
-                return Ok(orderReadDtoCollection.Select(x => x.Id).ToList());
+                return Ok(orderReadDtoCollection
+                    .Select(x => x.Id)
+                    .ToList());
             }
             catch (Exception e)
             {
