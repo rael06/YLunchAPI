@@ -39,14 +39,6 @@ namespace YnovEat.Application.Services
             return new OrderReadDto(order);
         }
 
-        public async Task<OrderReadDto> AddStatus(OrderStatusCreationDto orderStatusCreationDto)
-        {
-            var order = await _orderRepository.GetById(orderStatusCreationDto.OrderId);
-            order.OrderStatuses.Add(OrderStatus.Create(orderStatusCreationDto));
-            await _orderRepository.Update();
-            return new OrderReadDto(order);
-        }
-
         public async Task<ICollection<OrderReadDto>> AddStatusToMultipleOrders(
             AddOrderStatusToMultipleOrdersDto addOrderStatusToMultipleOrdersDto)
         {

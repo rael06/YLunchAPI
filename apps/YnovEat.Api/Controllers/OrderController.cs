@@ -52,14 +52,6 @@ namespace YnovEat.Api.Controllers
             }
         }
 
-        [HttpPost("add-status")]
-        [Authorize(Roles = UserRoles.RestaurantAdmin + "," + UserRoles.Employee)]
-        public async Task<IActionResult> AddStatus([FromBody] OrderStatusCreationDto orderStatusCreationDto)
-        {
-            var orderReadDto = await _orderService.AddStatus(orderStatusCreationDto);
-            return Ok(orderReadDto);
-        }
-
         [HttpPost("add-status-to-orders")]
         [Authorize(Roles = UserRoles.RestaurantAdmin + "," + UserRoles.Employee)]
         public async Task<IActionResult> AddStatusToMultipleOrders(

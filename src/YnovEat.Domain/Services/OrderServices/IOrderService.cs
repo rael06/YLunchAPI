@@ -10,7 +10,6 @@ namespace YnovEat.Domain.Services.OrderServices
     public interface IOrderService
     {
         Task<OrderReadDto> Create(OrderCreationDto orderCreationDto, Customer customer);
-        Task<OrderReadDto> AddStatus(OrderStatusCreationDto orderStatusCreationDto);
 
         Task<ICollection<OrderReadDto>> AddStatusToMultipleOrders(
             AddOrderStatusToMultipleOrdersDto addOrderStatusToMultipleOrdersDto);
