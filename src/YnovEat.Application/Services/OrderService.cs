@@ -27,7 +27,7 @@ namespace YnovEat.Application.Services
         public async Task<OrderReadDto> Create(OrderCreationDto orderCreationDto, Customer customer)
         {
             var restaurantProducts =
-                _restaurantProductRepository.GetListByIds(orderCreationDto.ProductsId);
+               await _restaurantProductRepository.GetAllEligibleForCustomerByRestaurantIdByProductIds(orderCreationDto.ProductsId, orderCreationDto.RestaurantId);
             if (restaurantProducts.Count != orderCreationDto.ProductsId.Count)
                 throw new NotFoundException("Not found all products");
 

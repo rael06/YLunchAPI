@@ -124,7 +124,11 @@ namespace YnovEat.Api.Controllers
             if (!model.IsValid())
                 return StatusCode(
                     StatusCodes.Status403Forbidden,
-                    "You must set a username with an Ynov email address"
+                    new Response
+                    {
+                        Status = ResponseStatus.Error,
+                        Message = "You must set a username with an Ynov email address"
+                    }
                 );
             return await RegisterUser(model);
         }

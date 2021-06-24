@@ -10,5 +10,6 @@ namespace YnovEat.Domain.DTO.OrderModels
         public string CustomerComment { get; set; }
         public string RestaurantComment { get; set; }
         public DateTime ReservedForDateTime { get; set; }
+        public string RestaurantId { get; set; }
     }
 }
