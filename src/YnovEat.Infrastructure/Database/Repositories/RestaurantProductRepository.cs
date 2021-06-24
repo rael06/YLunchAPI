@@ -50,14 +50,15 @@ namespace YnovEat.Infrastructure.Database.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task<ICollection<RestaurantProduct>> GetAllEligibleForCustomerByRestaurantIdByProductIds(ICollection<string> restaurantProductsIds,
+        public async Task<ICollection<RestaurantProduct>> GetAllEligibleForCustomerByRestaurantIdByProductIds(ICollection<string> orderedRestaurantProductsIds,
             string restaurantId)
         {
             var restaurantProducts =
                 await GetAllForCustomerByRestaurantId(restaurantId);
 
-            return restaurantProducts
-                .Where(rp => restaurantProductsIds.Contains(rp.Id))
+            return orderedRestaurantProductsIds
+                .Where(id => restaurantProducts.Any(rp=> rp.Id.Equals(id)))
+                .Select(id=> _context.RestaurantProducts.Find(id))
                 .ToList();
         }
     }
