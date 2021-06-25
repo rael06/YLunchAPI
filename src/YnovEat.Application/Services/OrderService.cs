@@ -27,7 +27,8 @@ namespace YnovEat.Application.Services
         public async Task<OrderReadDto> Create(OrderCreationDto orderCreationDto, Customer customer)
         {
             var restaurantProducts =
-               await _restaurantProductRepository.GetAllEligibleForCustomerByRestaurantIdByProductIds(orderCreationDto.ProductsId, orderCreationDto.RestaurantId);
+                await _restaurantProductRepository.GetAllEligibleForCustomerByRestaurantIdByProductIds(
+                    orderCreationDto.ProductsId, orderCreationDto.RestaurantId);
             if (restaurantProducts.Count != orderCreationDto.ProductsId.Count)
                 throw new NotFoundException("Not found all products");
 
@@ -48,12 +49,16 @@ namespace YnovEat.Application.Services
 
             foreach (var o in orders)
             {
-                if (o.CurrentOrderStatus.State != OrderState.Canceled &&
-                    o.CurrentOrderStatus.State != OrderState.Rejected &&
-                    o.CurrentOrderStatus.State != OrderState.Other &&
-                    o.CurrentOrderStatus.State != addOrderStatusToMultipleOrdersDto.State - 1)
+                if (addOrderStatusToMultipleOrdersDto.State != OrderState.Canceled &&
+                    addOrderStatusToMultipleOrdersDto.State != OrderState.Rejected &&
+                    addOrderStatusToMultipleOrdersDto.State != OrderState.Other &&
+                    o.CurrentOrderStatus.State != addOrderStatusToMultipleOrdersDto.State - 1
+                )
+                {
                     throw new BadNewOrderStateException(
                         $"order: {o.Id} is not in the previous state the new requested state");
+                }
+
                 var newStatus = OrderStatus.Create(o.Id, addOrderStatusToMultipleOrdersDto.State);
                 o.OrderStatuses.Add(newStatus);
             }
