@@ -15,7 +15,7 @@ jobs:
         runs-on: ubuntu-latest
         steps:
         - name: Azure Pipelines Action
-          uses: azure/pipelines@v1
+          uses: Azure/pipelines@v1
           with:
             azure-devops-project-url: https://dev.azure.com/organization/YnovYLunch
             azure-pipeline-name: 'YnovYLunch-ASP.NET Core-CI'
