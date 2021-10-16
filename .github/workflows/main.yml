@@ -17,6 +17,6 @@ jobs:
         - name: Azure Pipelines Action
           uses: Azure/pipelines@v1
           with:
-            azure-devops-project-url: https://dev.azure.com/organization/YnovYLunch
+            azure-devops-project-url: https://dev.azure.com/ylunch/YnovYLunch
             azure-pipeline-name: 'YnovYLunch-ASP.NET Core-CI'
             azure-devops-token: ${{ secrets.AZURE_DEVOPS_TOKEN }}
