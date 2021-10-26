@@ -11,7 +11,7 @@ on:
 
 jobs:
   sonar:
-    name: Build
+    name: Build for Sonar
     runs-on: windows-latest
     steps:
       - name: Set up JDK 11
