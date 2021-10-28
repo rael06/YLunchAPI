@@ -77,7 +77,8 @@ namespace YLunch.Api.Controllers
         [HttpPost("init-super-admin")]
         public async Task<IActionResult> InitSuperAdmin([FromBody] InitSuperAdminDto model)
         {
-            if (model.EndpointPassword != Configuration["InitAdminPass"]) return Unauthorized();
+            if (model.EndpointPassword != Configuration["InitAdminPass"])
+                return Unauthorized();
 
             return await RegisterUser(model);
         }
