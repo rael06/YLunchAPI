@@ -2,13 +2,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using YLunch.Application.Exceptions;
-using YnovEat.Domain.DTO.OrderModels;
-using YnovEat.Domain.DTO.RestaurantModels;
-using YnovEat.Domain.DTO.UserModels;
-using YnovEat.Domain.ModelsAggregate.RestaurantAggregate;
-using YnovEat.Domain.Services.Database.Repositories;
-using YnovEat.Domain.Services.OrderServices;
-using YnovEat.Domain.Services.RestaurantServices;
+using YLunch.Domain.DTO.OrderModels;
+using YLunch.Domain.DTO.RestaurantModels;
+using YLunch.Domain.DTO.UserModels;
+using YLunch.Domain.ModelsAggregate.RestaurantAggregate;
+using YLunch.Domain.Services.Database.Repositories;
+using YLunch.Domain.Services.OrderServices;
+using YLunch.Domain.Services.RestaurantServices;
 
 namespace YLunch.Application.Services
 {

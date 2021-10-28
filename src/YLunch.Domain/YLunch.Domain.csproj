@@ -20,7 +20,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\YnovEat.DomainShared\YnovEat.DomainShared.csproj" />
+      <ProjectReference Include="..\YLunch.DomainShared\YLunch.DomainShared.csproj" />
     </ItemGroup>
 
 </Project>

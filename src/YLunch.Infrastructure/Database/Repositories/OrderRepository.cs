@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using YLunch.Domain.ModelsAggregate.RestaurantAggregate;
 using YLunch.Domain.Services.OrderServices;
-using YnovEat.DomainShared.RestaurantAggregate.Enums;
+using YLunch.DomainShared.RestaurantAggregate.Enums;
 
 namespace YLunch.Infrastructure.Database.Repositories
 {

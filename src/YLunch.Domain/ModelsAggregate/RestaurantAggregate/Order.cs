@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using YLunch.Domain.DTO.OrderModels;
 using YLunch.Domain.ModelsAggregate.CustomerAggregate;
-using YnovEat.DomainShared.RestaurantAggregate.Enums;
+using YLunch.DomainShared.RestaurantAggregate.Enums;
 
 namespace YLunch.Domain.ModelsAggregate.RestaurantAggregate
 {

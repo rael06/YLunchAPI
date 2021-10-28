@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using YnovEat.DomainShared.RestaurantAggregate.Enums;
+using YLunch.DomainShared.RestaurantAggregate.Enums;
 
 namespace YLunch.Domain.DTO.OrderModels.OrderStatusModels
 {
