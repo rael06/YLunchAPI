@@ -1,10 +1,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using YnovEat.Domain.DTO.UserModels;
-using YnovEat.Domain.ModelsAggregate.UserAggregate;
-using YnovEat.Domain.Services.Database.Repositories;
-using YnovEat.Domain.Services.UserServices;
+using YLunch.Domain.DTO.UserModels;
+using YLunch.Domain.ModelsAggregate.UserAggregate;
+using YLunch.Domain.Services.Database.Repositories;
+using YLunch.Domain.Services.UserServices;
 
 namespace YLunch.Application.Services
 {

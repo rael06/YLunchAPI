@@ -1,14 +1,14 @@
 using System;
 using System.Threading.Tasks;
 using YLunch.Application.Exceptions;
-using YnovEat.Domain.DTO.UserModels;
-using YnovEat.Domain.DTO.UserModels.Registration;
-using YnovEat.Domain.ModelsAggregate.CustomerAggregate;
-using YnovEat.Domain.ModelsAggregate.UserAggregate;
-using YnovEat.Domain.ModelsAggregate.UserAggregate.Roles;
-using YnovEat.Domain.Services.Database.Repositories;
-using YnovEat.Domain.Services.Registration;
-using YnovEat.DomainShared.RestaurantAggregate.Enums;
+using YLunch.Domain.DTO.UserModels;
+using YLunch.Domain.DTO.UserModels.Registration;
+using YLunch.Domain.ModelsAggregate.CustomerAggregate;
+using YLunch.Domain.ModelsAggregate.UserAggregate;
+using YLunch.Domain.ModelsAggregate.UserAggregate.Roles;
+using YLunch.Domain.Services.Database.Repositories;
+using YLunch.Domain.Services.Registration;
+using YLunch.DomainShared.RestaurantAggregate.Enums;
 
 namespace YLunch.Application.Services
 {

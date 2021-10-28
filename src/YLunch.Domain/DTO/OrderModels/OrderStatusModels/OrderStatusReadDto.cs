@@ -1,6 +1,6 @@
 using System;
 using YLunch.Domain.ModelsAggregate.RestaurantAggregate;
-using YnovEat.DomainShared.RestaurantAggregate.Enums;
+using YLunch.DomainShared.RestaurantAggregate.Enums;
 
 namespace YLunch.Domain.DTO.OrderModels.OrderStatusModels
 {

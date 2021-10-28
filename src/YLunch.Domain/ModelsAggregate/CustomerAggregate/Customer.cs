@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using YLunch.Domain.ModelsAggregate.RestaurantAggregate;
 using YLunch.Domain.ModelsAggregate.UserAggregate;
-using YnovEat.DomainShared.RestaurantAggregate.Enums;
+using YLunch.DomainShared.RestaurantAggregate.Enums;
 
 namespace YLunch.Domain.ModelsAggregate.CustomerAggregate
 {

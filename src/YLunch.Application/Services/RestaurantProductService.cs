@@ -2,10 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using YnovEat.Domain.DTO.ProductModels.RestaurantProductModels;
-using YnovEat.Domain.ModelsAggregate.RestaurantAggregate;
-using YnovEat.Domain.Services.Database.Repositories;
-using YnovEat.Domain.Services.RestaurantServices;
+using YLunch.Domain.DTO.ProductModels.RestaurantProductModels;
+using YLunch.Domain.ModelsAggregate.RestaurantAggregate;
+using YLunch.Domain.Services.Database.Repositories;
+using YLunch.Domain.Services.RestaurantServices;
 
 namespace YLunch.Application.Services
 {
