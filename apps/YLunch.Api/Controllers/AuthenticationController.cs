@@ -80,7 +80,7 @@ namespace YLunch.Api.Controllers
             if (model.EndpointPassword != Configuration["InitAdminPass"])
                 return Unauthorized();
 
-            return await RegisterUser(model);
+            return await RegisterUser(model.User);
         }
 
         [HttpPost("register-super-admin")]
