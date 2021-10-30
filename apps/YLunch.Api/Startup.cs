@@ -1,3 +1,4 @@
+using System;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -38,13 +39,14 @@ namespace YLunch.Api
             services.AddSwaggerGen(c => { c.SwaggerDoc("v1", new OpenApiInfo {Title = "YLunch", Version = "v1"}); });
 
             // For Entity Framework
+            var database = Configuration["DbName"];
+            var user = Configuration["DbUser"];
+            var password = Configuration["DbPassword"];
+            var connectionString = $"Server=127.0.0.1,1433;Database={database};User Id={user};password={password};";
             services.AddDbContext<ApplicationDbContext>(options =>
             {
-                var database = Configuration["DbName"];
-                var user = Configuration["DbUser"];
-                var password = Configuration["DbPassword"];
                 options.UseSqlServer(
-                    $"Server=127.0.0.1,1433;Database={database};User Id={user};password={password};",
+                    connectionString,
                     b => b.MigrationsAssembly("YLunch.Api"));
             });
 
@@ -54,6 +56,7 @@ namespace YLunch.Api
                 .AddDefaultTokenProviders();
 
             // Adding Authentication
+            var jwtSecret = Configuration["JwtSecret"];
             services.AddAuthentication(options =>
                 {
                     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -72,7 +75,7 @@ namespace YLunch.Api
                         ValidateAudience = true,
                         ValidAudience = Configuration["JWT:ValidAudience"],
                         ValidIssuer = Configuration["JWT:ValidIssuer"],
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JwtSecret"]))
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSecret))
                     };
                 });
 
@@ -101,9 +104,8 @@ namespace YLunch.Api
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            loggerFactory.AddFile("Logs/myapp-{Date}.txt");
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
