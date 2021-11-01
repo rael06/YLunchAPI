@@ -14,7 +14,6 @@ namespace YLunch.Application.Services
 
         public UserService(
             IUserRepository userRepository
-
         )
         {
             _userRepository = userRepository;

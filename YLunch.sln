@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YLunch.Application", "src\Y
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YLunch.DomainShared", "src\YLunch.DomainShared\YLunch.DomainShared.csproj", "{06F17950-4AC0-4ADE-A9F3-1B9238DF7C96}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YLunch.Application.Tests", "YLunch.Application.Tests\YLunch.Application.Tests.csproj", "{0D390023-EEBE-4388-B4DD-3FA511041781}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -41,6 +43,10 @@ Global
 		{06F17950-4AC0-4ADE-A9F3-1B9238DF7C96}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{06F17950-4AC0-4ADE-A9F3-1B9238DF7C96}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{06F17950-4AC0-4ADE-A9F3-1B9238DF7C96}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0D390023-EEBE-4388-B4DD-3FA511041781}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0D390023-EEBE-4388-B4DD-3FA511041781}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0D390023-EEBE-4388-B4DD-3FA511041781}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0D390023-EEBE-4388-B4DD-3FA511041781}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{3D12B338-4F15-467E-94DA-A4FECBC525AB} = {EF98A3B9-F1B7-48D9-9D89-9EE7EE38135F}
