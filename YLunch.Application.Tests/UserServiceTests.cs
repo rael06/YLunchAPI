@@ -10,7 +10,7 @@ using YLunch.Infrastructure.Database.Repositories;
 
 namespace YLunch.Application.Tests
 {
-    public class UsersServiceTests
+    public class UserServiceTests
     {
         private readonly ApplicationDbContext context;
         private readonly UserRepository userRepository;
@@ -31,7 +31,7 @@ namespace YLunch.Application.Tests
         //     return mgr;
         // }
 
-        public UsersServiceTests()
+        public UserServiceTests()
         {
             context = ContextBuilder.BuildContext();
             InitContext();
