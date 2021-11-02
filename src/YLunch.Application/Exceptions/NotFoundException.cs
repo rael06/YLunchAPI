@@ -2,7 +2,8 @@ using System;
 
 namespace YLunch.Application.Exceptions
 {
-    public class NotFoundException : Exception
+    [Serializable]
+    public sealed class NotFoundException : Exception
     {
         public NotFoundException() : base("Entity not found exception")
         {

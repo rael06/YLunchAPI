@@ -53,15 +53,15 @@ namespace YLunch.Domain.ModelsAggregate.RestaurantAggregate
 
         private bool CanPublish =>
             IsPublic &&
-            Name != null && !Name.Equals("") &&
-            PhoneNumber != null && !PhoneNumber.Equals("") &&
-            Email != null && !Email.Equals("") &&
-            ZipCode != null && !ZipCode.Equals("") &&
-            Country != null && !Country.Equals("") &&
-            City != null && !City.Equals("") &&
-            StreetNumber != null && !StreetNumber.Equals("") &&
-            StreetName != null && !StreetName.Equals("") &&
-            OwnerId != null && !OwnerId.Equals("") &&
+            !string.IsNullOrEmpty(Name) &&
+            !string.IsNullOrEmpty(PhoneNumber) &&
+            !string.IsNullOrEmpty(Email) &&
+            !string.IsNullOrEmpty(ZipCode) &&
+            !string.IsNullOrEmpty(Country) &&
+            !string.IsNullOrEmpty(City) &&
+            !string.IsNullOrEmpty(StreetNumber) &&
+            !string.IsNullOrEmpty(StreetName) &&
+            !string.IsNullOrEmpty(OwnerId) &&
             WeekOpeningTimes.Count > 0 &&
             RestaurantProducts.Any(x => x.IsActive);
 

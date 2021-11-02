@@ -1,29 +1,23 @@
-using System;
 using System.Threading.Tasks;
 using YLunch.Application.Exceptions;
 using YLunch.Domain.DTO.UserModels;
 using YLunch.Domain.DTO.UserModels.Registration;
-using YLunch.Domain.ModelsAggregate.CustomerAggregate;
 using YLunch.Domain.ModelsAggregate.UserAggregate;
 using YLunch.Domain.ModelsAggregate.UserAggregate.Roles;
 using YLunch.Domain.Services.Database.Repositories;
 using YLunch.Domain.Services.Registration;
-using YLunch.DomainShared.RestaurantAggregate.Enums;
 
 namespace YLunch.Application.Services
 {
     public class RegistrationService : IRegistrationService
     {
         private readonly IUserRepository _userRepository;
-        private readonly IRestaurantRepository _restaurantRepository;
 
         public RegistrationService(
-            IUserRepository userRepository,
-            IRestaurantRepository restaurantRepository
+            IUserRepository userRepository
         )
         {
             _userRepository = userRepository;
-            _restaurantRepository = restaurantRepository;
         }
 
         private async Task<UserReadDto> Register(SuperAdminCreationDto userCreationDto)

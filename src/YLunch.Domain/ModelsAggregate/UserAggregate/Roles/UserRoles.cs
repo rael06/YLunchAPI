@@ -10,6 +10,6 @@ namespace YLunch.Domain.ModelsAggregate.UserAggregate.Roles
         public const string RestaurantAdmin = "RestaurantAdmin";
         public const string Employee = "Employee";
 
-        public static IEnumerable<string> List => typeof(UserRoles).GetFields().Select(x => x.Name).ToList();
+        public static IEnumerable<string> GetList() => typeof(UserRoles).GetFields().Select(x => x.Name).ToList();
     }
 }

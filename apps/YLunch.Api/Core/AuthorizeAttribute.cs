@@ -16,7 +16,7 @@ namespace YLunch.Api.Core
 
         public AuthorizeAttribute()
         {
-            Roles = string.Join(",", UserRoles.List);
+            Roles = string.Join(",", UserRoles.GetList());
         }
     }
 }
