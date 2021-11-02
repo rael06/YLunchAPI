@@ -57,10 +57,10 @@ namespace YLunch.Application.Services
             return orders.Select(x => new OrderReadDto(x)).ToList();
         }
 
-        public async Task<RestaurantReadDto> Create(RestaurantCreationDto restaurantCreationDto, CurrentUser user)
+        public async Task<RestaurantReadDto> Create(RestaurantCreationDto restaurantCreationDto, CurrentUser currentUser)
         {
             var allRestaurantCategories = await _restaurantRepository.GetAllRestaurantCategories();
-            var restaurant = Restaurant.Create(restaurantCreationDto, user, allRestaurantCategories);
+            var restaurant = Restaurant.Create(restaurantCreationDto, currentUser, allRestaurantCategories);
             await _restaurantRepository.Create(restaurant);
             return new RestaurantReadDto(restaurant);
         }
