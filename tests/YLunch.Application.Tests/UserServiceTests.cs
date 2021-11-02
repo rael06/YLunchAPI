@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Xunit;
 using YLunch.Application.Services;
+using YLunch.Domain.DTO.UserModels;
 using YLunch.Domain.ModelsAggregate.UserAggregate;
 using YLunch.Infrastructure.Database;
 using YLunch.Infrastructure.Database.Repositories;
@@ -60,11 +61,12 @@ namespace YLunch.Application.Tests
             var id = context.Users.First().Id;
 
             // Act
-            var result = (await userService.GetAsCustomerById(id)).Id;
+            var result = await userService.GetAsCustomerById(id);
 
             // Assert
-            var expected = context.Users.First().Id;
-            Assert.Equal(expected, result);
+            var user = context.Users.First();
+            var expected = new UserAsCustomerDetailsReadDto(user);
+            Assert.True(result.Equals(expected));
         }
     }
 }
