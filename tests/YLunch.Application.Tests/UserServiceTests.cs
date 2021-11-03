@@ -1,9 +1,10 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
+using FluentAssertions;
 using Xunit;
 using YLunch.Application.Services;
+using YLunch.Domain.DTO.UserModels;
 using YLunch.Domain.ModelsAggregate.UserAggregate;
 using YLunch.Infrastructure.Database;
 using YLunch.Infrastructure.Database.Repositories;
@@ -12,16 +13,15 @@ namespace YLunch.Application.Tests
 {
     public class UserServiceTests
     {
-        private readonly ApplicationDbContext context;
-        private readonly UserRepository userRepository;
-        private readonly UserService userService;
+        private readonly ApplicationDbContext _context;
+        private readonly UserService _userService;
 
         public UserServiceTests()
         {
-            context = ContextBuilder.BuildContext();
+            _context = ContextBuilder.BuildContext();
             InitContext();
-            userRepository = new UserRepository(null , null ,context);
-            userService = new UserService(userRepository);
+            var userRepository = new UserRepository(null , null ,_context);
+            _userService = new UserService(userRepository);
         }
 
         private void InitContext()
@@ -40,15 +40,15 @@ namespace YLunch.Application.Tests
                 IsAccountActivated = false
             };
 
-            context.Users.Add(user);
-            context.SaveChanges();
+            _context.Users.Add(user);
+            _context.SaveChanges();
         }
 
         [Fact]
         public async Task GetAllUsers_Should_Return_All_Users()
         {
-            var expected = context.Users.Count();
-            var result = (await userService.GetAllUsers()).Count;
+            var expected = _context.Users.Count();
+            var result = (await _userService.GetAllUsers()).Count;
 
             Assert.Equal(expected, result);
         }
@@ -57,14 +57,15 @@ namespace YLunch.Application.Tests
         public async Task GetAsCustomerById_Should_Return_A_Customer_Based_On_Input_Id()
         {
             // Arrange
-            var id = context.Users.First().Id;
+            var id = _context.Users.First().Id;
 
             // Act
-            var result = (await userService.GetAsCustomerById(id)).Id;
+            var actual = await _userService.GetAsCustomerById(id);
 
             // Assert
-            var expected = context.Users.First().Id;
-            Assert.Equal(expected, result);
+            var user = _context.Users.First();
+            var expected = new UserAsCustomerDetailsReadDto(user);
+            actual.Should().BeEquivalentTo(expected);
         }
     }
 }

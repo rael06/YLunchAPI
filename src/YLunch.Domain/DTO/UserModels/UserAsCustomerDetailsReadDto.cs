@@ -3,7 +3,7 @@ using YLunch.Domain.ModelsAggregate.UserAggregate;
 
 namespace YLunch.Domain.DTO.UserModels
 {
-    public class UserAsCustomerDetailsReadDto
+    public sealed class UserAsCustomerDetailsReadDto
     {
         public string Id { get; set; }
         public string Firstname { get; set; }
