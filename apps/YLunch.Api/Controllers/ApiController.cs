@@ -26,7 +26,7 @@ namespace YLunch.Api.Controllers
 
         [HttpGet("try")]
         [AllowAnonymous]
-        public string Try() => API_RUNNING_MESSAGE;
+        public string Try() => "Api is running test feature/sonar-cloud";
 
         [HttpGet("try-authenticated")]
         [Core.Authorize]
