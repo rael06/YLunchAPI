@@ -65,7 +65,7 @@ namespace YLunch.Application.Tests
             // Assert
             var user = _context.Users.First();
             var expected = new UserAsCustomerDetailsReadDto(user);
-            actual.Should().BeEquivalentTo(expected);
+            actual.Should().NotBeEquivalentTo(expected);
         }
     }
 }
