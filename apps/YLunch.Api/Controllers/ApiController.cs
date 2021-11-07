@@ -11,7 +11,7 @@ namespace YLunch.Api.Controllers
     [Route("api")]
     public class ApiController : CustomControllerBase
     {
-        private const string API_RUNNING_MESSAGE = "Api is running test sonar cloud";
+        private const string API_RUNNING_MESSAGE = "Api is running test feature/sonar-cloud";
 
         private static readonly string API_RUNNING_AS_AUTHENTICATED_MESSAGE =
             $"{API_RUNNING_MESSAGE}, and you're authenticated";
