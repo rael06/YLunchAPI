@@ -1,6 +1,6 @@
-name: CI
+name: Deploy
 
-# Run this workflow every time a commit is pushed to main or a pull request is opened against main
+# Run this workflow every time a commit is pushed to main
 on:
   push:
     branches:
@@ -47,6 +47,7 @@ jobs:
           dotnet build
           .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
   build:
+    needs: [sonar]
     name: Call Azure Pipeline
     runs-on: ubuntu-latest
     steps:
