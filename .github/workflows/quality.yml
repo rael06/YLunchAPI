@@ -15,7 +15,7 @@ jobs:
       uses: Azure/pipelines@v1
       with:
         azure-devops-project-url: https://dev.azure.com/ylunch/YnovYLunch
-        azure-pipeline-name: 'YnovYLunch-.NET Core with SonarCloud-CI'
+        azure-pipeline-name: 'Restore_Build_Test'
         azure-devops-token: ${{ secrets.AZURE_DEVOPS_TOKEN }}
         
   sonar:
