@@ -122,7 +122,7 @@ namespace YLunch.Api.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> RegisterCustomer([FromBody] CustomerCreationDto model)
         {
-            // todo valid username based on company's email template
+            // Todo valid username based on company's email template
             if (!model.IsValid())
                 return StatusCode(
                     StatusCodes.Status403Forbidden,
