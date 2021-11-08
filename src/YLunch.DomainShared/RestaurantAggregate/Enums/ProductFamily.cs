@@ -4,7 +4,7 @@ using System.Reflection;
 
 namespace YLunch.DomainShared.RestaurantAggregate.Enums
 {
-    // !!! IMPORTANT: Update Count of ProductFamiliesUtils when add value !!!
+    // IMPORTANT: Update Count of ProductFamiliesUtils when add value !!!
     public enum ProductFamily
     {
         Starter,

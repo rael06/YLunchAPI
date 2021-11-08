@@ -4,7 +4,8 @@ name: Quality
 on:
   push:
     branches:
-      - feature/**
+      - '**'
+      - '!master'
 
 jobs:
   build_and_test:
