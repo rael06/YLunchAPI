@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
@@ -26,31 +27,53 @@ namespace YLunch.Application.Tests
 
         private void InitContext()
         {
-            var user = new User
+            var users = new List<User>
             {
-                Id = "6899dc5a-3764-45d7-8d8f-91855f294f71",
-                UserName = "RAEL06@HOTMAIL.FR",
-                Firstname = "rael",
-                Lastname = "calitro",
-                Email = null,
-                PhoneNumber = null,
-                EmailConfirmed = false,
-                PhoneNumberConfirmed = false,
-                CreationDateTime = DateTime.Parse("2021-10-31T14:34:46.0431306"),
-                IsAccountActivated = false
+                new User
+                {
+                    Id = "111",
+                    UserName = "SUPERADMIN@YNOV.COM",
+                    Firstname = "superadmin-firstname",
+                    Lastname = "superadmin-lastname",
+                    Email = null,
+                    PhoneNumber = null,
+                    EmailConfirmed = false,
+                    PhoneNumberConfirmed = false,
+                    CreationDateTime = DateTime.Parse("2021-10-31T14:34:46.0431306"),
+                    IsAccountActivated = false
+                },
+                new User
+                {
+                    Id = "222",
+                    UserName = "CUSTOMER@YNOV.COM",
+                    Firstname = "customer_firstname",
+                    Lastname = "customer_lastname",
+                    Email = "customer@ynov.com",
+                    PhoneNumber = "0612345678",
+                    EmailConfirmed = false,
+                    PhoneNumberConfirmed = false,
+                    CreationDateTime = DateTime.Parse("2021-10-31T14:34:46.0431306"),
+                    IsAccountActivated = false
+                }
             };
 
-            _context.Users.Add(user);
+            _context.Users.AddRange(users);
             _context.SaveChanges();
         }
 
         [Fact]
         public async Task GetAllUsers_Should_Return_All_Users()
         {
-            var expected = _context.Users.Count();
-            var result = (await _userService.GetAllUsers()).Count;
+            // Arrange
 
-            Assert.Equal(expected, result);
+            // Act
+            var actual = await _userService.GetAllUsers();
+
+
+            // Assert
+            var expected = _context.Users.Select(u=>new UserReadDto(u));
+
+            actual.Should().BeEquivalentTo(expected);
         }
 
         [Fact]
