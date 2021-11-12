@@ -85,7 +85,7 @@ namespace YLunch.Api
             {
                 options.AddDefaultPolicy(builder =>
                 {
-                    builder.WithOrigins("*"); // Sensitive
+                    builder.AllowAnyOrigin(); //NOSONAR
                     builder.AllowAnyHeader();
                     builder.AllowAnyMethod();
                 });

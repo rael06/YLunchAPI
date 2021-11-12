@@ -28,10 +28,7 @@ namespace YLunch.Api.Controllers
 
         [HttpGet("try")]
         [AllowAnonymous]
-        public string Try() {
-            Console.WriteLine(Request.Headers["Origin"].FirstOrDefault());
-            return API_RUNNING_MESSAGE;
-        }
+        public string Try() => API_RUNNING_MESSAGE;
 
         [HttpGet("try-authenticated")]
         [Core.Authorize]
