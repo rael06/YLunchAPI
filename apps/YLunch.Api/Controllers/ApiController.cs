@@ -1,3 +1,5 @@
+using System;
+using System.Linq;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -26,7 +28,10 @@ namespace YLunch.Api.Controllers
 
         [HttpGet("try")]
         [AllowAnonymous]
-        public string Try() => API_RUNNING_MESSAGE;
+        public string Try() {
+            Console.WriteLine(Request.Headers["Origin"].FirstOrDefault());
+            return API_RUNNING_MESSAGE;
+        }
 
         [HttpGet("try-authenticated")]
         [Core.Authorize]
