@@ -2,6 +2,7 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using Xunit;
+using YLunch.Application.Exceptions;
 using YLunch.Application.Services.RegistrationServices;
 using YLunch.Domain.DTO.UserModels;
 using YLunch.Domain.DTO.UserModels.Registration;
@@ -128,6 +129,19 @@ namespace YLunch.Application.Tests
             var contextUser = await _context.Users.FirstOrDefaultAsync();
             var expected = new UserReadDto(contextUser);
             actual.Should().BeEquivalentTo(expected);
+        }
+
+        [Fact]
+        public async Task Register_Should_Throw_If_User_RegistrationStrategy_Not_Exists()
+        {
+            // Arrange
+            UserCreationDto user = null;
+
+            // Act
+            async Task Act() => await _registrationService.Register(user);
+
+            // Assert
+            Assert.ThrowsAsync<UserRegistrationException>(Act);
         }
     }
 }
