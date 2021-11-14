@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Xunit;
 using YLunch.Application.Exceptions;
 using YLunch.Application.Services;
+using YLunch.Application.Tests.Mocks;
 using YLunch.Domain.DTO.UserModels;
 using YLunch.Domain.ModelsAggregate.UserAggregate;
 using YLunch.Domain.Services.UserServices;
@@ -17,53 +18,18 @@ namespace YLunch.Application.Tests
 {
     public class UserServiceTests
     {
+        private const string NOT_EXISTING_USERNAME = "not-existing@ynov.com";
         private readonly ApplicationDbContext _context;
         private readonly IUserService _userService;
-        private const string FIRST_USER_ID = "111";
-        private const string NOT_EXISTING_ID = "abc";
 
         public UserServiceTests()
         {
             _context = ContextBuilder.BuildContext();
-            InitContext();
+            _context.Users.AddRange(UsersMock.USERS);
+            _context.SaveChanges();
+
             var userRepository = new UserRepository(null, null, _context);
             _userService = new UserService(userRepository);
-        }
-
-        private void InitContext()
-        {
-            var users = new List<User>
-            {
-                new()
-                {
-                    Id = FIRST_USER_ID,
-                    UserName = "SUPERADMIN@YNOV.COM",
-                    Firstname = "superadmin-firstname",
-                    Lastname = "superadmin-lastname",
-                    Email = null,
-                    PhoneNumber = null,
-                    EmailConfirmed = false,
-                    PhoneNumberConfirmed = false,
-                    CreationDateTime = DateTime.Parse("2021-10-31T14:34:46.0431306"),
-                    IsAccountActivated = false
-                },
-                new()
-                {
-                    Id = "222",
-                    UserName = "CUSTOMER@YNOV.COM",
-                    Firstname = "customer_firstname",
-                    Lastname = "customer_lastname",
-                    Email = "customer@ynov.com",
-                    PhoneNumber = "0612345678",
-                    EmailConfirmed = false,
-                    PhoneNumberConfirmed = false,
-                    CreationDateTime = DateTime.Parse("2021-10-31T14:34:46.0431306"),
-                    IsAccountActivated = false
-                }
-            };
-
-            _context.Users.AddRange(users);
-            _context.SaveChanges();
         }
 
         [Fact]
@@ -82,43 +48,44 @@ namespace YLunch.Application.Tests
         public async Task GetAsCustomerById_Should_Return_A_Customer_Based_On_Input_Id()
         {
             // Arrange
-            const string id = FIRST_USER_ID;
+            var id = UsersMock.CUSTOMER.Id;
 
             // Act
             var actual = await _userService.GetAsCustomerById(id);
 
             // Assert
-            var user = _context.Users.First();
+            var user = await _context.Users.FindAsync(id);
             var expected = new UserAsCustomerDetailsReadDto(user);
             actual.Should().BeEquivalentTo(expected);
         }
 
 
         [Fact]
-        public async Task DeleteUserById_Should_Delete_A_User_Given_His_Id()
+        public async Task DeleteUserByUsername_Should_Delete_A_User_Given_His_Username()
         {
             // Arrange
-            const string id = FIRST_USER_ID;
+            var username = UsersMock.SUPER_ADMIN.UserName;
 
             // Act
-            await _userService.DeleteUserById(id);
+            await _userService.DeleteUserByUsername(username);
 
             // Assert
-            var user = await _context.Users.FindAsync(id);
+            var user = await _context.Users.FindAsync(username);
             Assert.Null(user);
         }
 
         [Fact]
-        public async Task DeleteUserById_Should_Throw_If_User_Not_Exists()
+        public async Task DeleteUserByUsername_Should_Throw_If_User_Given_His_Username_Not_Exists()
         {
             // Arrange
-            const string id = NOT_EXISTING_ID;
+            const string username = NOT_EXISTING_USERNAME;
 
             // Act
-            async Task Act() => await _userService.DeleteUserById(id);
+            async Task Act() => await _userService.DeleteUserByUsername(username);
 
             // Assert
-            await Assert.ThrowsAsync<NotFoundException>(Act);
+            var notFoundException = await Assert.ThrowsAsync<NotFoundException>(Act);
+            Assert.Equal(notFoundException.Message, $"Entity not found exception: User with username: '{NOT_EXISTING_USERNAME}' not found");
         }
     }
 }

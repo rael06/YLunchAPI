@@ -9,6 +9,6 @@ namespace YLunch.Domain.Services.UserServices
     {
         Task<ICollection<UserReadDto>> GetAllUsers();
         Task<UserAsCustomerDetailsReadDto> GetAsCustomerById(string id);
-        Task DeleteUserById(string id);
+        Task DeleteUserByUsername(string username);
     }
 }
