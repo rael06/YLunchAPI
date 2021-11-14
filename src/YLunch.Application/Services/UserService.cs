@@ -30,5 +30,10 @@ namespace YLunch.Application.Services
             User user = await _userRepository.GetAsCustomerById(id);
             return new UserAsCustomerDetailsReadDto(user);
         }
+
+        public async Task DeleteUserById(string id)
+        {
+            await _userRepository.DeleteById(id);
+        }
     }
 }

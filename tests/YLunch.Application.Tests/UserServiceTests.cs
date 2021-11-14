@@ -7,6 +7,7 @@ using Xunit;
 using YLunch.Application.Services;
 using YLunch.Domain.DTO.UserModels;
 using YLunch.Domain.ModelsAggregate.UserAggregate;
+using YLunch.Domain.Services.UserServices;
 using YLunch.Infrastructure.Database;
 using YLunch.Infrastructure.Database.Repositories;
 
@@ -15,13 +16,13 @@ namespace YLunch.Application.Tests
     public class UserServiceTests
     {
         private readonly ApplicationDbContext _context;
-        private readonly UserService _userService;
+        private readonly IUserService _userService;
 
         public UserServiceTests()
         {
             _context = ContextBuilder.BuildContext();
             InitContext();
-            var userRepository = new UserRepository(null , null ,_context);
+            var userRepository = new UserRepository(null, null, _context);
             _userService = new UserService(userRepository);
         }
 
@@ -29,7 +30,7 @@ namespace YLunch.Application.Tests
         {
             var users = new List<User>
             {
-                new User
+                new()
                 {
                     Id = "111",
                     UserName = "SUPERADMIN@YNOV.COM",
@@ -42,7 +43,7 @@ namespace YLunch.Application.Tests
                     CreationDateTime = DateTime.Parse("2021-10-31T14:34:46.0431306"),
                     IsAccountActivated = false
                 },
-                new User
+                new()
                 {
                     Id = "222",
                     UserName = "CUSTOMER@YNOV.COM",
@@ -71,7 +72,7 @@ namespace YLunch.Application.Tests
 
 
             // Assert
-            var expected = _context.Users.Select(u=>new UserReadDto(u));
+            var expected = _context.Users.Select(u => new UserReadDto(u));
 
             actual.Should().BeEquivalentTo(expected);
         }
@@ -89,6 +90,20 @@ namespace YLunch.Application.Tests
             var user = _context.Users.First();
             var expected = new UserAsCustomerDetailsReadDto(user);
             actual.Should().BeEquivalentTo(expected);
+        }
+
+        [Fact]
+        public async Task DeleteUserById_Should_Delete_A_User_Given_His_Id()
+        {
+            // Arrange
+            var id = _context.Users.First().Id;
+
+            // Act
+            await _userService.DeleteUserById(id);
+
+            // Assert
+            var user = await _context.Users.FindAsync(id);
+            Assert.Null(user);
         }
     }
 }
