@@ -9,7 +9,7 @@ namespace YLunch.Application.Services.RegistrationServices
 {
     public class EmployeeRegistrationStrategy : AbstractRegistrationStrategy
     {
-        public EmployeeRegistrationStrategy(IUserRepository userRepository) : base(userRepository)
+        internal EmployeeRegistrationStrategy(IUserRepository userRepository) : base(userRepository)
         {
         }
 
