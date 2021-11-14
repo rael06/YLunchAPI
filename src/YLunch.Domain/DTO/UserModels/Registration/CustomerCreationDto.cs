@@ -10,7 +10,7 @@ namespace YLunch.Domain.DTO.UserModels.Registration
 
         public override bool IsValid()
         {
-            Match m = Regex.Match(UserName, "^.+@ynov.com$", RegexOptions.IgnoreCase);
+            var m = Regex.Match(UserName, @"^.+@ynov\.com$", RegexOptions.IgnoreCase);
             return m.Success;
         }
     }
