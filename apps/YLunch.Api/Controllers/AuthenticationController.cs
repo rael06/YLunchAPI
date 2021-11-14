@@ -14,10 +14,10 @@ using Microsoft.IdentityModel.Tokens;
 using YLunch.Api.Core.Response;
 using YLunch.Api.Core.Response.Errors;
 using YLunch.Application.Exceptions;
-using YLunch.Domain.DTO.UserModels;
 using YLunch.Domain.DTO.UserModels.Registration;
 using YLunch.Domain.ModelsAggregate.UserAggregate;
 using YLunch.Domain.ModelsAggregate.UserAggregate.Roles;
+using YLunch.Domain.DTO.UserModels;
 using YLunch.Domain.Services.Database.Repositories;
 using YLunch.Domain.Services.Registration;
 
@@ -155,11 +155,11 @@ namespace YLunch.Api.Controllers
             if (userExists != null) throw new UserAlreadyExistsException();
         }
 
-        private async Task<IActionResult> RegisterUser<T>(T model) where T : UserCreationDto
+        private async Task<IActionResult> RegisterUser(UserCreationDto userCreationDto)
         {
             try
             {
-                await CheckUserNonexistence(model.UserName);
+                await CheckUserNonexistence(userCreationDto.UserName);
             }
             catch (Exception e)
             {
@@ -169,7 +169,16 @@ namespace YLunch.Api.Controllers
 
             try
             {
-                var userDto = await _registrationService.Register(model);
+                var userDto =
+                    userCreationDto switch
+                    {
+                        SuperAdminCreationDto dto => await _registrationService.Register(dto),
+                        CustomerCreationDto dto => await _registrationService.Register(dto),
+                        RestaurantOwnerCreationDto dto => await _registrationService.Register(dto),
+                        RestaurantAdminCreationDto dto => await _registrationService.Register(dto),
+                        EmployeeCreationDto dto => await _registrationService.Register(dto),
+                        _ => throw new UserRegistrationException()
+                    };
 
                 return StatusCode(
                     StatusCodes.Status201Created,

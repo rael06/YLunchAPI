@@ -1,16 +1,10 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Moq;
 using Xunit;
-using YLunch.Application.Services;
+using YLunch.Application.Services.RegistrationServices;
 using YLunch.Domain.DTO.UserModels;
 using YLunch.Domain.DTO.UserModels.Registration;
-using YLunch.Domain.ModelsAggregate.UserAggregate;
 using YLunch.Infrastructure.Database;
 using YLunch.Infrastructure.Database.Repositories;
 
