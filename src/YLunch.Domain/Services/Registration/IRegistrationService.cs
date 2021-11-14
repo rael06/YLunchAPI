@@ -6,6 +6,6 @@ namespace YLunch.Domain.Services.Registration
 {
     public interface IRegistrationService
     {
-        Task<UserReadDto> Register(UserCreationDto userCreationDto);
+        Task<UserReadDto> Register<T>(T userCreationDto) where T : UserCreationDto;
     }
 }

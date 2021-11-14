@@ -3,7 +3,7 @@ using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using Xunit;
 using YLunch.Application.Exceptions;
-using YLunch.Application.Services.RegistrationServices;
+using YLunch.Application.Services;
 using YLunch.Domain.DTO.UserModels;
 using YLunch.Domain.DTO.UserModels.Registration;
 using YLunch.Infrastructure.Database;
@@ -134,14 +134,11 @@ namespace YLunch.Application.Tests
         [Fact]
         public async Task Register_Should_Throw_If_User_RegistrationStrategy_Not_Exists()
         {
-            // Arrange
-            UserCreationDto user = null;
-
             // Act
-            async Task Act() => await _registrationService.Register(user);
+            async Task Act() => await _registrationService.Register((UserCreationDto) null);
 
             // Assert
-            Assert.ThrowsAsync<UserRegistrationException>(Act);
+            await Assert.ThrowsAsync<UserRegistrationException>(Act);
         }
     }
 }

@@ -10,7 +10,6 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using YLunch.Application.Services;
-using YLunch.Application.Services.RegistrationServices;
 using YLunch.Domain.ModelsAggregate.UserAggregate;
 using YLunch.Domain.Services.Database.Repositories;
 using YLunch.Domain.Services.OrderServices;
