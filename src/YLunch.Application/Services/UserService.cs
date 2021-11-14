@@ -33,7 +33,8 @@ namespace YLunch.Application.Services
 
         public async Task DeleteUserById(string id)
         {
-            await _userRepository.DeleteById(id);
+            var user = await _userRepository.GetById(id);
+            await _userRepository.Delete(user);
         }
     }
 }

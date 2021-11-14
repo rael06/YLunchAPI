@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
+using Microsoft.EntityFrameworkCore;
 using Xunit;
+using YLunch.Application.Exceptions;
 using YLunch.Application.Services;
 using YLunch.Domain.DTO.UserModels;
 using YLunch.Domain.ModelsAggregate.UserAggregate;
@@ -17,6 +19,8 @@ namespace YLunch.Application.Tests
     {
         private readonly ApplicationDbContext _context;
         private readonly IUserService _userService;
+        private const string FIRST_USER_ID = "111";
+        private const string NOT_EXISTING_ID = "abc";
 
         public UserServiceTests()
         {
@@ -32,7 +36,7 @@ namespace YLunch.Application.Tests
             {
                 new()
                 {
-                    Id = "111",
+                    Id = FIRST_USER_ID,
                     UserName = "SUPERADMIN@YNOV.COM",
                     Firstname = "superadmin-firstname",
                     Lastname = "superadmin-lastname",
@@ -65,14 +69,11 @@ namespace YLunch.Application.Tests
         [Fact]
         public async Task GetAllUsers_Should_Return_All_Users()
         {
-            // Arrange
-
             // Act
             var actual = await _userService.GetAllUsers();
 
-
             // Assert
-            var expected = _context.Users.Select(u => new UserReadDto(u));
+            var expected = await _context.Users.Select(u => new UserReadDto(u)).ToListAsync();
 
             actual.Should().BeEquivalentTo(expected);
         }
@@ -81,7 +82,7 @@ namespace YLunch.Application.Tests
         public async Task GetAsCustomerById_Should_Return_A_Customer_Based_On_Input_Id()
         {
             // Arrange
-            var id = _context.Users.First().Id;
+            const string id = FIRST_USER_ID;
 
             // Act
             var actual = await _userService.GetAsCustomerById(id);
@@ -92,11 +93,12 @@ namespace YLunch.Application.Tests
             actual.Should().BeEquivalentTo(expected);
         }
 
+
         [Fact]
         public async Task DeleteUserById_Should_Delete_A_User_Given_His_Id()
         {
             // Arrange
-            var id = _context.Users.First().Id;
+            const string id = FIRST_USER_ID;
 
             // Act
             await _userService.DeleteUserById(id);
@@ -104,6 +106,19 @@ namespace YLunch.Application.Tests
             // Assert
             var user = await _context.Users.FindAsync(id);
             Assert.Null(user);
+        }
+
+        [Fact]
+        public async Task DeleteUserById_Should_Throw_If_User_Not_Exists()
+        {
+            // Arrange
+            const string id = NOT_EXISTING_ID;
+
+            // Act
+            async Task Act() => await _userService.DeleteUserById(id);
+
+            // Assert
+            await Assert.ThrowsAsync<NotFoundException>(Act);
         }
     }
 }

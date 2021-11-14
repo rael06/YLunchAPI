@@ -141,7 +141,7 @@ namespace YLunch.Application.Tests
             async Task Act() => await _registrationService.Register(user);
 
             // Assert
-            Assert.ThrowsAsync<UserRegistrationException>(Act);
+            await Assert.ThrowsAsync<UserRegistrationException>(Act);
         }
     }
 }

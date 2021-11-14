@@ -37,6 +37,13 @@ namespace YLunch.Api.Controllers
             return Ok(await _userService.GetAllUsers());
         }
 
+        [HttpDelete("delete-user")]
+        public async Task<IActionResult> DeleteUserById([FromQuery] string id)
+        {
+            await _userService.DeleteUserById(id);
+            return NoContent();
+        }
+
         [HttpGet("get-all-restaurants")]
         public async Task<IActionResult> GetAllRestaurants()
         {

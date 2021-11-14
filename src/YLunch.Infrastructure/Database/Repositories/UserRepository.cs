@@ -77,9 +77,8 @@ namespace YLunch.Infrastructure.Database.Repositories
             return user;
         }
 
-        public async Task DeleteById(string id)
+        public async Task Delete(User user)
         {
-            var user = await _context.Users.FindAsync(id);
             _context.Users.Remove(user);
             await _context.SaveChangesAsync();
         }
