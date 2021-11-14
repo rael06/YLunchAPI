@@ -10,13 +10,11 @@ namespace YLunch.Application.Services.RegistrationServices
 {
     public class RegistrationService : IRegistrationService
     {
-        private readonly IUserRepository _userRepository;
         private readonly RegistrationStrategyFactory _registrationStrategyFactory;
 
         public RegistrationService(IUserRepository userRepository)
         {
-            _userRepository = userRepository;
-            _registrationStrategyFactory = new RegistrationStrategyFactory(_userRepository);
+            _registrationStrategyFactory = new RegistrationStrategyFactory(userRepository);
         }
 
         public Task<UserReadDto> Register(UserCreationDto userCreationDto)

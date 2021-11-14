@@ -22,7 +22,9 @@ namespace YLunch.Application.Services.RegistrationServices
                 CustomerCreationDto => new CustomerRegistrationStrategy(_userRepository),
                 RestaurantOwnerCreationDto => new RestaurantOwnerRegistrationStrategy(_userRepository),
                 RestaurantAdminCreationDto => new RestaurantAdminRegistrationStrategy(_userRepository),
-                EmployeeCreationDto => new EmployeeRegistrationStrategy(_userRepository)
+                EmployeeCreationDto => new EmployeeRegistrationStrategy(_userRepository),
+                // Todo implement exception strategy
+                _ => throw new UserRegistrationException()
             };
         }
     }
