@@ -5,40 +5,25 @@ using YLunch.Domain.Services.Database.Repositories;
 
 namespace YLunch.Application.Services.RegistrationServices
 {
-    public class RegistrationStrategyFactory:IRegistrationStrategyFactory
+    public class RegistrationStrategyFactory : IRegistrationStrategyFactory
     {
-        private static readonly RegistrationStrategyFactory _instance;
-        public static readonly RegistrationStrategyFactory Instance = _instance ??= new RegistrationStrategyFactory();
+        private readonly IUserRepository _userRepository;
 
-        private RegistrationStrategyFactory()
+        public RegistrationStrategyFactory(IUserRepository userRepository)
         {
+            _userRepository = userRepository;
         }
 
-        public SuperAdminRegistrationStrategy Create(IUserRepository userRepository, SuperAdminCreationDto superAdminCreationDto)
+        public AbstractRegistrationStrategy Create(UserCreationDto userCreationDto)
         {
-            return new (userRepository);
-        }
-
-        public CustomerRegistrationStrategy Create(IUserRepository userRepository, CustomerCreationDto customerCreationDto)
-        {
-            return new (userRepository);
-        }
-
-        public RestaurantOwnerRegistrationStrategy Create(IUserRepository userRepository,
-            RestaurantOwnerCreationDto restaurantOwnerCreationDto)
-        {
-            return new (userRepository);
-        }
-
-        public RestaurantAdminRegistrationStrategy Create(IUserRepository userRepository,
-            RestaurantAdminCreationDto restaurantAdminCreationDto)
-        {
-            return new (userRepository);
-        }
-
-        public EmployeeRegistrationStrategy Create(IUserRepository userRepository, EmployeeCreationDto employeeCreationDto)
-        {
-            return new (userRepository);
+            return userCreationDto switch
+            {
+                SuperAdminCreationDto => new SuperAdminRegistrationStrategy(_userRepository),
+                CustomerCreationDto => new CustomerRegistrationStrategy(_userRepository),
+                RestaurantOwnerCreationDto => new RestaurantOwnerRegistrationStrategy(_userRepository),
+                RestaurantAdminCreationDto => new RestaurantAdminRegistrationStrategy(_userRepository),
+                EmployeeCreationDto => new EmployeeRegistrationStrategy(_userRepository)
+            };
         }
     }
 }

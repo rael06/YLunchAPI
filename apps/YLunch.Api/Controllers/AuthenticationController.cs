@@ -169,16 +169,7 @@ namespace YLunch.Api.Controllers
 
             try
             {
-                var userDto =
-                    userCreationDto switch
-                    {
-                        SuperAdminCreationDto dto => await _registrationService.Register(dto),
-                        CustomerCreationDto dto => await _registrationService.Register(dto),
-                        RestaurantOwnerCreationDto dto => await _registrationService.Register(dto),
-                        RestaurantAdminCreationDto dto => await _registrationService.Register(dto),
-                        EmployeeCreationDto dto => await _registrationService.Register(dto),
-                        _ => throw new UserRegistrationException()
-                    };
+                var userDto = await _registrationService.Register(userCreationDto);
 
                 return StatusCode(
                     StatusCodes.Status201Created,
