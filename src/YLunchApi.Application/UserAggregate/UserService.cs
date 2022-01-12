@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Identity;
-using YLunchApi.Domain.Core.Exceptions;
+using YLunchApi.Domain.Exceptions;
 using YLunchApi.Domain.UserAggregate;
 using YLunchApi.Domain.UserAggregate.Dto;
 
@@ -14,33 +14,26 @@ public class UserService : IUserService
         _userRepository = userRepository;
     }
 
-    public async Task<RestaurantOwnerReadDto> Create(RestaurantOwnerCreateDto restaurantOwnerCreateDto)
+    public async Task<UserReadDto?> Create(UserCreateDto userCreateDto, string role)
     {
-        var user = new User
-        {
-            Id = Guid.NewGuid().ToString(),
-            UserName = restaurantOwnerCreateDto.Email,
-            Email = restaurantOwnerCreateDto.Email,
-            PhoneNumber = restaurantOwnerCreateDto.PhoneNumber,
-            Firstname = restaurantOwnerCreateDto.Firstname,
-            Lastname = restaurantOwnerCreateDto.Lastname
-        };
-
-        await _userRepository.Create(user, restaurantOwnerCreateDto.Password);
+        var user = new User(userCreateDto);
 
         var userDb = await _userRepository.GetByEmail(user.Email);
+        if (userDb != null)
+        {
+            throw new EntityAlreadyExistsException();
+        }
+
+        await _userRepository.Create(user, userCreateDto.Password, role);
+
+        userDb = await _userRepository.GetByEmail(user.Email);
         if (userDb == null)
         {
             throw new EntityNotFoundException();
         }
 
-        return new RestaurantOwnerReadDto
-        {
-            Id = userDb.Id,
-            Email = userDb.Email,
-            PhoneNumber = userDb.PhoneNumber,
-            Firstname = userDb.Firstname,
-            Lastname = userDb.Lastname
-        };
+        var roles = await _userRepository.GetUserRoles(userDb.Id);
+
+        return new UserReadDto(userDb, roles);
     }
 }

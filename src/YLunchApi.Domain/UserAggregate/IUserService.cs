@@ -4,5 +4,5 @@ namespace YLunchApi.Domain.UserAggregate;
 
 public interface IUserService
 {
-    Task<RestaurantOwnerReadDto> Create(RestaurantOwnerCreateDto restaurantOwnerCreateDto);
+    Task<UserReadDto?> Create(UserCreateDto userCreateDto, string role);
 }

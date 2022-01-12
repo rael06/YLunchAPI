@@ -1,6 +1,6 @@
 using System.Runtime.Serialization;
 
-namespace YLunchApi.Domain.Core.Exceptions;
+namespace YLunchApi.Domain.Exceptions;
 
 [Serializable]
 public sealed class EntityNotFoundException : Exception

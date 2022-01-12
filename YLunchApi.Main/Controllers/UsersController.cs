@@ -1,12 +1,12 @@
-using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc;
+using YLunchApi.Domain.Exceptions;
 using YLunchApi.Domain.UserAggregate;
 using YLunchApi.Domain.UserAggregate.Dto;
 
 namespace YLunchApi.Main.Controllers;
 
 [ApiController]
-[Route("[Controller]")]
+[Route("")]
 public class UsersController : ControllerBase
 {
     private readonly IUserService _userService;
@@ -15,17 +15,35 @@ public class UsersController : ControllerBase
     {
         _userService = userService;
     }
-
-    [HttpPost]
-    public async Task<ActionResult<RestaurantOwnerReadDto>> Create(
-        [FromBody] RestaurantOwnerCreateDto restaurantOwnerCreateDto,
-        [FromQuery] [Required] string userType
-    )
+    
+    [HttpPost("restaurant-admins")]
+    public async Task<ActionResult<UserReadDto>> Register([FromBody] RestaurantAdminCreateDto restaurantAdminCreateDto)
     {
-        var restaurantOwnerReadDto = await _userService.Create(restaurantOwnerCreateDto);
-        return StatusCode(
-            StatusCodes.Status201Created,
-            restaurantOwnerReadDto
-        );
+        return await Create(restaurantAdminCreateDto, Roles.RestaurantAdmin);
+    }
+
+    [HttpPost("customers")]
+    public async Task<ActionResult<UserReadDto>> Register([FromBody] CustomerCreateDto customerCreateDto)
+    {
+        return await Create(customerCreateDto, Roles.Customer);
+    }
+
+    private async Task<ActionResult<UserReadDto>> Create(UserCreateDto userCreateDto, string role)
+    {
+        try
+        {
+            var userReadDto = await _userService.Create(userCreateDto, role);
+            return StatusCode(
+                StatusCodes.Status201Created,
+                userReadDto
+            );
+        }
+        catch (EntityAlreadyExistsException)
+        {
+            return StatusCode(
+                StatusCodes.Status409Conflict,
+                "User already exists"
+            );
+        }
     }
 }
