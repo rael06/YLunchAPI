@@ -17,11 +17,6 @@
       "applicationUrl": "https://localhost:7110;http://localhost:5254",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
-        "ASPNETCORE_DbName": "YLunch",
-        "ASPNETCORE_DbUser": "sa",
-        "ASPNETCORE_DbPassword": "YLunch.Data.2021",
-        "ASPNETCORE_JwtSecret": "YLunch.JsonWebToken.2021",
-        "ASPNETCORE_InitAdminPass": "Y2L0u2n1c.h"
       }
     },
     "IIS Express": {
