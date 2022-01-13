@@ -5,7 +5,7 @@ namespace YLunchApi.Domain.Exceptions;
 [Serializable]
 public sealed class UserRegistrationException : Exception
 {
-    public UserRegistrationException()
+    public UserRegistrationException(string message = "") : base(message)
     {
     }
 

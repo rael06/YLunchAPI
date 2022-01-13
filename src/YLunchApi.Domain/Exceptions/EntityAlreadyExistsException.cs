@@ -5,7 +5,7 @@ namespace YLunchApi.Domain.Exceptions;
 [Serializable]
 public sealed class EntityAlreadyExistsException : Exception
 {
-    public EntityAlreadyExistsException()
+    public EntityAlreadyExistsException(string message = "") : base(message)
     {
     }
 

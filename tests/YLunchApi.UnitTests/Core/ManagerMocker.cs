@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Moq;
+using YLunchApi.Domain.Exceptions;
 using YLunchApi.Domain.UserAggregate;
 using YLunchApi.Infrastructure.Database;
 
@@ -65,6 +66,10 @@ public static class ManagerMocker
             .Callback<User, string>(async (x, role) =>
             {
                 var identityRole = await context.Roles.FirstOrDefaultAsync(r => r.Name.Equals(role));
+                if (identityRole == null)
+                {
+                    throw new EntityNotFoundException("Role not found");
+                }
                 await context.UserRoles.AddAsync(new IdentityUserRole<string>
                     { UserId = x.Id, RoleId = identityRole.Id });
                 await context.SaveChangesAsync();

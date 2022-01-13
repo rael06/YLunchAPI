@@ -5,7 +5,7 @@ namespace YLunchApi.Domain.Exceptions;
 [Serializable]
 public sealed class EntityNotFoundException : Exception
 {
-    public EntityNotFoundException()
+    public EntityNotFoundException(string message = "") : base(message)
     {
     }
 
