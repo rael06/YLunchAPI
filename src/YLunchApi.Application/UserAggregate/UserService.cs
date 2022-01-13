@@ -18,7 +18,7 @@ public class UserService : IUserService
     {
         var user = new User(userCreateDto);
 
-        var userDb = await _userRepository.GetByEmail(user.Email);
+        var userDb = await _userRepository.GetByEmail(userCreateDto.Email);
         if (userDb != null)
         {
             throw new EntityAlreadyExistsException();
@@ -32,7 +32,7 @@ public class UserService : IUserService
             throw new EntityNotFoundException();
         }
 
-        var roles = await _userRepository.GetUserRoles(userDb.Id);
+        var roles = await _userRepository.GetUserRoles(userDb);
 
         return new UserReadDto(userDb, roles);
     }

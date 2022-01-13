@@ -11,8 +11,11 @@ public class UserRepository : IUserRepository
     private readonly UserManager<User> _userManager;
     private readonly RoleManager<IdentityRole> _roleManager;
 
-    public UserRepository(UserManager<User> userManager, ApplicationDbContext context,
-        RoleManager<IdentityRole> roleManager)
+    public UserRepository(
+        ApplicationDbContext context,
+        UserManager<User> userManager,
+        RoleManager<IdentityRole> roleManager
+    )
     {
         _userManager = userManager;
         _context = context;
@@ -45,14 +48,9 @@ public class UserRepository : IUserRepository
         return await _context.Users.FirstOrDefaultAsync(x => x.Email.Equals(email));
     }
 
-    public async Task<List<IdentityRole>> GetUserRoles(string userId)
+    public async Task<List<string>> GetUserRoles(User user)
     {
-        var rolesId = await _context.UserRoles
-            .Where(x => x.UserId.Equals(userId))
-            .ToListAsync();
-
-        return await _roleManager.Roles
-            .Where(x=>rolesId.Any(y=>x.Id.Equals(y.RoleId)))
-            .ToListAsync();
+        var iListRoles = await _userManager.GetRolesAsync(user);
+        return iListRoles.ToList();
     }
 }
