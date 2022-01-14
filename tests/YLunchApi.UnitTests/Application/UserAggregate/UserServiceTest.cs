@@ -1,11 +1,15 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using FluentAssertions;
+using Microsoft.AspNetCore.Identity;
+using Moq;
 using Xunit;
 using YLunchApi.Application.UserAggregate;
+using YLunchApi.Domain.Core.Utils;
 using YLunchApi.Domain.Exceptions;
 using YLunchApi.Domain.UserAggregate;
 using YLunchApi.Domain.UserAggregate.Dto;
+using YLunchApi.Infrastructure.Database;
 using YLunchApi.Infrastructure.Database.Repositories;
 using YLunchApi.UnitTests.Core;
 
@@ -13,38 +17,34 @@ namespace YLunchApi.UnitTests.Application.UserAggregate;
 
 public class UserServiceTest
 {
-    private readonly IUserService _userService;
-    private readonly IUserRepository _userRepository;
+    private readonly ApplicationDbContext _context;
+    private readonly Mock<RoleManager<IdentityRole>> _roleManagerMock;
+    private readonly Mock<UserManager<User>> _userManagerMock;
+    private IUserService _userService;
 
     public UserServiceTest()
     {
-        var context = ContextBuilder.BuildContext();
-        var userManagerMock = ManagerMocker.GetUserManagerMock(context);
-        var roleManagerMock = ManagerMocker.GetRoleManagerMock(context);
-        _userRepository = new UserRepository(context, userManagerMock.Object, roleManagerMock.Object);
-        _userService = new UserService(_userRepository);
+        _context = ContextBuilder.BuildContext();
+
+        _roleManagerMock = ManagerMocker.GetRoleManagerMock(_context);
+        _userManagerMock = ManagerMocker.GetUserManagerMock(_context);
+
+        var userRepository = new UserRepository(_context, _userManagerMock.Object, _roleManagerMock.Object);
+        _userService = new UserService(userRepository);
     }
 
     [Fact]
     public async Task Should_Create_RestaurantAdmin()
     {
         // Arrange
-        var userCreateDto = new RestaurantAdminCreateDto
-        {
-            Email = "admin@restaurant.com",
-            Firstname = "Jean",
-            Lastname = "Dupont",
-            PhoneNumber = "0612345678",
-            Password = "Password1234."
-        };
+        var userCreateDto = UserMocks.RestaurantAdminCreateDto;
 
         // Act
         var actual = await _userService.Create(userCreateDto, Roles.RestaurantAdmin);
-        var userDb = await _userRepository.GetByEmail(userCreateDto.Email);
-        userDb.Should().NotBeNull();
-        var expected = new UserReadDto(userDb!, new List<string> { Roles.RestaurantAdmin });
 
         // Assert
+        actual.Should().NotBeNull();
+        var expected = UserMocks.RestaurantAdminUserReadDto(actual!.Id);
         actual.Should().BeEquivalentTo(expected);
     }
 
@@ -52,37 +52,22 @@ public class UserServiceTest
     public async Task Should_Create_Customer()
     {
         // Arrange
-        var userCreateDto = new CustomerCreateDto
-        {
-            Email = "customer@ynov.com",
-            Firstname = "Jean",
-            Lastname = "Dupont",
-            PhoneNumber = "0612345678",
-            Password = "Password1234."
-        };
+        var userCreateDto = UserMocks.CustomerCreateDto;
 
         // Act
         var actual = await _userService.Create(userCreateDto, Roles.Customer);
-        var userDb = await _userRepository.GetByEmail(userCreateDto.Email);
-        userDb.Should().NotBeNull();
-        var expected = new UserReadDto(userDb!, new List<string> { Roles.Customer });
 
         // Assert
+        actual.Should().NotBeNull();
+        var expected = UserMocks.CustomerUserReadDto(actual!.Id);
         actual.Should().BeEquivalentTo(expected);
     }
 
     [Fact]
-    public async Task Should_Throw_Entity_Already_Exists_Exception()
+    public async Task Create_Should_Throw_EntityAlreadyExistsException()
     {
         // Arrange
-        var userCreateDto = new CustomerCreateDto
-        {
-            Email = "customer@ynov.com",
-            Firstname = "Jean",
-            Lastname = "Dupont",
-            PhoneNumber = "0612345678",
-            Password = "Password1234."
-        };
+        var userCreateDto = UserMocks.CustomerCreateDto;
         await _userService.Create(userCreateDto, Roles.Customer);
 
         // Act
@@ -90,5 +75,57 @@ public class UserServiceTest
 
         // Assert
         await Assert.ThrowsAsync<EntityAlreadyExistsException>(Act);
+    }
+
+    [Fact]
+    public async Task Create_Should_Throw_EntityNotFoundException()
+    {
+        // Arrange
+        var userRepositoryMock = new Mock<IUserRepository>();
+        userRepositoryMock.Setup(x => x.GetByEmail(It.IsAny<string>()))
+            .ReturnsAsync(() => null);
+        _userService = new UserService(userRepositoryMock.Object);
+        var userCreateDto = UserMocks.CustomerCreateDto;
+
+        // Act
+        async Task Act() => await _userService.Create(userCreateDto, Roles.Customer);
+
+        // Assert
+        await Assert.ThrowsAsync<EntityNotFoundException>(Act);
+    }
+
+    [Fact]
+    public async Task Create_Should_Throw_EntityNotFoundException_When_Role_Is_Unknown()
+    {
+        // Arrange
+        var userCreateDto = UserMocks.CustomerCreateDto;
+
+        // Act
+        async Task Act() => await _userService.Create(userCreateDto, "UnknownRole");
+
+        // Assert
+        await Assert.ThrowsAsync<EntityNotFoundException>(Act);
+    }
+
+    [Fact]
+    public async Task Create_Should_Throw_UserRegistrationException()
+    {
+        // Arrange
+        _userManagerMock.Setup(x => x.CreateAsync(
+                It.IsAny<User>(),
+                It.IsAny<string>()))
+            .ReturnsAsync(IdentityResult.Failed());
+
+        var userRepository = new UserRepository(_context, _userManagerMock.Object, _roleManagerMock.Object);
+
+        _userService = new UserService(userRepository);
+
+        var userCreateDto = UserMocks.CustomerCreateDto;
+
+        // Act
+        async Task Act() => await _userService.Create(userCreateDto, Roles.Customer);
+
+        // Assert
+        await Assert.ThrowsAsync<UserRegistrationException>(Act);
     }
 }

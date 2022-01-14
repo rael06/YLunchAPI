@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.Serialization;
 
 namespace YLunchApi.Domain.Exceptions;
@@ -9,6 +10,7 @@ public sealed class UserRegistrationException : Exception
     {
     }
 
+    [ExcludeFromCodeCoverage]
     private UserRegistrationException(SerializationInfo info, StreamingContext context) : base(info, context)
     {
     }

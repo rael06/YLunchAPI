@@ -34,7 +34,13 @@ public class UserRepository : IUserRepository
         if (!await _roleManager.RoleExistsAsync(Roles.Customer))
             success &= (await _roleManager.CreateAsync(new IdentityRole(Roles.Customer))).Succeeded;
 
-        if (await _roleManager.RoleExistsAsync(role))
+        var roleExists= await _roleManager.RoleExistsAsync(role);
+        if (!roleExists)
+        {
+            throw new EntityNotFoundException("Role not found");
+        }
+
+        if (success)
             success &= (await _userManager.AddToRoleAsync(user, role)).Succeeded;
 
         if (!success)

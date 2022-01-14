@@ -5,8 +5,7 @@ namespace YLunchApi.Domain.UserAggregate.Dto;
 public abstract class UserCreateDto
 {
     [Required]
-    [EmailAddress]
-    [RegularExpression(@"^.*@\w+\-?\w+\.\w+$", ErrorMessage = "Email is invalid")]
+    [RegularExpression(@"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$", ErrorMessage = "Email is invalid")]
     public virtual string Email { get; set; } = null!;
 
     [Required]
@@ -17,8 +16,8 @@ public abstract class UserCreateDto
     public string PhoneNumber { get; set; } = null!;
 
     [Required]
-    public string? Firstname { get; set; } = null!;
+    public string Firstname { get; set; } = null!;
 
     [Required]
-    public string? Lastname { get; set; } = null!;
+    public string Lastname { get; set; } = null!;
 }

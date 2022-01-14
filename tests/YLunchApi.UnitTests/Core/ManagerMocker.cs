@@ -66,12 +66,9 @@ public static class ManagerMocker
             .Callback<User, string>(async (x, role) =>
             {
                 var identityRole = await context.Roles.FirstOrDefaultAsync(r => r.Name.Equals(role));
-                if (identityRole == null)
-                {
-                    throw new EntityNotFoundException("Role not found");
-                }
+
                 await context.UserRoles.AddAsync(new IdentityUserRole<string>
-                    { UserId = x.Id, RoleId = identityRole.Id });
+                    { UserId = x.Id, RoleId = identityRole!.Id });
                 await context.SaveChangesAsync();
             });
         userManagerMock.Setup(x => x.GetRolesAsync(It.IsAny<User>()))

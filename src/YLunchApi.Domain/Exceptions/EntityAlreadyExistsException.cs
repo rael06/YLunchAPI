@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.Serialization;
 
 namespace YLunchApi.Domain.Exceptions;
@@ -9,6 +10,7 @@ public sealed class EntityAlreadyExistsException : Exception
     {
     }
 
+    [ExcludeFromCodeCoverage]
     private EntityAlreadyExistsException(SerializationInfo info, StreamingContext context) : base(info, context)
     {
     }
