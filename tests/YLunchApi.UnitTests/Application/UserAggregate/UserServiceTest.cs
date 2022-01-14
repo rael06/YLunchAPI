@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using FluentAssertions;
-using Moq;
 using Xunit;
 using YLunchApi.Application.UserAggregate;
 using YLunchApi.Domain.Exceptions;
@@ -10,11 +9,11 @@ using YLunchApi.Domain.UserAggregate.Dto;
 using YLunchApi.Infrastructure.Database.Repositories;
 using YLunchApi.UnitTests.Core;
 
-namespace YLunchApi.UnitTests.Domain.UserAggregate;
+namespace YLunchApi.UnitTests.Application.UserAggregate;
 
 public class UserServiceTest
 {
-    private IUserService _userService;
+    private readonly IUserService _userService;
     private readonly IUserRepository _userRepository;
 
     public UserServiceTest()
