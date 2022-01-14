@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Identity;
 using YLunchApi.Domain.Exceptions;
 using YLunchApi.Domain.UserAggregate;
 using YLunchApi.Domain.UserAggregate.Dto;

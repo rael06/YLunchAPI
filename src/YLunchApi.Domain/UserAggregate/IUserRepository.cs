@@ -1,5 +1,3 @@
-using Microsoft.AspNetCore.Identity;
-
 namespace YLunchApi.Domain.UserAggregate;
 
 public interface IUserRepository

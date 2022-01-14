@@ -28,7 +28,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 builder.Services.AddCors(options =>
     options.AddDefaultPolicy(policy =>
-        policy.AllowAnyOrigin() // NOSONAR
+            policy.AllowAnyOrigin() // NOSONAR
     )
 );
 

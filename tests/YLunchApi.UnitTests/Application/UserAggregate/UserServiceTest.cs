@@ -1,14 +1,11 @@
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.AspNetCore.Identity;
 using Moq;
 using Xunit;
 using YLunchApi.Application.UserAggregate;
-using YLunchApi.Domain.Core.Utils;
 using YLunchApi.Domain.Exceptions;
 using YLunchApi.Domain.UserAggregate;
-using YLunchApi.Domain.UserAggregate.Dto;
 using YLunchApi.Infrastructure.Database;
 using YLunchApi.Infrastructure.Database.Repositories;
 using YLunchApi.UnitTests.Core;

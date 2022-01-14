@@ -1,6 +1,4 @@
-using Microsoft.AspNetCore.Identity;
 using YLunchApi.Domain.CommonAggregate;
-using YLunchApi.Domain.Core.Utils;
 
 namespace YLunchApi.Domain.UserAggregate.Dto;
 
@@ -13,7 +11,8 @@ public class UserReadDto : EntityReadDto
     public string Lastname { get; }
     public List<string> Roles { get; }
 
-    public UserReadDto(string id, string email, string phoneNumber, string firstname, string lastname, List<string> roles) : base(id, ResourcesName)
+    public UserReadDto(string id, string email, string phoneNumber, string firstname, string lastname,
+        List<string> roles) : base(id, ResourcesName)
     {
         Email = email;
         PhoneNumber = phoneNumber;

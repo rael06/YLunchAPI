@@ -5,7 +5,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Moq;
-using YLunchApi.Domain.Exceptions;
 using YLunchApi.Domain.UserAggregate;
 using YLunchApi.Infrastructure.Database;
 

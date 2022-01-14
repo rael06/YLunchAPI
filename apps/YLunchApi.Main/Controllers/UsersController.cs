@@ -15,7 +15,7 @@ public class UsersController : ControllerBase
     {
         _userService = userService;
     }
-    
+
     [HttpPost("restaurant-admins")]
     public async Task<ActionResult<UserReadDto>> Register([FromBody] RestaurantAdminCreateDto restaurantAdminCreateDto)
     {
@@ -33,17 +33,11 @@ public class UsersController : ControllerBase
         try
         {
             var userReadDto = await _userService.Create(userCreateDto, role);
-            return StatusCode(
-                StatusCodes.Status201Created,
-                userReadDto
-            );
+            return Created("", userReadDto);
         }
         catch (EntityAlreadyExistsException)
         {
-            return StatusCode(
-                StatusCodes.Status409Conflict,
-                "User already exists"
-            );
+            return Conflict("User already exists");
         }
     }
 }
