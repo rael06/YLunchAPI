@@ -8,7 +8,7 @@ namespace YLunchApi.UnitTests.Domain;
 public class RoleTest
 {
     [Fact]
-    void Should_Return_All_The_Application_Roles()
+    public void Should_Return_All_The_Application_Roles()
     {
         Roles.GetList().Should().BeEquivalentTo(new List<string>
         {
