@@ -14,6 +14,12 @@
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=07f44599_002D4c6d_002D42ba_002D8daf_002De3297b157434/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="UserServiceTest" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
   &lt;Project Location="/Users/rael/Documents/perso-code/csharp/YLunchApi/tests/YLunchApi.UnitTests" Presentation="&amp;lt;tests&amp;gt;\&amp;lt;YLunchApi.UnitTests&amp;gt;" /&gt;
 &lt;/SessionState&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=12fcfc70_002Deef0_002D4886_002Da4b5_002D29a39c4c498b/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="Post_RestaurantAdmin_Should_Return_A_201Created #2" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
+  &lt;TestAncestor&gt;
+    &lt;TestId&gt;xUnit::EE9819B4-D52B-4922-AB2C-D3D06A082051::net6.0::YLunchApi.IntegrationTests.Controllers.UsersController.Post_RestaurantAdmin_Should_Return_A_201Created&lt;/TestId&gt;
+    &lt;TestId&gt;xUnit::EE9819B4-D52B-4922-AB2C-D3D06A082051::net6.0::YLunchApi.IntegrationTests.Controllers.TrialsControllerTest.Get_Anonymous_Should_Return_A_200Ok&lt;/TestId&gt;
+  &lt;/TestAncestor&gt;
+&lt;/SessionState&gt;</s:String>
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=17220c02_002D8fc6_002D49c0_002D8e40_002D44cf376b0b26/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="Should_Return_A_200Success #6" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
   &lt;Project Location="/Users/rael/Documents/perso-code/csharp/YLunchApi" Presentation="&amp;lt;tests&amp;gt;" /&gt;
 &lt;/SessionState&gt;</s:String>
@@ -44,7 +50,7 @@
     &lt;TestId&gt;xUnit::EE9819B4-D52B-4922-AB2C-D3D06A082051::net6.0::YLunchApi.IntegrationTests.Controllers.UnitTest1.Should_Return_A_200Success&lt;/TestId&gt;
   &lt;/TestAncestor&gt;
 &lt;/SessionState&gt;</s:String>
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=7c8f9f60_002D302e_002D40d2_002D86c4_002D053738a891d3/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="Post_RestaurantAdmin_Should_Return_A_201Created" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=7c8f9f60_002D302e_002D40d2_002D86c4_002D053738a891d3/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="Post_RestaurantAdmin_Should_Return_A_201Created" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
   &lt;Project Location="/Users/rael/Documents/perso-code/csharp/YLunchApi/tests/YLunchApi.IntegrationTests" Presentation="&amp;lt;tests&amp;gt;\&amp;lt;YLunchApi.IntegrationTests&amp;gt;" /&gt;
 &lt;/SessionState&gt;</s:String>
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=918317d3_002Dc2f9_002D49bf_002Da5fd_002Dc942c4b0fcbd/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="Should_Return_A_200Success #5" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;

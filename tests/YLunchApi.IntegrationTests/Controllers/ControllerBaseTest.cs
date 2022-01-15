@@ -12,14 +12,9 @@ public class ControllerBaseTest : IClassFixture<WebApplicationFactory<Program>>
 
     protected ControllerBaseTest()
     {
-        if (Environment.GetEnvironmentVariable("IntegrationTestsProfile") == "online")
-        {
-            Client = new HttpClient();
-            Client.BaseAddress = new Uri("https://ylunch-api.rael-calitro.ovh/");
-        }
-        else
-        {
-            Client = new CustomWebApplicationFactory<Program>().CreateClient();
-        }
+        // Client = new HttpClient();
+        // Client.BaseAddress = new Uri("https://ylunch-api.rael-calitro.ovh/");
+
+        Client = new CustomWebApplicationFactory<Program>().CreateClient();
     }
 }
