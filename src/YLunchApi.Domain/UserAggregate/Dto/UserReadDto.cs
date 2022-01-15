@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using YLunchApi.Domain.CommonAggregate;
 
 namespace YLunchApi.Domain.UserAggregate.Dto;
@@ -11,6 +12,7 @@ public class UserReadDto : EntityReadDto
     public string Lastname { get; set; } = null!;
     public List<string> Roles { get; set; } = null!;
 
+    [ExcludeFromCodeCoverage]
     public UserReadDto()
     {
     }
