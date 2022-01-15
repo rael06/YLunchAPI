@@ -1,0 +1,238 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Simple Inventory API",
+    "description": "This is a simple API",
+    "contact": {
+      "email": "rael.calitro@ynov.com"
+    },
+    "license": {
+      "name": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+    },
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://virtserver.swaggerhub.com/rael06/ylunch-api/1.0.0",
+      "description": "SwaggerHub API Auto Mocking"
+    },
+    {
+      "url": "https://ylunch-api.rael-calitro.ovh",
+      "description": "Online server"
+    },
+    {
+      "url": "http://localhost:5254",
+      "description": "Local server"
+    }
+  ],
+  "security": [
+    {
+      "Bearer": []
+    }
+  ],
+  "tags": [
+    {
+      "name": "trials",
+      "description": "Operations available to try the api"
+    },
+    {
+      "name": "users",
+      "description": "users endpoints"
+    }
+  ],
+  "paths": {
+    "/trials/anonymous": {
+      "get": {
+        "tags": [
+          "trials"
+        ],
+        "summary": "Tries the api as anonymous",
+        "operationId": "getAnonymousTry",
+        "responses": {
+          "200": {
+            "description": "Success:\n- The anonymous trial Json object\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AnonymousTrialDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request:\n- Something went wrong, please try again later\n"
+          }
+        }
+      }
+    },
+    "/restaurant-admins": {
+      "post": {
+        "tags": [
+          "users"
+        ],
+        "summary": "Restaurant admin registration",
+        "operationId": "addRestaurantAdmin",
+        "requestBody": {
+          "description": "User to register",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserCreateDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "user created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserReadDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "invalid input, object invalid"
+          },
+          "409": {
+            "description": "User already exists"
+          }
+        }
+      }
+    },
+    "/customers": {
+      "post": {
+        "tags": [
+          "users"
+        ],
+        "summary": "Customer registration",
+        "operationId": "addCustomer",
+        "requestBody": {
+          "description": "User to register",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserCreateDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "user created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserReadDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "invalid input, object invalid"
+          },
+          "409": {
+            "description": "User already exists"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "AnonymousTrialDto": {
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "DiscordApi is running, you are anonymous"
+          }
+        }
+      },
+      "UserCreateDto": {
+        "required": [
+          "email",
+          "firstname",
+          "lastname",
+          "password",
+          "phoneNumber"
+        ],
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email",
+            "example": "owner@restaurant.com"
+          },
+          "firstname": {
+            "type": "string",
+            "example": "Jean"
+          },
+          "lastname": {
+            "type": "string",
+            "example": "Dupont"
+          },
+          "phoneNumber": {
+            "type": "string",
+            "format": "phone",
+            "example": "0612345678"
+          },
+          "password": {
+            "type": "string",
+            "format": "password",
+            "example": "Password1234."
+          }
+        }
+      },
+      "UserReadDto": {
+        "type": "object",
+        "properties": {
+          "link": {
+            "type": "string",
+            "example": "https://my-api.com/users/a00000e0-aaa0-000a-0000-00e00aa00e00"
+          },
+          "id": {
+            "type": "string",
+            "example": "a00000e0-aaa0-000a-0000-00e00aa00e00"
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "example": "user@domain.com"
+          },
+          "firstname": {
+            "type": "string",
+            "example": "Jean"
+          },
+          "lastname": {
+            "type": "string",
+            "example": "Dupont"
+          },
+          "phoneNumber": {
+            "type": "string",
+            "format": "phone",
+            "example": "0612345678"
+          },
+          "roles": {
+            "type": "array",
+            "example": [
+              "RestaurantAdmin"
+            ],
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "Bearer": {
+        "type": "http",
+        "description": "JWT Authorization header using the Bearer scheme. Example: \\\"Authorization: Bearer {token}\\\"\",\n",
+        "scheme": "bearer"
+      }
+    }
+  }
+}
