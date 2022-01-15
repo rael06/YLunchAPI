@@ -25,10 +25,6 @@
     </ItemGroup>
 
     <ItemGroup>
-        <InternalsVisibleTo Include="..\..\tests\YLunchApi.IntegrationTests\YLunchApi.IntegrationTests.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
         <Folder Include="wwwroot" />
     </ItemGroup>
 

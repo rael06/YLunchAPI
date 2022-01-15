@@ -2,10 +2,8 @@ using System.Net;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
 using FluentAssertions;
-using Microsoft.AspNetCore.Mvc.Testing;
 using Xunit;
 using YLunchApi.Domain.UserAggregate.Dto;
-using YLunchApi.IntegrationTests.Core;
 using YLunchApi.IntegrationTests.Core.Utils;
 using YLunchApi.UnitTests.Application.UserAggregate;
 
@@ -16,8 +14,10 @@ public class UsersController : ControllerBaseTest
     [Fact]
     public async Task Post_RestaurantAdmin_Should_Return_A_201Created()
     {
-        var response = await Client.PostAsJsonAsync("restaurant-admins", UserMocks.RestaurantAdminCreateDto);
-        Assert.True(response.IsSuccessStatusCode);
+        var response = await Client.PostAsJsonAsync(
+            "restaurant-admins",
+            UserMocks.RestaurantAdminCreateDto
+        );
         response.StatusCode.Should().Be(HttpStatusCode.Created);
         var content = await ResponseUtils.DeserializeContentAsync<UserReadDto>(response);
 

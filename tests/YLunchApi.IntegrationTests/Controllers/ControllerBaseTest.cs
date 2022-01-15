@@ -12,5 +12,9 @@ public class ControllerBaseTest : IClassFixture<WebApplicationFactory<Program>>
     protected ControllerBaseTest()
     {
         Client = new CustomWebApplicationFactory<Program>().CreateClient();
+        // Client to run tests with online app
+        // Client = new HttpClient();
+
+        Client.BaseAddress = new Uri("https://ylunch-api.rael-calitro.ovh/");
     }
 }
