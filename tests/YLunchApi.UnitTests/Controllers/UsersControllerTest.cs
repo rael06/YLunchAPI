@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using FluentAssertions;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Xunit;
 using YLunchApi.Application.UserAggregate;
@@ -35,10 +36,8 @@ public class UsersControllerTest
         var response = await _usersController.Register(UserMocks.CustomerCreateDto);
 
         // Assert
-        response.Result.Should().NotBeNull();
-        var responseResult = (CreatedResult)response.Result!;
-        responseResult.Value.Should().NotBeNull();
-        var responseBody = (UserReadDto)responseResult.Value!;
+        var responseResult = Assert.IsType<CreatedResult>(response.Result);
+        var responseBody = Assert.IsType<UserReadDto>(responseResult.Value);
 
         responseBody.Should().BeEquivalentTo(UserMocks.CustomerUserReadDto(responseBody.Id));
     }
@@ -50,10 +49,8 @@ public class UsersControllerTest
         var response = await _usersController.Register(UserMocks.RestaurantAdminCreateDto);
 
         // Assert
-        response.Result.Should().NotBeNull();
-        var responseResult = (CreatedResult)response.Result!;
-        responseResult.Value.Should().NotBeNull();
-        var responseBody = (UserReadDto)responseResult.Value!;
+        var responseResult = Assert.IsType<CreatedResult>(response.Result);
+        var responseBody = Assert.IsType<UserReadDto>(responseResult.Value);
 
         responseBody.Should().BeEquivalentTo(UserMocks.RestaurantAdminUserReadDto(responseBody.Id));
     }
@@ -66,11 +63,8 @@ public class UsersControllerTest
         var response = await _usersController.Register(UserMocks.RestaurantAdminCreateDto);
 
         // Assert
-        response.Result.Should().NotBeNull();
-
-        var responseResult = (ConflictObjectResult)response.Result!;
-        responseResult.Value.Should().NotBeNull();
-        var responseBody = responseResult.Value!;
+        var responseResult = Assert.IsType<ConflictObjectResult>(response.Result);
+        var responseBody = Assert.IsType<string>(responseResult.Value);
 
         responseBody.Should().Be("User already exists");
     }

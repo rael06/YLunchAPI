@@ -7,7 +7,7 @@ namespace YLunchApi.Main.Controllers;
 
 [ApiController]
 [Route("")]
-public class UsersController : ControllerBase
+public class UsersController : ApplicationControllerBase
 {
     private readonly IUserService _userService;
 

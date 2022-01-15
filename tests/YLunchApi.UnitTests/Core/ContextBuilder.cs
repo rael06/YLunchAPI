@@ -9,7 +9,7 @@ public static class ContextBuilder
     public static ApplicationDbContext BuildContext()
     {
         var options = new DbContextOptionsBuilder<ApplicationDbContext>()
-            .UseInMemoryDatabase($"YLunchDatabase-{Guid.NewGuid()}")
+            .UseInMemoryDatabase($"YLunchDatabaseForUnitTests-{Guid.NewGuid()}")
             .Options;
         return new ApplicationDbContext(options);
     }

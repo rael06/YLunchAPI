@@ -23,4 +23,8 @@
       <ProjectReference Include="..\..\src\YLunchApi.Infrastructure\YLunchApi.Infrastructure.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+        <InternalsVisibleTo Include="..\..\tests\YLunchApi.IntegrationTests\YLunchApi.IntegrationTests.csproj" />
+    </ItemGroup>
+
 </Project>
