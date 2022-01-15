@@ -5,14 +5,14 @@ namespace YLunchApi.IntegrationTests.Core.Utils;
 
 public static class DatabaseUtils
 {
-    public static void InitializeDbForTests(ApplicationDbContext db)
+    public static void InitializeDbForTests(ApplicationDbContext context)
     {
-        db.SaveChanges();
+        context.SaveChanges();
     }
 
     [ExcludeFromCodeCoverage]
-    public static void ReinitializeDbForTests(ApplicationDbContext db)
+    public static void ReinitializeDbForTests(ApplicationDbContext context)
     {
-        InitializeDbForTests(db);
+        InitializeDbForTests(context);
     }
 }

@@ -9,12 +9,17 @@ namespace YLunchApi.IntegrationTests.Controllers;
 public class ControllerBaseTest : IClassFixture<WebApplicationFactory<Program>>
 {
     protected readonly HttpClient Client;
+
     protected ControllerBaseTest()
     {
-        Client = new CustomWebApplicationFactory<Program>().CreateClient();
-        // Client to run tests with online app
-        // Client = new HttpClient();
-
-        Client.BaseAddress = new Uri("https://ylunch-api.rael-calitro.ovh/");
+        if (Environment.GetEnvironmentVariable("IntegrationTestsProfile") == "online")
+        {
+            Client = new HttpClient();
+            Client.BaseAddress = new Uri("https://ylunch-api.rael-calitro.ovh/");
+        }
+        else
+        {
+            Client = new CustomWebApplicationFactory<Program>().CreateClient();
+        }
     }
 }
