@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using YLunchApi.Domain.Core.Utils;
 using YLunchApi.Domain.UserAggregate;
 using YLunchApi.Domain.UserAggregate.Dto;
 
@@ -24,21 +25,25 @@ public static class UserMocks
         Password = "Password1234."
     };
 
-    public static UserReadDto CustomerUserReadDto(string id) => new(
-        id,
-        CustomerCreateDto.Email,
-        CustomerCreateDto.PhoneNumber,
-        CustomerCreateDto.Firstname,
-        CustomerCreateDto.Lastname,
-        new List<string> { Roles.Customer }
-    );
+    public static UserReadDto CustomerUserReadDto(string id) => new ()
+    {
+        Id = id,
+        Email = CustomerCreateDto.Email,
+        PhoneNumber = CustomerCreateDto.PhoneNumber,
+        Firstname = CustomerCreateDto.Firstname,
+        Lastname = CustomerCreateDto.Lastname,
+        Roles = new List<string> { Roles.Customer },
+        Link = $"{EnvironmentUtils.BaseUrl}/Users/{id}"
+    };
 
-    public static UserReadDto RestaurantAdminUserReadDto(string id) => new(
-        id,
-        RestaurantAdminCreateDto.Email,
-        RestaurantAdminCreateDto.PhoneNumber,
-        RestaurantAdminCreateDto.Firstname,
-        RestaurantAdminCreateDto.Lastname,
-        new List<string> { Roles.RestaurantAdmin }
-    );
+    public static UserReadDto RestaurantAdminUserReadDto(string id) => new ()
+    {
+        Id = id,
+        Email = RestaurantAdminCreateDto.Email,
+        PhoneNumber = RestaurantAdminCreateDto.PhoneNumber,
+        Firstname = RestaurantAdminCreateDto.Firstname,
+        Lastname = RestaurantAdminCreateDto.Lastname,
+        Roles = new List<string> { Roles.RestaurantAdmin },
+        Link = $"{EnvironmentUtils.BaseUrl}/Users/{id}"
+    };
 }

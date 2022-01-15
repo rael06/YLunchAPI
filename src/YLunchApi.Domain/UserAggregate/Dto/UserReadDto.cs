@@ -12,19 +12,8 @@ public class UserReadDto : EntityReadDto
     public string Lastname { get; set; } = null!;
     public List<string> Roles { get; set; } = null!;
 
-    [ExcludeFromCodeCoverage]
     public UserReadDto()
     {
-    }
-
-    public UserReadDto(string id, string email, string phoneNumber, string firstname, string lastname,
-        List<string> roles) : base(id, ResourcesName)
-    {
-        Email = email;
-        PhoneNumber = phoneNumber;
-        Firstname = firstname;
-        Lastname = lastname;
-        Roles = roles;
     }
 
     public UserReadDto(User user, List<string> roles) : base(user.Id, ResourcesName)

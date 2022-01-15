@@ -9,7 +9,7 @@ using YLunchApi.UnitTests.Application.UserAggregate;
 
 namespace YLunchApi.IntegrationTests.Controllers;
 
-public class TrialsController : TestControllerBase
+public class TrialsControllerTest : ControllerBaseTest
 {
     [Fact]
     public async Task Get_Anonymous_Should_Return_A_200Ok()

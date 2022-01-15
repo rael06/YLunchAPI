@@ -27,29 +27,27 @@ public class CustomWebApplicationFactory<TStartup>
 
             services.AddDbContext<ApplicationDbContext>(options =>
             {
-                options.UseInMemoryDatabase($"YLunchDatabaseForIntegrationTests-{Guid.NewGuid()}");
+                options.UseInMemoryDatabase("YLunchDatabaseForIntegrationTests");
             });
 
             var sp = services.BuildServiceProvider();
 
-            using (var scope = sp.CreateScope())
+            using var scope = sp.CreateScope();
+            var scopedServices = scope.ServiceProvider;
+            var db = scopedServices.GetRequiredService<ApplicationDbContext>();
+            var logger = scopedServices
+                .GetRequiredService<ILogger<CustomWebApplicationFactory<TStartup>>>();
+
+            db.Database.EnsureCreated();
+
+            try
             {
-                var scopedServices = scope.ServiceProvider;
-                var db = scopedServices.GetRequiredService<ApplicationDbContext>();
-                var logger = scopedServices
-                    .GetRequiredService<ILogger<CustomWebApplicationFactory<TStartup>>>();
-
-                db.Database.EnsureCreated();
-
-                try
-                {
-                    DatabaseUtils.InitializeDbForTests(db);
-                }
-                catch (Exception ex)
-                {
-                    logger.LogError(ex, "An error occurred seeding the " +
-                                        "database : {Message}", ex.Message);
-                }
+                DatabaseUtils.InitializeDbForTests(db);
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "An error occurred seeding the " +
+                                    "database : {Message}", ex.Message);
             }
         });
     }

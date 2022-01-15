@@ -6,6 +6,7 @@ using Xunit;
 using YLunchApi.Application.UserAggregate;
 using YLunchApi.Domain.Exceptions;
 using YLunchApi.Domain.UserAggregate;
+using YLunchApi.Domain.UserAggregate.Dto;
 using YLunchApi.Infrastructure.Database;
 using YLunchApi.Infrastructure.Database.Repositories;
 using YLunchApi.UnitTests.Core;
@@ -40,8 +41,8 @@ public class UserServiceTest
         var actual = await _userService.Create(userCreateDto, Roles.RestaurantAdmin);
 
         // Assert
-        actual.Should().NotBeNull();
-        var expected = UserMocks.RestaurantAdminUserReadDto(actual!.Id);
+        actual = Assert.IsType<UserReadDto>(actual);
+        var expected = UserMocks.RestaurantAdminUserReadDto(actual.Id);
         actual.Should().BeEquivalentTo(expected);
     }
 
@@ -55,8 +56,8 @@ public class UserServiceTest
         var actual = await _userService.Create(userCreateDto, Roles.Customer);
 
         // Assert
-        actual.Should().NotBeNull();
-        var expected = UserMocks.CustomerUserReadDto(actual!.Id);
+        actual = Assert.IsType<UserReadDto>(actual);
+        var expected = UserMocks.CustomerUserReadDto(actual.Id);
         actual.Should().BeEquivalentTo(expected);
     }
 

@@ -11,7 +11,7 @@ using YLunchApi.UnitTests.Application.UserAggregate;
 
 namespace YLunchApi.IntegrationTests.Controllers;
 
-public class UsersController : TestControllerBase
+public class UsersController : ControllerBaseTest
 {
     [Fact]
     public async Task Post_RestaurantAdmin_Should_Return_A_201Created()

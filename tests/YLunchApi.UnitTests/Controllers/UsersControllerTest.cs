@@ -1,6 +1,5 @@
 using System.Threading.Tasks;
 using FluentAssertions;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Xunit;
 using YLunchApi.Application.UserAggregate;

@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using Microsoft.AspNetCore.Mvc;
 using YLunchApi.Domain.Exceptions;
 using YLunchApi.Domain.UserAggregate;

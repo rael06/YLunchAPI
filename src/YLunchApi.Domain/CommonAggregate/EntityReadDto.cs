@@ -8,7 +8,6 @@ public class EntityReadDto
     public string Link { get; set; } = null!;
     public string Id { get; set; } = null!;
 
-    [ExcludeFromCodeCoverage]
     public EntityReadDto()
     {
     }

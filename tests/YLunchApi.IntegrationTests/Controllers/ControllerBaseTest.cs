@@ -5,10 +5,10 @@ using YLunchApi.IntegrationTests.Core;
 
 namespace YLunchApi.IntegrationTests.Controllers;
 
-public class TestControllerBase : IClassFixture<WebApplicationFactory<Program>>
+public class ControllerBaseTest : IClassFixture<WebApplicationFactory<Program>>
 {
     protected readonly HttpClient Client;
-    protected TestControllerBase()
+    protected ControllerBaseTest()
     {
         Client = new CustomWebApplicationFactory<Program>().CreateClient();
     }
