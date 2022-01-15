@@ -17,7 +17,7 @@ public class CustomWebApplicationFactory<TStartup>
     [ExcludeFromCodeCoverage]
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
-        builder.ConfigureServices(services =>
+        builder.ConfigureServices(async services =>
         {
             var descriptor = services.SingleOrDefault(
                 d => d.ServiceType ==
@@ -32,17 +32,15 @@ public class CustomWebApplicationFactory<TStartup>
 
             var sp = services.BuildServiceProvider();
 
-            using var scope = sp.CreateScope();
+            var scope = sp.CreateScope();
             var scopedServices = scope.ServiceProvider;
             var db = scopedServices.GetRequiredService<ApplicationDbContext>();
             var logger = scopedServices
                 .GetRequiredService<ILogger<CustomWebApplicationFactory<TStartup>>>();
 
-            db.Database.EnsureCreated();
-
             try
             {
-                DatabaseUtils.InitializeDbForTests(db);
+                await DatabaseUtils.InitializeDbForTests(db);
             }
             catch (Exception ex)
             {

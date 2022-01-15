@@ -15,10 +15,7 @@
   &lt;Project Location="/Users/rael/Documents/perso-code/csharp/YLunchApi/tests/YLunchApi.UnitTests" Presentation="&amp;lt;tests&amp;gt;\&amp;lt;YLunchApi.UnitTests&amp;gt;" /&gt;
 &lt;/SessionState&gt;</s:String>
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=12fcfc70_002Deef0_002D4886_002Da4b5_002D29a39c4c498b/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="Post_RestaurantAdmin_Should_Return_A_201Created #2" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
-  &lt;TestAncestor&gt;
-    &lt;TestId&gt;xUnit::EE9819B4-D52B-4922-AB2C-D3D06A082051::net6.0::YLunchApi.IntegrationTests.Controllers.UsersController.Post_RestaurantAdmin_Should_Return_A_201Created&lt;/TestId&gt;
-    &lt;TestId&gt;xUnit::EE9819B4-D52B-4922-AB2C-D3D06A082051::net6.0::YLunchApi.IntegrationTests.Controllers.TrialsControllerTest.Get_Anonymous_Should_Return_A_200Ok&lt;/TestId&gt;
-  &lt;/TestAncestor&gt;
+  &lt;Project Location="/Users/rael/Documents/perso-code/csharp/YLunchApi" Presentation="&amp;lt;tests&amp;gt;" /&gt;
 &lt;/SessionState&gt;</s:String>
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=17220c02_002D8fc6_002D49c0_002D8e40_002D44cf376b0b26/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="Should_Return_A_200Success #6" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
   &lt;Project Location="/Users/rael/Documents/perso-code/csharp/YLunchApi" Presentation="&amp;lt;tests&amp;gt;" /&gt;
