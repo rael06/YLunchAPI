@@ -4,7 +4,7 @@ using System.Runtime.Serialization;
 namespace YLunchApi.Authentication.Exceptions;
 
 [Serializable]
-public class RefreshTokenRevokedException : Exception
+public sealed class RefreshTokenRevokedException : Exception
 {
     [ExcludeFromCodeCoverage]
     private RefreshTokenRevokedException(SerializationInfo info, StreamingContext context) : base(info, context)

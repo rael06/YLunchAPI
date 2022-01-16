@@ -1,6 +1,4 @@
-using System.Diagnostics.CodeAnalysis;
 using Microsoft.AspNetCore.Mvc;
-using YLunchApi.Authentication.Models.Dto;
 using YLunchApi.Authentication.Services;
 using YLunchApi.Domain.UserAggregate;
 using YLunchApi.Domain.UserAggregate.Dto;
@@ -11,8 +9,8 @@ namespace YLunchApi.Main.Controllers;
 [Route("[controller]")]
 public class AuthenticationController : ApplicationControllerBase
 {
-    private readonly IUserService _userService;
     private readonly IJwtService _jwtService;
+    private readonly IUserService _userService;
 
     public AuthenticationController(IJwtService jwtService, IUserService userService)
     {
@@ -24,10 +22,7 @@ public class AuthenticationController : ApplicationControllerBase
     public async Task<ActionResult<string>> Login([FromBody] LoginRequestDto loginRequestDto)
     {
         var user = await _userService.GetAuthenticatedUser(loginRequestDto);
-        if (user == null)
-        {
-            return Unauthorized("Please login with valid credentials");
-        }
+        if (user == null) return Unauthorized("Please login with valid credentials");
 
         return Ok(await _jwtService.GenerateJwtToken(user));
     }

@@ -8,8 +8,8 @@ namespace YLunchApi.Infrastructure.Database.Repositories;
 public class UserRepository : IUserRepository
 {
     private readonly ApplicationDbContext _context;
-    private readonly UserManager<User> _userManager;
     private readonly RoleManager<IdentityRole> _roleManager;
+    private readonly UserManager<User> _userManager;
 
     public UserRepository(
         ApplicationDbContext context,
@@ -35,18 +35,12 @@ public class UserRepository : IUserRepository
             success &= (await _roleManager.CreateAsync(new IdentityRole(Roles.Customer))).Succeeded;
 
         var roleExists = await _roleManager.RoleExistsAsync(role);
-        if (!roleExists)
-        {
-            throw new EntityNotFoundException("Role not found");
-        }
+        if (!roleExists) throw new EntityNotFoundException("Role not found");
 
         if (success)
             success &= (await _userManager.AddToRoleAsync(user, role)).Succeeded;
 
-        if (!success)
-        {
-            throw new UserRegistrationException();
-        }
+        if (!success) throw new UserRegistrationException();
     }
 
     public async Task<User?> GetByEmail(string email)
@@ -56,12 +50,8 @@ public class UserRepository : IUserRepository
 
     public async Task<User?> GetByEmailAndPassword(string email, string password)
     {
-
         var user = await GetByEmail(email);
-        if (user == null || !await _userManager.CheckPasswordAsync(user, password))
-        {
-            return null;
-        }
+        if (user == null || !await _userManager.CheckPasswordAsync(user, password)) return null;
 
         return user;
     }

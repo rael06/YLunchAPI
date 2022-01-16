@@ -25,25 +25,31 @@ public static class UserMocks
         Password = "Password1234."
     };
 
-    public static UserReadDto CustomerUserReadDto(string id) => new ()
+    public static UserReadDto CustomerUserReadDto(string id)
     {
-        Id = id,
-        Email = CustomerCreateDto.Email,
-        PhoneNumber = CustomerCreateDto.PhoneNumber,
-        Firstname = CustomerCreateDto.Firstname,
-        Lastname = CustomerCreateDto.Lastname,
-        Roles = new List<string> { Roles.Customer },
-        Link = $"{EnvironmentUtils.BaseUrl}/Users/{id}"
-    };
+        return new()
+        {
+            Id = id,
+            Email = CustomerCreateDto.Email,
+            PhoneNumber = CustomerCreateDto.PhoneNumber,
+            Firstname = CustomerCreateDto.Firstname,
+            Lastname = CustomerCreateDto.Lastname,
+            Roles = new List<string> { Roles.Customer },
+            Link = $"{EnvironmentUtils.BaseUrl}/Users/{id}"
+        };
+    }
 
-    public static UserReadDto RestaurantAdminUserReadDto(string id) => new ()
+    public static UserReadDto RestaurantAdminUserReadDto(string id)
     {
-        Id = id,
-        Email = RestaurantAdminCreateDto.Email,
-        PhoneNumber = RestaurantAdminCreateDto.PhoneNumber,
-        Firstname = RestaurantAdminCreateDto.Firstname,
-        Lastname = RestaurantAdminCreateDto.Lastname,
-        Roles = new List<string> { Roles.RestaurantAdmin },
-        Link = $"{EnvironmentUtils.BaseUrl}/Users/{id}"
-    };
+        return new()
+        {
+            Id = id,
+            Email = RestaurantAdminCreateDto.Email,
+            PhoneNumber = RestaurantAdminCreateDto.PhoneNumber,
+            Firstname = RestaurantAdminCreateDto.Firstname,
+            Lastname = RestaurantAdminCreateDto.Lastname,
+            Roles = new List<string> { Roles.RestaurantAdmin },
+            Link = $"{EnvironmentUtils.BaseUrl}/Users/{id}"
+        };
+    }
 }

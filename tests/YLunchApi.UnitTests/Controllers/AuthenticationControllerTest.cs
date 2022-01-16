@@ -1,6 +1,4 @@
 using System;
-using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using FluentAssertions;
@@ -26,8 +24,8 @@ namespace YLunchApi.UnitTests.Controllers;
 public class AuthenticationControllerTest
 {
     private readonly AuthenticationController _authenticationController;
-    private readonly IUserService _userService;
     private readonly IUserRepository _userRepository;
+    private readonly IUserService _userService;
 
     public AuthenticationControllerTest()
     {

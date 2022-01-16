@@ -7,9 +7,6 @@ namespace YLunchApi.Domain.UserAggregate;
 
 public sealed class User : IdentityUser
 {
-    public string Firstname { get; set; } = null!;
-    public string Lastname { get; set; } = null!;
-
     [ExcludeFromCodeCoverage]
     public User()
     {
@@ -24,4 +21,7 @@ public sealed class User : IdentityUser
         Firstname = userCreateDto.Firstname.Capitalize();
         Lastname = userCreateDto.Lastname.Capitalize();
     }
+
+    public string Firstname { get; set; } = null!;
+    public string Lastname { get; set; } = null!;
 }

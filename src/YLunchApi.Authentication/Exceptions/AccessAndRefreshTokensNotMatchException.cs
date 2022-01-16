@@ -4,7 +4,7 @@ using System.Runtime.Serialization;
 namespace YLunchApi.Authentication.Exceptions;
 
 [Serializable]
-public class AccessAndRefreshTokensNotMatchException : Exception
+public sealed class AccessAndRefreshTokensNotMatchException : Exception
 {
     [ExcludeFromCodeCoverage]
     private AccessAndRefreshTokensNotMatchException(SerializationInfo info, StreamingContext context) : base(info,

@@ -16,10 +16,10 @@ namespace YLunchApi.Authentication.Services;
 
 public class JwtService : IJwtService
 {
-    private readonly UserManager<User> _userManager;
-    private readonly IRefreshTokenRepository _refreshTokenRepository;
     private readonly JwtConfig _jwtConfig;
+    private readonly IRefreshTokenRepository _refreshTokenRepository;
     private readonly TokenValidationParameters _tokenValidationParameters;
+    private readonly UserManager<User> _userManager;
 
     public JwtService(UserManager<User> userManager, IRefreshTokenRepository refreshTokenRepository,
         IOptionsMonitor<JwtConfig> jwtConfig, TokenValidationParameters tokenValidationParameters)
@@ -28,6 +28,65 @@ public class JwtService : IJwtService
         _refreshTokenRepository = refreshTokenRepository;
         _tokenValidationParameters = tokenValidationParameters;
         _jwtConfig = jwtConfig.CurrentValue;
+    }
+
+    public async Task<TokenReadDto> GenerateJwtToken(User user)
+    {
+        var accessToken = CreateToken(user);
+
+        var refreshToken = await CreateRefreshToken(user.Id, accessToken.SecurityToken.Id);
+
+        return new TokenReadDto(accessToken.StringToken, refreshToken.Token);
+    }
+
+    public async Task<TokenReadDto> RefreshJwtToken(TokenUpdateDto tokenUpdateDto)
+    {
+        var jwtTokenHandler = new JwtSecurityTokenHandler();
+        var tokenValidationParameters = _tokenValidationParameters.Clone();
+        tokenValidationParameters.ValidateLifetime = false;
+
+
+        // Validation 1 - jwt format
+        var tokenInValidation = jwtTokenHandler.ValidateToken(
+            tokenUpdateDto.AccessToken,
+            tokenValidationParameters,
+            out var validatedToken
+        );
+
+        if (tokenInValidation == null || validatedToken == null) throw new InvalidTokenException();
+
+        // Validation 2 - encryption algorithm
+        if (validatedToken is JwtSecurityToken jwtSecurityToken)
+        {
+            var result = jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256,
+                StringComparison.InvariantCultureIgnoreCase);
+            if (!result) throw new InvalidTokenException();
+        }
+
+        // Validation 3 - refresh token exists
+        var storedToken = await _refreshTokenRepository.GetByToken(tokenUpdateDto.RefreshToken);
+        if (storedToken == null) throw new RefreshTokenNotFoundException();
+
+        // Validation 4 - refresh token is not expired
+        if (storedToken.ExpirationDateTime < DateTime.UtcNow) throw new RefreshTokenExpiredException();
+
+        // Validation 5 - refresh token not used
+        if (storedToken.IsUsed) throw new RefreshTokenAlreadyUsedException();
+
+        // Validation 6 - refresh token not revoked
+        if (storedToken.IsRevoked) throw new RefreshTokenRevokedException();
+
+        // Validation 7 - refresh token has a valid Id
+        var jti = tokenInValidation.Claims.FirstOrDefault(x => x.Type == JwtRegisteredClaimNames.Jti)!.Value;
+        if (storedToken.JwtId != jti) throw new AccessAndRefreshTokensNotMatchException();
+
+        // Update current refresh token
+        storedToken.IsUsed = true;
+        await _refreshTokenRepository.Update(storedToken);
+
+        // Create new access and refresh tokens
+        var dbUser = await _userManager.FindByIdAsync(storedToken.UserId);
+        return await GenerateJwtToken(dbUser);
     }
 
     private Token CreateToken(User user)
@@ -68,90 +127,10 @@ public class JwtService : IJwtService
             UserId = userId,
             CreationDateTime = DateTime.UtcNow,
             ExpirationDateTime = DateTime.UtcNow.AddMonths(1),
-            Token = RandomUtils.GetRandomString(32) + Guid.NewGuid()
+            Token = RandomUtils.GetRandomKey() + Guid.NewGuid()
         };
 
         await _refreshTokenRepository.Create(refreshToken);
         return refreshToken;
-    }
-
-    public async Task<TokenReadDto> GenerateJwtToken(User user)
-    {
-        var accessToken = CreateToken(user);
-
-        var refreshToken = await CreateRefreshToken(user.Id, accessToken.SecurityToken.Id);
-
-        return new TokenReadDto(accessToken.StringToken, refreshToken.Token);
-    }
-
-    public async Task<TokenReadDto> RefreshJwtToken(TokenUpdateDto tokenUpdateDto)
-    {
-        var jwtTokenHandler = new JwtSecurityTokenHandler();
-        var tokenValidationParameters = _tokenValidationParameters.Clone();
-        tokenValidationParameters.ValidateLifetime = false;
-
-
-        // Validation 1 - jwt format
-        var tokenInValidation = jwtTokenHandler.ValidateToken(
-            tokenUpdateDto.AccessToken,
-            tokenValidationParameters,
-            out var validatedToken
-        );
-
-        if (tokenInValidation == null || validatedToken == null)
-        {
-            throw new InvalidTokenException();
-        }
-
-        // Validation 2 - encryption algorithm
-        if (validatedToken is JwtSecurityToken jwtSecurityToken)
-        {
-            var result = jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256,
-                StringComparison.InvariantCultureIgnoreCase);
-            if (!result)
-            {
-                throw new InvalidTokenException();
-            }
-        }
-
-        // Validation 3 - refresh token exists
-        var storedToken = await _refreshTokenRepository.GetByToken(tokenUpdateDto.RefreshToken);
-        if (storedToken == null)
-        {
-            throw new RefreshTokenNotFoundException();
-        }
-
-        // Validation 4 - refresh token is not expired
-        if (storedToken.ExpirationDateTime < DateTime.UtcNow)
-        {
-            throw new RefreshTokenExpiredException();
-        }
-
-        // Validation 5 - refresh token not used
-        if (storedToken.IsUsed)
-        {
-            throw new RefreshTokenAlreadyUsedException();
-        }
-
-        // Validation 6 - refresh token not revoked
-        if (storedToken.IsRevoked)
-        {
-            throw new RefreshTokenRevokedException();
-        }
-
-        // Validation 7 - refresh token has a valid Id
-        var jti = tokenInValidation.Claims.FirstOrDefault(x => x.Type == JwtRegisteredClaimNames.Jti)!.Value;
-        if (storedToken.JwtId != jti)
-        {
-            throw new AccessAndRefreshTokensNotMatchException();
-        }
-
-        // Update current refresh token
-        storedToken.IsUsed = true;
-        await _refreshTokenRepository.Update(storedToken);
-
-        // Create new access and refresh tokens
-        var dbUser = await _userManager.FindByIdAsync(storedToken.UserId);
-        return await GenerateJwtToken(dbUser);
     }
 }

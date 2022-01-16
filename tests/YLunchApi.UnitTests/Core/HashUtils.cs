@@ -7,6 +7,6 @@ public static class HashUtils
 {
     public static string HashValue(string value)
     {
-        return MD5.HashData(Encoding.ASCII.GetBytes(value)).ToString();
+        return MD5.HashData(Encoding.ASCII.GetBytes(value)).ToString()!;
     }
 }

@@ -7,9 +7,9 @@ namespace YLunchApi.Infrastructure.Database;
 
 public class ApplicationDbContext : IdentityDbContext<User>
 {
-    public DbSet<RefreshToken> RefreshTokens { get; set; } = null!;
-
     public ApplicationDbContext(DbContextOptions options) : base(options)
     {
     }
+
+    public DbSet<RefreshToken> RefreshTokens { get; set; } = null!;
 }

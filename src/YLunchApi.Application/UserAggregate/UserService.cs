@@ -18,18 +18,12 @@ public class UserService : IUserService
         var user = new User(userCreateDto);
 
         var userDb = await _userRepository.GetByEmail(userCreateDto.Email);
-        if (userDb != null)
-        {
-            throw new EntityAlreadyExistsException();
-        }
+        if (userDb != null) throw new EntityAlreadyExistsException();
 
         await _userRepository.Create(user, userCreateDto.Password, role);
 
         userDb = await _userRepository.GetByEmail(user.Email);
-        if (userDb == null)
-        {
-            throw new EntityNotFoundException();
-        }
+        if (userDb == null) throw new EntityNotFoundException();
 
         var roles = await _userRepository.GetUserRoles(userDb);
 
