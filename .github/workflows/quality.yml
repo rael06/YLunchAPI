@@ -18,6 +18,7 @@ jobs:
     steps:
     - name: Azure Pipelines Action
       uses: Azure/pipelines@v1
+      if: failure()
       with:
         azure-devops-project-url: https://dev.azure.com/ylunch/YnovYLunch
         azure-pipeline-name: 'Restore_Build_Test'
