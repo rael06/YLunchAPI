@@ -35,4 +35,9 @@ public class UserService : IUserService
 
         return new UserReadDto(userDb, roles);
     }
+
+    public async Task<User?> GetAuthenticatedUser(LoginRequestDto loginRequestDto)
+    {
+        return await _userRepository.GetByEmailAndPassword(loginRequestDto.Email, loginRequestDto.Password);
+    }
 }

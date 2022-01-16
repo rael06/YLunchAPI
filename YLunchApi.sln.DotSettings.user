@@ -31,6 +31,11 @@
     &lt;TestId&gt;xUnit::58CF9628-FA45-496D-A22C-69271AF4C5C3::net6.0::YLunchApi.UnitTests.UsersControllerTest.Should_Create_A_Customer_User&lt;/TestId&gt;
   &lt;/TestAncestor&gt;
 &lt;/SessionState&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=517b6bce_002D48c8_002D48f2_002D861a_002Dc11db4bc7a42/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="Login_Should_Return_A_200Ok_Containing_Tokens #2" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
+  &lt;TestAncestor&gt;
+    &lt;TestId&gt;xUnit::58CF9628-FA45-496D-A22C-69271AF4C5C3::net6.0::YLunchApi.UnitTests.Controllers.AuthenticationControllerTest.Login_Should_Return_A_200Ok_Containing_Tokens&lt;/TestId&gt;
+  &lt;/TestAncestor&gt;
+&lt;/SessionState&gt;</s:String>
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=5f864ab3_002D08ee_002D48bf_002Db9aa_002D88724a9fe0ef/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="Should_Return_A_200Success #2" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
   &lt;TestAncestor&gt;
     &lt;TestId&gt;xUnit::EE9819B4-D52B-4922-AB2C-D3D06A082051::net6.0::YLunchApi.IntegrationTests.Controllers.UnitTest1.Should_Return_A_200Success&lt;/TestId&gt;
@@ -48,6 +53,11 @@
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=7805322a_002D0f9c_002D4f5d_002D9cfe_002D08fc66ef2486/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="Should_Return_A_200Success #3" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
   &lt;TestAncestor&gt;
     &lt;TestId&gt;xUnit::EE9819B4-D52B-4922-AB2C-D3D06A082051::net6.0::YLunchApi.IntegrationTests.Controllers.UnitTest1.Should_Return_A_200Success&lt;/TestId&gt;
+  &lt;/TestAncestor&gt;
+&lt;/SessionState&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=782095f2_002D3dc0_002D4ad5_002Db9e0_002Dcca708e779eb/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="Login_Should_Return_A_200Ok_Containing_Tokens" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
+  &lt;TestAncestor&gt;
+    &lt;TestId&gt;xUnit::58CF9628-FA45-496D-A22C-69271AF4C5C3::net6.0::YLunchApi.UnitTests.Controllers.AuthenticationControllerTest.Login_Should_Return_A_200Ok_Containing_Tokens&lt;/TestId&gt;
   &lt;/TestAncestor&gt;
 &lt;/SessionState&gt;</s:String>
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=7c8f9f60_002D302e_002D40d2_002D86c4_002D053738a891d3/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="Post_RestaurantAdmin_Should_Return_A_201Created" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;

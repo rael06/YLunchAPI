@@ -54,6 +54,18 @@ public class UserRepository : IUserRepository
         return await _context.Users.FirstOrDefaultAsync(x => x.Email.Equals(email));
     }
 
+    public async Task<User?> GetByEmailAndPassword(string email, string password)
+    {
+
+        var user = await GetByEmail(email);
+        if (user == null || !await _userManager.CheckPasswordAsync(user, password))
+        {
+            return null;
+        }
+
+        return user;
+    }
+
     public async Task<List<string>> GetUserRoles(User user)
     {
         var iListRoles = await _userManager.GetRolesAsync(user);

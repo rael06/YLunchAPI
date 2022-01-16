@@ -18,13 +18,13 @@ public class UsersController : ApplicationControllerBase
     }
 
     [HttpPost("restaurant-admins")]
-    public async Task<ActionResult<UserReadDto>> Register([FromBody] RestaurantAdminCreateDto restaurantAdminCreateDto)
+    public async Task<ActionResult<UserReadDto>> Create([FromBody] RestaurantAdminCreateDto restaurantAdminCreateDto)
     {
         return await Create(restaurantAdminCreateDto, Roles.RestaurantAdmin);
     }
 
     [HttpPost("customers")]
-    public async Task<ActionResult<UserReadDto>> Register([FromBody] CustomerCreateDto customerCreateDto)
+    public async Task<ActionResult<UserReadDto>> Create([FromBody] CustomerCreateDto customerCreateDto)
     {
         return await Create(customerCreateDto, Roles.Customer);
     }

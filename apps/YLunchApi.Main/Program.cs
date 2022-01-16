@@ -34,8 +34,7 @@ builder.Services.AddIdentity<User, IdentityRole>()
     .AddDefaultTokenProviders();
 
 // For Jwt
-var jwtSecret = builder.Configuration["Profile"] == "Local" ?
-    builder.Configuration["JwtSecretLocal"] : builder.Configuration["JwtSecret"];
+var jwtSecret = builder.Configuration["JwtSecret"];
 var key = Encoding.ASCII.GetBytes(jwtSecret);
 var tokenValidationParameters = new TokenValidationParameters
 {

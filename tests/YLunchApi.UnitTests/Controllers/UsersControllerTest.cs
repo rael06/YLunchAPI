@@ -32,7 +32,7 @@ public class UsersControllerTest
     public async Task Should_Create_A_Customer_User()
     {
         // Act
-        var response = await _usersController.Register(UserMocks.CustomerCreateDto);
+        var response = await _usersController.Create(UserMocks.CustomerCreateDto);
 
         // Assert
         var responseResult = Assert.IsType<CreatedResult>(response.Result);
@@ -45,7 +45,7 @@ public class UsersControllerTest
     public async Task Should_Create_A_RestaurantAdmin_User()
     {
         // Act
-        var response = await _usersController.Register(UserMocks.RestaurantAdminCreateDto);
+        var response = await _usersController.Create(UserMocks.RestaurantAdminCreateDto);
 
         // Assert
         var responseResult = Assert.IsType<CreatedResult>(response.Result);
@@ -58,8 +58,8 @@ public class UsersControllerTest
     public async Task Should_Return_A_409ConflictError()
     {
         // Act
-        _ = await _usersController.Register(UserMocks.RestaurantAdminCreateDto);
-        var response = await _usersController.Register(UserMocks.RestaurantAdminCreateDto);
+        _ = await _usersController.Create(UserMocks.RestaurantAdminCreateDto);
+        var response = await _usersController.Create(UserMocks.RestaurantAdminCreateDto);
 
         // Assert
         var responseResult = Assert.IsType<ConflictObjectResult>(response.Result);
