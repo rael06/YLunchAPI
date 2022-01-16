@@ -147,6 +147,42 @@ namespace YLunchApi.Main.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("YLunchApi.Authentication.Models.RefreshToken", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<DateTime>("CreationDateTime")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime>("ExpirationDateTime")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<bool>("IsRevoked")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<bool>("IsUsed")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("JwtId")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Token")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("varchar(255)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("RefreshTokens");
+                });
+
             modelBuilder.Entity("YLunchApi.Domain.UserAggregate.User", b =>
                 {
                     b.Property<string>("Id")
@@ -268,6 +304,17 @@ namespace YLunchApi.Main.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("YLunchApi.Authentication.Models.RefreshToken", b =>
+                {
+                    b.HasOne("YLunchApi.Domain.UserAggregate.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 #pragma warning restore 612, 618
         }
