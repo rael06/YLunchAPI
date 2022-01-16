@@ -24,8 +24,4 @@
       <ProjectReference Include="..\..\src\YLunchApi.Infrastructure\YLunchApi.Infrastructure.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-        <Folder Include="wwwroot" />
-    </ItemGroup>
-
 </Project>

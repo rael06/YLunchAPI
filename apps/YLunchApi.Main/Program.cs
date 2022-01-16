@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.EntityFrameworkCore;
 using YLunchApi.Application.UserAggregate;
 using YLunchApi.Domain.UserAggregate;
@@ -54,12 +55,22 @@ builder.Services.AddCors(options =>
 
 // ------------------------ MIDDLEWARES ------------------------
 
+// Allow static files to serve yaml
 var app = builder.Build();
-
-app.UseStaticFiles();
+var provider = new FileExtensionContentTypeProvider
+{
+    Mappings =
+    {
+        [".yaml"] = "application/x-yaml"
+    }
+};
+app.UseStaticFiles(new StaticFileOptions
+{
+    ContentTypeProvider = provider
+});
 
 app.UseSwagger();
-app.UseSwaggerUI(options => options.SwaggerEndpoint("/swagger-original.json", "Simple Inventory API Original"));
+app.UseSwaggerUI(options => options.SwaggerEndpoint("/swagger-original.yaml", "Simple Inventory API Original"));
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
