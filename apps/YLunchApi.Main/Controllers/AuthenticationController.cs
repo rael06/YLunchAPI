@@ -26,7 +26,7 @@ public class AuthenticationController : ApplicationControllerBase
         var user = await _userService.GetAuthenticatedUser(loginRequestDto);
         if (user == null)
         {
-            return Unauthorized();
+            return Unauthorized("Please login with valid credentials");
         }
 
         return Ok(await _jwtService.GenerateJwtToken(user));

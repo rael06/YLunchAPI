@@ -56,7 +56,7 @@ public static class ManagerMocker
             .ReturnsAsync(IdentityResult.Success)
             .Callback<User, string>(async (x, password) =>
             {
-                x.PasswordHash = $"TestPassword-{x.Email}-{password}";
+                x.PasswordHash = HashUtils.HashValue(password);
                 await context.Users.AddAsync(x);
                 await context.SaveChangesAsync();
             });
@@ -88,7 +88,7 @@ public static class ManagerMocker
             .Returns<User, string>(async (user, password) =>
             {
                 var userDb = await context.Users.FirstOrDefaultAsync(x => x.Email.Equals(user.Email));
-                return userDb!.PasswordHash.Equals($"TestPassword-{userDb.Email}-{password}");
+                return userDb!.PasswordHash.Equals(HashUtils.HashValue(password));
             });
 
         return userManagerMock;

@@ -38,6 +38,6 @@ public class UserService : IUserService
 
     public async Task<User?> GetAuthenticatedUser(LoginRequestDto loginRequestDto)
     {
-        return await _userRepository.GetByEmailAndPassword(loginRequestDto.Email, loginRequestDto.Password);
+        return await _userRepository.GetByEmailAndPassword(loginRequestDto.Email.ToLower(), loginRequestDto.Password);
     }
 }

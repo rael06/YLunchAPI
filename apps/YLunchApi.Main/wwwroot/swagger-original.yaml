@@ -17,10 +17,12 @@ servers:
   - url: http://localhost:5254
     description: Local server
 security:
-  - Bearer: [ ]
+  - Bearer: []
 tags:
   - name: trials
     description: Operations available to try the api
+  - name: authentication
+    description: authentication endpoints
   - name: users
     description: users endpoints
 paths:
@@ -43,6 +45,36 @@ paths:
           description: |
             Bad request:
             - Something went wrong, please try again later
+  /authentication/login:
+    post:
+      tags:
+        - authentication
+      summary: Login a user and returns access and refresh tokens as Json Web Token
+      operationId: login
+      requestBody:
+        required: true
+        description: A JSON object that contains the user name and password
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequestDto'
+      responses:
+        '200':
+          description: |
+            Success:
+            - The access and refresh tokens
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenReadDto'
+        '400':
+          description: |
+            Bad request:
+            - Something went wrong, please try again later
+        '401':
+          description: |
+            Unauthorized:
+            - Please login and use provided tokens
   /restaurant-admins:
     post:
       tags:
@@ -96,6 +128,30 @@ components:
         message:
           type: string
           description: DiscordApi is running, you are anonymous
+    LoginRequestDto:
+      type: object
+      required:
+        - userName
+        - password
+      properties:
+        userName:
+          type: string
+          description: cannot be empty
+          example: my-pseudo
+        password:
+          type: string
+          description: cannot be empty
+          example: Password1234.
+    TokenReadDto:
+      type: object
+      properties:
+        accessToken:
+          type: string
+          example: |
+            eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJJZCI6ImFlNTcxOGJkLWY5NzktNDQ1Ni04MmRlLTBjNzgzMzk4NzYzNCIsImp0aSI6IjBjZjc3NGYwLTUxYWQtNDM4Yi1hNTZlLTI1N2VlZGRhMjQ0MCIsIm5iZiI6MTY0MTEzNzMxMCwiZXhwIjoxNjQxMTU4OTEwLCJpYXQiOjE2NDExMzczMTB9.q1VaAodjovu79AyBNbrSxu4yZ4vOlDZQF2IyDvcsbJM
+        refreshToken:
+          type: string
+          example: abcdefghij-a00000e0-aaa0-000a-0000-00e00aa00e00
     UserCreateDto:
       required:
         - email

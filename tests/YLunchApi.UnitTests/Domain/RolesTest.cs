@@ -5,7 +5,7 @@ using YLunchApi.Domain.UserAggregate;
 
 namespace YLunchApi.UnitTests.Domain;
 
-public class RoleTest
+public class RolesTest
 {
     [Fact]
     public void Should_Return_All_The_Application_Roles()

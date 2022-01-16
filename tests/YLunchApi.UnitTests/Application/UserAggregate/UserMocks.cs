@@ -10,7 +10,7 @@ public static class UserMocks
     public static readonly RestaurantAdminCreateDto RestaurantAdminCreateDto = new()
     {
         Email = "admin@restaurant.com",
-        Firstname = "Jean",
+        Firstname = "Jean-Marc",
         Lastname = "Dupont",
         PhoneNumber = "0612345678",
         Password = "Password1234."
@@ -18,10 +18,10 @@ public static class UserMocks
 
     public static readonly CustomerCreateDto CustomerCreateDto = new()
     {
-        Email = "customer@ynov.com",
-        Firstname = "Jean",
-        Lastname = "Dupont",
-        PhoneNumber = "0612345678",
+        Email = "anne-marie.martin@ynov.com",
+        Firstname = "Anne-Marie",
+        Lastname = "Martin",
+        PhoneNumber = "0687654321",
         Password = "Password1234."
     };
 
