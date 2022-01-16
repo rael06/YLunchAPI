@@ -76,6 +76,9 @@
     &lt;TestId&gt;xUnit::58CF9628-FA45-496D-A22C-69271AF4C5C3::net6.0::YLunchApi.UnitTests.UsersControllerTest.Should_Create_A_Customer_User&lt;/TestId&gt;
   &lt;/TestAncestor&gt;
 &lt;/SessionState&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=e23e2047_002D27f6_002D49f5_002Db781_002Dbe0930d4e3da/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="All tests from Solution" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
+  &lt;Solution /&gt;
+&lt;/SessionState&gt;</s:String>
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=e57b9717_002De3b6_002D4a53_002Da38f_002D5d98c500f1f1/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="Should_Return_A_400BadRequest" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
   &lt;TestAncestor&gt;
     &lt;TestId&gt;xUnit::EE9819B4-D52B-4922-AB2C-D3D06A082051::net6.0::YLunchApi.IntegrationTests.UnitTest1.Should_Return_A_400BadRequest&lt;/TestId&gt;
