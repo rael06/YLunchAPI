@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
 using YLunchApi.Domain.UserAggregate;
 
 namespace YLunchApi.Authentication.Models;
@@ -14,5 +15,6 @@ public class RefreshToken
     public DateTime CreationDateTime { get; set; }
     public DateTime ExpirationDateTime { get; set; }
 
+    [ExcludeFromCodeCoverage]
     public virtual User User { get; set; } = null!;
 }

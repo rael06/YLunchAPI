@@ -152,13 +152,28 @@ public class AuthenticationControllerTest
         // Assert
         var responseResult = Assert.IsType<OkObjectResult>(response.Result);
         var responseBody = Assert.IsType<TokenReadDto>(responseResult.Value);
-        var jwtSecurityToken = new ApplicationSecurityToken(responseBody.AccessToken);
 
+        var jwtSecurityToken = new ApplicationSecurityToken(responseBody.AccessToken);
         jwtSecurityToken.UserId.Should().BeEquivalentTo(userDb.Id);
         jwtSecurityToken.Subject.Should().BeEquivalentTo(userDb.Email);
 
-        var refreshToken = await _refreshTokenRepository.GetByToken(refreshTokensRequest.RefreshToken);
-        refreshToken = Assert.IsType<RefreshToken>(refreshToken);
-        refreshToken.IsUsed.Should().BeTrue();
+        var oldRefreshToken = await _refreshTokenRepository.GetByToken(refreshTokensRequest.RefreshToken);
+        oldRefreshToken = Assert.IsType<RefreshToken>(oldRefreshToken);
+        oldRefreshToken.IsUsed.Should().BeTrue();
+
+        var newRefreshToken = await _refreshTokenRepository.GetByToken(responseBody.RefreshToken);
+        newRefreshToken = Assert.IsType<RefreshToken>(newRefreshToken);
+        newRefreshToken.UserId.Should().Be(jwtSecurityToken.UserId);
+        newRefreshToken.JwtId.Should().Be(jwtSecurityToken.Id);
+        newRefreshToken.IsRevoked.Should().BeFalse();
+        newRefreshToken.IsUsed.Should().BeFalse();
+        newRefreshToken.CreationDateTime.Should().BeAfter(DateTime.UtcNow.AddSeconds(-1));
+        newRefreshToken.CreationDateTime.Should().BeBefore(DateTime.UtcNow);
+        newRefreshToken.ExpirationDateTime.Should().BeAfter(DateTime.UtcNow.AddSeconds(-1).AddMonths(1));
+        newRefreshToken.ExpirationDateTime.Should().BeBefore(DateTime.UtcNow.AddMonths(1));
+        Assert.IsType<string>(newRefreshToken.Id);
+        Assert.IsType<string>(newRefreshToken.Token);
+        newRefreshToken.Id.Should().NotBe(oldRefreshToken.Id);
+        newRefreshToken.Token.Should().NotBe(oldRefreshToken.Token);
     }
 }

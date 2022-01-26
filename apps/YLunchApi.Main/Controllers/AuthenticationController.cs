@@ -46,7 +46,5 @@ public class AuthenticationController : ApplicationControllerBase
 
             return Unauthorized("Invalid tokens, please login to generate new valid tokens");
         }
-
-        return BadRequest();
     }
 }

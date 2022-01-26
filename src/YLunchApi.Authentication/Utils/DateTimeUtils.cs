@@ -1,6 +1,9 @@
+using System.Diagnostics.CodeAnalysis;
+
 namespace YLunchApi.Authentication.Utils;
 
-public static class DateTimeUtils
+[ExcludeFromCodeCoverage]
+public static class DateTimeUtils //NOSONAR
 {
     public static DateTime ConvertUnixTimeStampToDateTime(long unixTimeStamp)
     {
