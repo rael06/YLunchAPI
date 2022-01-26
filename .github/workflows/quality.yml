@@ -24,8 +24,8 @@ jobs:
         azure-devops-token: ${{ secrets.AZURE_DEVOPS_TOKEN }}
         
   sonar:
-    needs: [build_and_test]
     name: Build for Sonar
+    needs: [build_and_test]
     runs-on: windows-2022
     steps:
       - name: Set up JDK 11

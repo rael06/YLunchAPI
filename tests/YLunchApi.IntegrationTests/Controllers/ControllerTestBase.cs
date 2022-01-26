@@ -7,8 +7,8 @@ namespace YLunchApi.IntegrationTests.Controllers;
 
 public class ControllerTestBase : IClassFixture<WebApplicationFactory<Program>>
 {
-    protected readonly CustomWebApplicationFactory<Program> WebApplication;
     protected readonly HttpClient Client;
+    protected readonly CustomWebApplicationFactory<Program> WebApplication;
 
     protected ControllerTestBase()
     {

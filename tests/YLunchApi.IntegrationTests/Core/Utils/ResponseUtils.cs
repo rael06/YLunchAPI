@@ -1,7 +1,6 @@
 using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
-using YLunchApi.Domain.UserAggregate.Dto;
 
 namespace YLunchApi.IntegrationTests.Core.Utils;
 

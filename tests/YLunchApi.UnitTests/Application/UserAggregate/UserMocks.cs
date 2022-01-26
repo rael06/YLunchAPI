@@ -10,7 +10,7 @@ public static class UserMocks
     public static readonly RestaurantAdminCreateDto RestaurantAdminCreateDto = new()
     {
         Email = "admin@restaurant.com",
-        Firstname = "Jean",
+        Firstname = "Jean-Marc",
         Lastname = "Dupont",
         PhoneNumber = "0612345678",
         Password = "Password1234."
@@ -18,32 +18,38 @@ public static class UserMocks
 
     public static readonly CustomerCreateDto CustomerCreateDto = new()
     {
-        Email = "customer@ynov.com",
-        Firstname = "Jean",
-        Lastname = "Dupont",
-        PhoneNumber = "0612345678",
+        Email = "anne-marie.martin@ynov.com",
+        Firstname = "Anne-Marie",
+        Lastname = "Martin",
+        PhoneNumber = "0687654321",
         Password = "Password1234."
     };
 
-    public static UserReadDto CustomerUserReadDto(string id) => new ()
+    public static UserReadDto CustomerUserReadDto(string id)
     {
-        Id = id,
-        Email = CustomerCreateDto.Email,
-        PhoneNumber = CustomerCreateDto.PhoneNumber,
-        Firstname = CustomerCreateDto.Firstname,
-        Lastname = CustomerCreateDto.Lastname,
-        Roles = new List<string> { Roles.Customer },
-        Link = $"{EnvironmentUtils.BaseUrl}/Users/{id}"
-    };
+        return new()
+        {
+            Id = id,
+            Email = CustomerCreateDto.Email,
+            PhoneNumber = CustomerCreateDto.PhoneNumber,
+            Firstname = CustomerCreateDto.Firstname,
+            Lastname = CustomerCreateDto.Lastname,
+            Roles = new List<string> { Roles.Customer },
+            Link = $"{EnvironmentUtils.BaseUrl}/Users/{id}"
+        };
+    }
 
-    public static UserReadDto RestaurantAdminUserReadDto(string id) => new ()
+    public static UserReadDto RestaurantAdminUserReadDto(string id)
     {
-        Id = id,
-        Email = RestaurantAdminCreateDto.Email,
-        PhoneNumber = RestaurantAdminCreateDto.PhoneNumber,
-        Firstname = RestaurantAdminCreateDto.Firstname,
-        Lastname = RestaurantAdminCreateDto.Lastname,
-        Roles = new List<string> { Roles.RestaurantAdmin },
-        Link = $"{EnvironmentUtils.BaseUrl}/Users/{id}"
-    };
+        return new()
+        {
+            Id = id,
+            Email = RestaurantAdminCreateDto.Email,
+            PhoneNumber = RestaurantAdminCreateDto.PhoneNumber,
+            Firstname = RestaurantAdminCreateDto.Firstname,
+            Lastname = RestaurantAdminCreateDto.Lastname,
+            Roles = new List<string> { Roles.RestaurantAdmin },
+            Link = $"{EnvironmentUtils.BaseUrl}/Users/{id}"
+        };
+    }
 }

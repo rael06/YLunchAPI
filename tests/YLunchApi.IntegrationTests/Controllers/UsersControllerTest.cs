@@ -208,14 +208,9 @@ public class UsersController : ControllerTestBase
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
         var content = await ResponseUtils.DeserializeContentAsync(response);
-        content.Should().ContainAll(new[]
-        {
-            "The Email field is required.",
-            "The Password field is required.",
-            "The Lastname field is required.",
-            "The Firstname field is required.",
-            "The PhoneNumber field is required."
-        });
+        content.Should().ContainAll("The Email field is required.", "The Password field is required.",
+            "The Lastname field is required.", "The Firstname field is required.",
+            "The PhoneNumber field is required.");
     }
 
     [Theory]

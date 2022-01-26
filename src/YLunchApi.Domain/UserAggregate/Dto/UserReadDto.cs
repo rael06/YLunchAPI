@@ -1,4 +1,3 @@
-using System.Diagnostics.CodeAnalysis;
 using YLunchApi.Domain.CommonAggregate;
 
 namespace YLunchApi.Domain.UserAggregate.Dto;
@@ -6,11 +5,6 @@ namespace YLunchApi.Domain.UserAggregate.Dto;
 public class UserReadDto : EntityReadDto
 {
     private const string ResourcesName = $"{nameof(User)}s";
-    public string Email { get; set; } = null!;
-    public string PhoneNumber { get; set; } = null!;
-    public string Firstname { get; set; } = null!;
-    public string Lastname { get; set; } = null!;
-    public List<string> Roles { get; set; } = null!;
 
     public UserReadDto()
     {
@@ -24,4 +18,10 @@ public class UserReadDto : EntityReadDto
         Lastname = user.Lastname;
         Roles = roles;
     }
+
+    public string Email { get; set; } = null!;
+    public string PhoneNumber { get; set; } = null!;
+    public string Firstname { get; set; } = null!;
+    public string Lastname { get; set; } = null!;
+    public List<string> Roles { get; set; } = null!;
 }

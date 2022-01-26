@@ -54,8 +54,9 @@ public static class ManagerMocker
         userManagerMock.Setup(x => x.DeleteAsync(It.IsAny<User>())).ReturnsAsync(IdentityResult.Success);
         userManagerMock.Setup(x => x.CreateAsync(It.IsAny<User>(), It.IsAny<string>()))
             .ReturnsAsync(IdentityResult.Success)
-            .Callback<User, string>(async (x, _) =>
+            .Callback<User, string>(async (x, password) =>
             {
+                x.PasswordHash = HashUtils.HashValue(password);
                 await context.Users.AddAsync(x);
                 await context.SaveChangesAsync();
             });
@@ -82,6 +83,12 @@ public static class ManagerMocker
                     .Select(x => x.Name)
                     .ToListAsync();
                 return roles;
+            });
+        userManagerMock.Setup(x => x.CheckPasswordAsync(It.IsAny<User>(), It.IsAny<string>()))
+            .Returns<User, string>(async (user, password) =>
+            {
+                var userDb = await context.Users.FirstOrDefaultAsync(x => x.Email.Equals(user.Email));
+                return userDb!.PasswordHash.Equals(HashUtils.HashValue(password));
             });
 
         return userManagerMock;
