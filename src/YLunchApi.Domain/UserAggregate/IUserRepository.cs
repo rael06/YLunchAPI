@@ -6,4 +6,5 @@ public interface IUserRepository
     Task<User?> GetByEmail(string email);
     Task<User?> GetByEmailAndPassword(string email, string password);
     Task<List<string>> GetUserRoles(User user);
+    Task<User?> GetById(string id);
 }

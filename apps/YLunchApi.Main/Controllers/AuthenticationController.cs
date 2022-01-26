@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
+using YLunchApi.Authentication.Models.Dto;
 using YLunchApi.Authentication.Services;
+using YLunchApi.Domain.Core.Utils;
 using YLunchApi.Domain.UserAggregate;
 using YLunchApi.Domain.UserAggregate.Dto;
 
@@ -25,5 +27,26 @@ public class AuthenticationController : ApplicationControllerBase
         if (user == null) return Unauthorized("Please login with valid credentials");
 
         return Ok(await _jwtService.GenerateJwtToken(user));
+    }
+
+    [HttpPost("refresh-tokens")]
+    public async Task<ActionResult<TokenReadDto>> RefreshTokens([FromBody] TokenUpdateDto tokenUpdateDto)
+    {
+        try
+        {
+            var tokenReadDto = await _jwtService.RefreshJwtToken(tokenUpdateDto);
+            return Ok(tokenReadDto);
+        }
+        catch
+        {
+            if (EnvironmentUtils.IsDevelopment)
+            {
+                throw;
+            }
+
+            return Unauthorized("Invalid tokens, please login to generate new valid tokens");
+        }
+
+        return BadRequest();
     }
 }

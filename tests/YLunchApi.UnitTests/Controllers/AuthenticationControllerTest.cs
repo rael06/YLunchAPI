@@ -10,6 +10,7 @@ using Xunit;
 using YLunchApi.Application.UserAggregate;
 using YLunchApi.Authentication.Models;
 using YLunchApi.Authentication.Models.Dto;
+using YLunchApi.Authentication.Repositories;
 using YLunchApi.Authentication.Services;
 using YLunchApi.AuthenticationShared.Repositories;
 using YLunchApi.Domain.UserAggregate;
@@ -26,6 +27,7 @@ public class AuthenticationControllerTest
     private readonly AuthenticationController _authenticationController;
     private readonly IUserRepository _userRepository;
     private readonly IUserService _userService;
+    private readonly IRefreshTokenRepository _refreshTokenRepository;
 
     public AuthenticationControllerTest()
     {
@@ -60,11 +62,12 @@ public class AuthenticationControllerTest
             ClockSkew = TimeSpan.Zero
         };
 
+        _refreshTokenRepository = new RefreshTokenRepository(context);
         var jwtService = new JwtService(
-            userManagerMock.Object,
-            new RefreshTokenRepository(context),
+            _refreshTokenRepository,
             optionsMonitorMock,
-            tokenValidationParameter
+            tokenValidationParameter,
+            _userRepository
         );
         _authenticationController = new AuthenticationController(jwtService, _userService);
     }
@@ -112,5 +115,50 @@ public class AuthenticationControllerTest
         var responseResult = Assert.IsType<UnauthorizedObjectResult>(response.Result);
         var responseBody = Assert.IsType<string>(responseResult.Value);
         responseBody.Should().Be("Please login with valid credentials");
+    }
+
+
+    [Fact]
+    public async Task RefreshTokens_Should_Return_A_200Ok_Containing_Tokens()
+    {
+        // Arrange
+        var user = UserMocks.RestaurantAdminCreateDto;
+
+        await _userService.Create(user, Roles.RestaurantAdmin);
+        var userDb = await _userRepository.GetByEmail(user.Email);
+        userDb = Assert.IsType<User>(userDb);
+
+        var loginRequestDto = new LoginRequestDto
+        {
+            Email = user.Email,
+            Password = user.Password
+        };
+
+        // Act
+        var loginResponse = await _authenticationController.Login(loginRequestDto);
+
+        var loginResponseResult = Assert.IsType<OkObjectResult>(loginResponse.Result);
+        var loginTokens = Assert.IsType<TokenReadDto>(loginResponseResult.Value);
+
+        var refreshTokensRequest = new TokenUpdateDto
+        {
+            AccessToken = loginTokens.AccessToken,
+            RefreshToken = loginTokens.RefreshToken
+        };
+
+        // Act
+        var response = await _authenticationController.RefreshTokens(refreshTokensRequest);
+
+        // Assert
+        var responseResult = Assert.IsType<OkObjectResult>(response.Result);
+        var responseBody = Assert.IsType<TokenReadDto>(responseResult.Value);
+        var jwtSecurityToken = new ApplicationSecurityToken(responseBody.AccessToken);
+
+        jwtSecurityToken.UserId.Should().BeEquivalentTo(userDb.Id);
+        jwtSecurityToken.Subject.Should().BeEquivalentTo(userDb.Email);
+
+        var refreshToken = await _refreshTokenRepository.GetByToken(refreshTokensRequest.RefreshToken);
+        refreshToken = Assert.IsType<RefreshToken>(refreshToken);
+        refreshToken.IsUsed.Should().BeTrue();
     }
 }

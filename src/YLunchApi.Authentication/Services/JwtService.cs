@@ -19,14 +19,14 @@ public class JwtService : IJwtService
     private readonly JwtConfig _jwtConfig;
     private readonly IRefreshTokenRepository _refreshTokenRepository;
     private readonly TokenValidationParameters _tokenValidationParameters;
-    private readonly UserManager<User> _userManager;
+    private readonly IUserRepository _userRepository;
 
-    public JwtService(UserManager<User> userManager, IRefreshTokenRepository refreshTokenRepository,
-        IOptionsMonitor<JwtConfig> jwtConfig, TokenValidationParameters tokenValidationParameters)
+    public JwtService(IRefreshTokenRepository refreshTokenRepository,
+        IOptionsMonitor<JwtConfig> jwtConfig, TokenValidationParameters tokenValidationParameters, IUserRepository userRepository)
     {
-        _userManager = userManager;
         _refreshTokenRepository = refreshTokenRepository;
         _tokenValidationParameters = tokenValidationParameters;
+        _userRepository = userRepository;
         _jwtConfig = jwtConfig.CurrentValue;
     }
 
@@ -85,7 +85,7 @@ public class JwtService : IJwtService
         await _refreshTokenRepository.Update(storedToken);
 
         // Create new access and refresh tokens
-        var dbUser = await _userManager.FindByIdAsync(storedToken.UserId);
+        var dbUser = await _userRepository.GetById(storedToken.UserId);
         return await GenerateJwtToken(dbUser);
     }
 

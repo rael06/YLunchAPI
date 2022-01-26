@@ -61,4 +61,9 @@ public class UserRepository : IUserRepository
         var iListRoles = await _userManager.GetRolesAsync(user);
         return iListRoles.ToList();
     }
+
+    public async Task<User?> GetById(string id)
+    {
+        return await _context.Users.FindAsync(id);
+    }
 }
