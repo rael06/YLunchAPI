@@ -14,8 +14,8 @@ public class ControllerTestBase : IClassFixture<WebApplicationFactory<Program>>
     {
         WebApplication = new CustomWebApplicationFactory<Program>();
 
-        // Client = new HttpClient();
-        // Client.BaseAddress = new Uri("https://ylunch-api.rael-calitro.ovh/");
+        // Client = new HttpClient(); //NOSONAR
+        // Client.BaseAddress = new Uri("https://ylunch-api.rael-calitro.ovh/"); //NOSONAR
 
         Client = WebApplication.CreateClient();
     }

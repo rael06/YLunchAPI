@@ -3,11 +3,14 @@ using System.Text;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using Moq;
 using NSubstitute;
 using Xunit;
 using YLunchApi.Application.UserAggregate;
+using YLunchApi.Authentication.Exceptions;
 using YLunchApi.Authentication.Models;
 using YLunchApi.Authentication.Models.Dto;
 using YLunchApi.Authentication.Repositories;
@@ -15,8 +18,10 @@ using YLunchApi.Authentication.Services;
 using YLunchApi.AuthenticationShared.Repositories;
 using YLunchApi.Domain.UserAggregate;
 using YLunchApi.Domain.UserAggregate.Dto;
+using YLunchApi.Infrastructure.Database;
 using YLunchApi.Infrastructure.Database.Repositories;
 using YLunchApi.Main.Controllers;
+using YLunchApi.UnitTests.Application.Authentication;
 using YLunchApi.UnitTests.Application.UserAggregate;
 using YLunchApi.UnitTests.Core;
 
@@ -25,18 +30,20 @@ namespace YLunchApi.UnitTests.Controllers;
 public class AuthenticationControllerTest
 {
     private readonly AuthenticationController _authenticationController;
+    private readonly ApplicationDbContext _context;
     private readonly IUserRepository _userRepository;
     private readonly IUserService _userService;
     private readonly IRefreshTokenRepository _refreshTokenRepository;
+    private readonly IJwtService _jwtService;
 
     public AuthenticationControllerTest()
     {
-        var context = ContextBuilder.BuildContext();
+        _context = ContextBuilder.BuildContext();
 
-        var roleManagerMock = ManagerMocker.GetRoleManagerMock(context);
-        var userManagerMock = ManagerMocker.GetUserManagerMock(context);
+        var roleManagerMock = ManagerMocker.GetRoleManagerMock(_context);
+        var userManagerMock = ManagerMocker.GetUserManagerMock(_context);
 
-        _userRepository = new UserRepository(context, userManagerMock.Object, roleManagerMock.Object);
+        _userRepository = new UserRepository(_context, userManagerMock.Object, roleManagerMock.Object);
         _userService = new UserService(_userRepository);
 
         const string jwtSecret = "JsonWebTokenSecretForTests";
@@ -62,14 +69,15 @@ public class AuthenticationControllerTest
             ClockSkew = TimeSpan.Zero
         };
 
-        _refreshTokenRepository = new RefreshTokenRepository(context);
-        var jwtService = new JwtService(
+        _refreshTokenRepository = new RefreshTokenRepository(_context);
+
+        _jwtService = new JwtService(
             _refreshTokenRepository,
             optionsMonitorMock,
             tokenValidationParameter,
             _userRepository
         );
-        _authenticationController = new AuthenticationController(jwtService, _userService);
+        _authenticationController = new AuthenticationController(_jwtService, _userService);
     }
 
     [Fact]
@@ -134,7 +142,6 @@ public class AuthenticationControllerTest
             Password = user.Password
         };
 
-        // Act
         var loginResponse = await _authenticationController.Login(loginRequestDto);
 
         var loginResponseResult = Assert.IsType<OkObjectResult>(loginResponse.Result);
@@ -175,5 +182,43 @@ public class AuthenticationControllerTest
         Assert.IsType<string>(newRefreshToken.Token);
         newRefreshToken.Id.Should().NotBe(oldRefreshToken.Id);
         newRefreshToken.Token.Should().NotBe(oldRefreshToken.Token);
+    }
+
+    [Fact]
+    public async Task RefreshTokens_Should_Return_A_401Unauthorized_When_AccessToken_Is_Bad_Signed()
+    {
+        // Arrange
+        Environment.SetEnvironmentVariable("ASPNETCORE_ENVIRONMENT", "Production");
+        var refreshTokensRequest = new TokenUpdateDto
+        {
+            AccessToken = TokenMocks.ExpiredAccessToken,
+            RefreshToken = TokenMocks.RefreshToken.Token
+        };
+
+        // Act
+        var response = await _authenticationController.RefreshTokens(refreshTokensRequest);
+
+        // Assert
+        var responseResult = Assert.IsType<UnauthorizedObjectResult>(response.Result);
+        var responseBody = Assert.IsType<string>(responseResult.Value);
+        responseBody.Should().Be("Invalid tokens, please login to generate new valid tokens");
+    }
+
+    [Fact]
+    public async Task RefreshTokens_Should_Throw_RefreshTokenNotFoundException()
+    {
+        // Arrange
+        Environment.SetEnvironmentVariable("ASPNETCORE_ENVIRONMENT", "Development");
+        var refreshTokensRequest = new TokenUpdateDto
+        {
+            AccessToken = TokenMocks.ExpiredAccessToken,
+            RefreshToken = TokenMocks.RefreshToken.Token
+        };
+
+        // Act
+        async Task Act() => await _authenticationController.RefreshTokens(refreshTokensRequest);
+
+        // Assert
+        await Assert.ThrowsAsync<RefreshTokenNotFoundException>(Act);
     }
 }

@@ -89,6 +89,9 @@
     &lt;TestId&gt;xUnit::EE9819B4-D52B-4922-AB2C-D3D06A082051::net6.0::YLunchApi.IntegrationTests.Controllers.UnitTest1.Should_Return_A_200Success&lt;/TestId&gt;
   &lt;/TestAncestor&gt;
 &lt;/SessionState&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=bed45174_002D86e0_002D4502_002Db35f_002D7686b5eebdb4/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="RefreshJwtToken_Should_Throw_RefreshTokenExpiredException" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
+  &lt;Project Location="/Users/rael/Documents/perso-code/csharp/YLunchApi" Presentation="&amp;lt;tests&amp;gt;" /&gt;
+&lt;/SessionState&gt;</s:String>
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=cd9274e0_002D15ec_002D442c_002Da9a2_002D3a8bdf501ee9/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="Should_Create_A_Customer_User" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
   &lt;TestAncestor&gt;
     &lt;TestId&gt;xUnit::58CF9628-FA45-496D-A22C-69271AF4C5C3::net6.0::YLunchApi.UnitTests.UsersControllerTest.Should_Create_A_Customer_User&lt;/TestId&gt;
@@ -105,7 +108,7 @@
     &lt;TestId&gt;xUnit::EE9819B4-D52B-4922-AB2C-D3D06A082051::net6.0::YLunchApi.IntegrationTests.UnitTest1.Should_Return_A_400BadRequest&lt;/TestId&gt;
   &lt;/TestAncestor&gt;
 &lt;/SessionState&gt;</s:String>
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=f6d69144_002D482a_002D40b6_002D96a9_002Db92dbbdb4d0a/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="RefreshTokens_Should_Return_A_200Ok_Containing_Tokens" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=f6d69144_002D482a_002D40b6_002D96a9_002Db92dbbdb4d0a/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="RefreshTokens_Should_Return_A_200Ok_Containing_Tokens" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
   &lt;Project Location="/Users/rael/Documents/perso-code/csharp/YLunchApi" Presentation="&amp;lt;tests&amp;gt;" /&gt;
 &lt;/SessionState&gt;</s:String>
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=fd5b1d80_002D62fe_002D46f0_002Db962_002Dd7608531a375/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="UnitTest1" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;

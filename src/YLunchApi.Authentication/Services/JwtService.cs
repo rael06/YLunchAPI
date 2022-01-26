@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -86,7 +87,7 @@ public class JwtService : IJwtService
 
         // Create new access and refresh tokens
         var dbUser = await _userRepository.GetById(storedToken.UserId);
-        return await GenerateJwtToken(dbUser);
+        return await GenerateJwtToken(dbUser!);
     }
 
     private Token CreateToken(User user)
