@@ -1,3 +1,4 @@
+using System;
 using System.Net;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
@@ -9,7 +10,7 @@ using YLunchApi.UnitTests.Application.UserAggregate;
 
 namespace YLunchApi.IntegrationTests.Controllers;
 
-public class UsersController : ControllerTestBase
+public class UsersControllerTest : ControllerTestBase
 {
     [Fact]
     public async Task Post_RestaurantAdmin_Should_Return_A_201Created()
@@ -82,6 +83,7 @@ public class UsersController : ControllerTestBase
     [InlineData("jean.dupont@")]
     [InlineData("jean.dupont@restaurant")]
     [InlineData("jean.dupont@restaurant.c")]
+    [InlineData("Jean.Dupont@Restaurant.com")]
     public async Task Post_RestaurantAdmin_Should_Return_A_400BadRequest_When_Email_Is_Invalid(
         string email
     )
@@ -151,6 +153,35 @@ public class UsersController : ControllerTestBase
         content.Should().Contain("PhoneNumber is not allowed. Example: 0612345678.");
     }
 
+    [Theory]
+    [InlineData("jean123", "dupont123")]
+    [InlineData("j", "d")]
+    [InlineData("Je.", "Du.")]
+    [InlineData("Je-A", "Du-P")]
+    [InlineData("Je-A", "Du P")]
+    public async Task Post_RestaurantAdmin_Should_Return_A_400BadRequest_When_Firstname_Or_Lastname_Is_Invalid(
+        string firstname, string lastname
+    )
+    {
+        // Arrange
+        var body = new
+        {
+            Firstname = firstname,
+            Lastname = lastname
+        };
+
+        // Act
+        var response = await Client.PostAsJsonAsync("restaurant-admins", body);
+
+        // Assert
+        response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+        var content = await ResponseUtils.DeserializeContentAsync(response);
+        content.Should()
+            .Contain("Firstname is not allowed")
+            .And
+            .Contain("Lastname is not allowed");
+    }
+
     [Fact]
     public async Task Post_Customer_Should_Return_A_201Created()
     {
@@ -179,7 +210,7 @@ public class UsersController : ControllerTestBase
         // Arrange
         var body = new
         {
-            UserMocks.CustomerCreateDto.Email,
+            Email = $"{Guid.NewGuid()}{UserMocks.CustomerCreateDto.Email}",
             UserMocks.CustomerCreateDto.Password,
             UserMocks.CustomerCreateDto.PhoneNumber,
             UserMocks.CustomerCreateDto.Lastname,
@@ -285,5 +316,34 @@ public class UsersController : ControllerTestBase
         response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
         var content = await ResponseUtils.DeserializeContentAsync(response);
         content.Should().Contain("PhoneNumber is not allowed. Example: 0612345678.");
+    }
+
+    [Theory]
+    [InlineData("jean123", "dupont123")]
+    [InlineData("j", "d")]
+    [InlineData("Je.", "Du.")]
+    [InlineData("Je-A", "Du-P")]
+    [InlineData("Je-A", "Du P")]
+    public async Task Post_Customer_Should_Return_A_400BadRequest_When_Firstname_Or_Lastname_Is_Invalid(
+        string firstname, string lastname
+    )
+    {
+        // Arrange
+        var body = new
+        {
+            Firstname = firstname,
+            Lastname = lastname
+        };
+
+        // Act
+        var response = await Client.PostAsJsonAsync("customers", body);
+
+        // Assert
+        response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+        var content = await ResponseUtils.DeserializeContentAsync(response);
+        content.Should()
+            .Contain("Firstname is not allowed")
+            .And
+            .Contain("Lastname is not allowed");
     }
 }

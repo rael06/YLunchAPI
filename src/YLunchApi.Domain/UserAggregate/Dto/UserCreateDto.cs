@@ -6,8 +6,8 @@ public abstract class UserCreateDto
 {
     [Required]
     [RegularExpression(
-        @"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*\.[a-zA-Z]{2,20}$",
-        ErrorMessage = "Email is invalid.")]
+        @"^[a-z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?(?:\.[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?)*\.[a-z]{2,20}$",
+        ErrorMessage = "Email is invalid. Should use right format with no uppercase.")]
     public virtual string Email { get; set; } = null!;
 
     [Required]
@@ -22,7 +22,13 @@ public abstract class UserCreateDto
         ErrorMessage = "PhoneNumber is not allowed. Example: 0612345678.")]
     public string PhoneNumber { get; set; } = null!;
 
+    [RegularExpression(
+        @"^(:?[^\W0-9]{2,20}[ -]*[^\W0-9]{2,20})+$",
+        ErrorMessage = "Firstname is not allowed. Should contain only letters and '-'")]
     [Required] public string Firstname { get; set; } = null!;
 
+    [RegularExpression(
+        @"^(:?[^\W0-9]{2,20}[ -]*[^\W0-9]{2,20})+$",
+        ErrorMessage = "Lastname is not allowed. Should contain only letters and '-'")]
     [Required] public string Lastname { get; set; } = null!;
 }
