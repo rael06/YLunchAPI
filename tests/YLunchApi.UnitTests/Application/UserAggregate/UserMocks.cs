@@ -11,7 +11,7 @@ public static class UserMocks
     {
         Email = "admin@restaurant.com",
         Firstname = "Jean-Marc",
-        Lastname = "Dupont",
+        Lastname = "Dupont Henri",
         PhoneNumber = "0612345678",
         Password = "Password1234."
     };
@@ -20,7 +20,7 @@ public static class UserMocks
     {
         Email = "anne-marie.martin@ynov.com",
         Firstname = "Anne-Marie",
-        Lastname = "Martin",
+        Lastname = "Martin-Jacques",
         PhoneNumber = "0687654321",
         Password = "Password1234."
     };

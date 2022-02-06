@@ -1,10 +1,20 @@
+using System.Text.RegularExpressions;
+
 namespace YLunchApi.Domain.Core.Utils;
 
 public static class StringExtension
 {
     public static string Capitalize(this string value)
     {
-        return string.Join("-", value.Split("-").Select(CapitalizePart));
+        var regex = new Regex(@"([^\W0-9]+)");
+        var matches = regex.Matches(value);
+        for (var i = 0; i < matches.Count; i++)
+        {
+            var part = matches[i].Value;
+            value = value.Replace(part, CapitalizePart(part));
+        }
+
+        return value;
     }
 
     private static string CapitalizePart(string value)

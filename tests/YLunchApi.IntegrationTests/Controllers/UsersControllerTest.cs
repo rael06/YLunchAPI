@@ -1,4 +1,3 @@
-using System;
 using System.Net;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
@@ -68,14 +67,13 @@ public class UsersControllerTest : ControllerTestBase
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
         var content = await ResponseUtils.DeserializeContentAsync(response);
-        content.Should().ContainAll(new[]
-        {
+        content.Should().ContainAll(
             "The Email field is required.",
             "The Password field is required.",
             "The Lastname field is required.",
             "The Firstname field is required.",
             "The PhoneNumber field is required."
-        });
+        );
     }
 
     [Theory]
@@ -210,7 +208,7 @@ public class UsersControllerTest : ControllerTestBase
         // Arrange
         var body = new
         {
-            Email = $"{Guid.NewGuid()}{UserMocks.CustomerCreateDto.Email}",
+            Email = $"post_customer_should_return_a_409conflict{UserMocks.CustomerCreateDto.Email}",
             UserMocks.CustomerCreateDto.Password,
             UserMocks.CustomerCreateDto.PhoneNumber,
             UserMocks.CustomerCreateDto.Lastname,
