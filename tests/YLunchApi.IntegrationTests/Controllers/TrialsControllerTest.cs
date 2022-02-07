@@ -100,20 +100,4 @@ public class TrialsControllerTest : ControllerTestBase
             .BeEquivalentTo(
                 $"YLunchApi is running, you are authenticated as {applicationSecurityToken.UserEmail} with Id: {applicationSecurityToken.UserId} and Roles: {string.Join(";", applicationSecurityToken.UserRoles)}");
     }
-
-    [Fact]
-    public async Task Get_Authenticated_As_Customer_Should_Return_A_401Unauthorized()
-    {
-        // Arrange
-        Client.DefaultRequestHeaders.Authorization =
-            new AuthenticationHeaderValue("Bearer", "Invalid AccessToken");
-
-        // Assert
-        var authenticatedTrialResponse = await Client.GetAsync("trials/authenticated");
-        authenticatedTrialResponse.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
-        var authenticatedTrialResponseContent = await ResponseUtils.DeserializeContentAsync(authenticatedTrialResponse);
-        authenticatedTrialResponseContent.Should()
-            .BeEquivalentTo(
-                "YLunchApi is running, you are authenticated");
-    }
 }

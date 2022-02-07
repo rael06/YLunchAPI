@@ -19,11 +19,11 @@ public class CustomWebApplicationFactory<TStartup>
     {
         builder.ConfigureServices(async services =>
         {
-            var descriptor = services.SingleOrDefault(
+            var dbContextDescriptor = services.SingleOrDefault(
                 d => d.ServiceType ==
                      typeof(DbContextOptions<ApplicationDbContext>));
 
-            services.Remove(descriptor!);
+            services.Remove(dbContextDescriptor!);
 
             services.AddDbContext<ApplicationDbContext>(options =>
             {
