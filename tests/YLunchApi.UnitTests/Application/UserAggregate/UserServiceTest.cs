@@ -69,7 +69,10 @@ public class UserServiceTest
         await _userService.Create(userCreateDto, Roles.Customer);
 
         // Act
-        async Task Act() => await _userService.Create(userCreateDto, Roles.Customer);
+        async Task Act()
+        {
+            await _userService.Create(userCreateDto, Roles.Customer);
+        }
 
         // Assert
         await Assert.ThrowsAsync<EntityAlreadyExistsException>(Act);
@@ -86,7 +89,10 @@ public class UserServiceTest
         var userCreateDto = UserMocks.CustomerCreateDto;
 
         // Act
-        async Task Act() => await _userService.Create(userCreateDto, Roles.Customer);
+        async Task Act()
+        {
+            await _userService.Create(userCreateDto, Roles.Customer);
+        }
 
         // Assert
         await Assert.ThrowsAsync<EntityNotFoundException>(Act);
@@ -99,7 +105,10 @@ public class UserServiceTest
         var userCreateDto = UserMocks.CustomerCreateDto;
 
         // Act
-        async Task Act() => await _userService.Create(userCreateDto, "UnknownRole");
+        async Task Act()
+        {
+            await _userService.Create(userCreateDto, "UnknownRole");
+        }
 
         // Assert
         await Assert.ThrowsAsync<EntityNotFoundException>(Act);
@@ -121,7 +130,10 @@ public class UserServiceTest
         var userCreateDto = UserMocks.CustomerCreateDto;
 
         // Act
-        async Task Act() => await _userService.Create(userCreateDto, Roles.Customer);
+        async Task Act()
+        {
+            await _userService.Create(userCreateDto, Roles.Customer);
+        }
 
         // Assert
         await Assert.ThrowsAsync<UserRegistrationException>(Act);

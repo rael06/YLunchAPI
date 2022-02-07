@@ -25,10 +25,12 @@ public abstract class UserCreateDto
     [RegularExpression(
         @"^(:?[^\W0-9]{2,20}[ -]*[^\W0-9]{2,20})+$",
         ErrorMessage = "Firstname is not allowed. Should contain only letters and '-'")]
-    [Required] public string Firstname { get; set; } = null!;
+    [Required]
+    public string Firstname { get; set; } = null!;
 
     [RegularExpression(
         @"^(:?[^\W0-9]{2,20}[ -]*[^\W0-9]{2,20})+$",
         ErrorMessage = "Lastname is not allowed. Should contain only letters and '-'")]
-    [Required] public string Lastname { get; set; } = null!;
+    [Required]
+    public string Lastname { get; set; } = null!;
 }

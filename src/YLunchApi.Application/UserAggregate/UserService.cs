@@ -32,11 +32,9 @@ public class UserService : IUserService
 
     public async Task<AuthenticatedUser> GetAuthenticatedUser(LoginRequestDto loginRequestDto)
     {
-        var user = await _userRepository.GetByEmailAndPassword(loginRequestDto.Email.ToLower(), loginRequestDto.Password);
-        if (user == null)
-        {
-            throw new EntityNotFoundException($"{loginRequestDto.Email} not found");
-        }
+        var user = await _userRepository.GetByEmailAndPassword(loginRequestDto.Email.ToLower(),
+            loginRequestDto.Password);
+        if (user == null) throw new EntityNotFoundException($"{loginRequestDto.Email} not found");
         var roles = await _userRepository.GetUserRoles(user);
         return new AuthenticatedUser(user, roles);
     }

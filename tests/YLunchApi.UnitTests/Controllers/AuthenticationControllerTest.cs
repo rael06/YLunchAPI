@@ -3,10 +3,8 @@ using System.Text;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using Moq;
 using NSubstitute;
 using Xunit;
 using YLunchApi.Application.UserAggregate;
@@ -31,10 +29,10 @@ public class AuthenticationControllerTest
 {
     private readonly AuthenticationController _authenticationController;
     private readonly ApplicationDbContext _context;
+    private readonly IJwtService _jwtService;
+    private readonly IRefreshTokenRepository _refreshTokenRepository;
     private readonly IUserRepository _userRepository;
     private readonly IUserService _userService;
-    private readonly IRefreshTokenRepository _refreshTokenRepository;
-    private readonly IJwtService _jwtService;
 
     public AuthenticationControllerTest()
     {
@@ -216,7 +214,10 @@ public class AuthenticationControllerTest
         };
 
         // Act
-        async Task Act() => await _authenticationController.RefreshTokens(refreshTokensRequest);
+        async Task Act()
+        {
+            await _authenticationController.RefreshTokens(refreshTokensRequest);
+        }
 
         // Assert
         await Assert.ThrowsAsync<RefreshTokenNotFoundException>(Act);

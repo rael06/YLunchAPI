@@ -27,7 +27,7 @@ public static class UserMocks
 
     public static UserReadDto CustomerUserReadDto(string id)
     {
-        return new()
+        return new UserReadDto
         {
             Id = id,
             Email = CustomerCreateDto.Email,
@@ -41,7 +41,7 @@ public static class UserMocks
 
     public static UserReadDto RestaurantAdminUserReadDto(string id)
     {
-        return new()
+        return new UserReadDto
         {
             Id = id,
             Email = RestaurantAdminCreateDto.Email,

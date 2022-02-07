@@ -15,6 +15,5 @@ public class RefreshToken
     public DateTime CreationDateTime { get; set; }
     public DateTime ExpirationDateTime { get; set; }
 
-    [ExcludeFromCodeCoverage]
-    public virtual User? User { get; set; }
+    [ExcludeFromCodeCoverage] public virtual User? User { get; set; }
 }

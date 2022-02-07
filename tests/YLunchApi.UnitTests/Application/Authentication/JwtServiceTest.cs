@@ -23,8 +23,8 @@ namespace YLunchApi.UnitTests.Application.Authentication;
 public class JwtServiceTest
 {
     private readonly ApplicationDbContext _context;
-    private readonly Mock<IRefreshTokenRepository> _refreshTokenRepositoryMock;
     private readonly IJwtService _jwtService;
+    private readonly Mock<IRefreshTokenRepository> _refreshTokenRepositoryMock;
 
     public JwtServiceTest()
     {
@@ -87,7 +87,10 @@ public class JwtServiceTest
         };
 
         // Act
-        async Task Act() => await _jwtService.RefreshJwtToken(refreshTokensRequest);
+        async Task Act()
+        {
+            await _jwtService.RefreshJwtToken(refreshTokensRequest);
+        }
 
         // Assert
         await Assert.ThrowsAsync<InvalidTokenException>(Act);
@@ -104,7 +107,10 @@ public class JwtServiceTest
         };
 
         // Act
-        async Task Act() => await _jwtService.RefreshJwtToken(refreshTokensRequest);
+        async Task Act()
+        {
+            await _jwtService.RefreshJwtToken(refreshTokensRequest);
+        }
 
         // Assert
         await Assert.ThrowsAsync<RefreshTokenNotFoundException>(Act);
@@ -126,7 +132,10 @@ public class JwtServiceTest
         };
 
         // Act
-        async Task Act() => await _jwtService.RefreshJwtToken(refreshTokensRequest);
+        async Task Act()
+        {
+            await _jwtService.RefreshJwtToken(refreshTokensRequest);
+        }
 
         // Assert
         await Assert.ThrowsAsync<RefreshTokenExpiredException>(Act);
@@ -149,7 +158,10 @@ public class JwtServiceTest
         };
 
         // Act
-        async Task Act() => await _jwtService.RefreshJwtToken(refreshTokensRequest);
+        async Task Act()
+        {
+            await _jwtService.RefreshJwtToken(refreshTokensRequest);
+        }
 
         // Assert
         await Assert.ThrowsAsync<RefreshTokenAlreadyUsedException>(Act);
@@ -171,7 +183,10 @@ public class JwtServiceTest
         };
 
         // Act
-        async Task Act() => await _jwtService.RefreshJwtToken(refreshTokensRequest);
+        async Task Act()
+        {
+            await _jwtService.RefreshJwtToken(refreshTokensRequest);
+        }
 
         // Assert
         await Assert.ThrowsAsync<RefreshTokenRevokedException>(Act);
@@ -193,7 +208,10 @@ public class JwtServiceTest
         };
 
         // Act
-        async Task Act() => await _jwtService.RefreshJwtToken(refreshTokensRequest);
+        async Task Act()
+        {
+            await _jwtService.RefreshJwtToken(refreshTokensRequest);
+        }
 
         // Assert
         await Assert.ThrowsAsync<AccessAndRefreshTokensNotMatchException>(Act);

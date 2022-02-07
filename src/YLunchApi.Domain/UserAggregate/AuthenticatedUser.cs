@@ -4,8 +4,6 @@ namespace YLunchApi.Domain.UserAggregate;
 
 public class AuthenticatedUser : User
 {
-    public List<string> Roles { get; set; }
-
     public AuthenticatedUser(User user, List<string> roles)
     {
         Id = user.Id;
@@ -16,4 +14,6 @@ public class AuthenticatedUser : User
         Lastname = user.Lastname.Capitalize();
         Roles = roles;
     }
+
+    public List<string> Roles { get; set; }
 }

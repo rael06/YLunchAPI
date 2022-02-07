@@ -44,10 +44,7 @@ public class AuthenticationController : ApplicationControllerBase
         }
         catch
         {
-            if (EnvironmentUtils.IsDevelopment)
-            {
-                throw;
-            }
+            if (EnvironmentUtils.IsDevelopment) throw;
 
             return Unauthorized("Invalid tokens, please login to generate new valid tokens");
         }
