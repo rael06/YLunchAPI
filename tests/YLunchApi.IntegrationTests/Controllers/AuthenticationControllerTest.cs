@@ -1,73 +1,43 @@
 using System.Net;
-using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Xunit;
 using YLunchApi.Authentication.Models.Dto;
-using YLunchApi.Domain.UserAggregate.Dto;
 using YLunchApi.IntegrationTests.Core.Utils;
 using YLunchApi.UnitTests.Application.UserAggregate;
 
 namespace YLunchApi.IntegrationTests.Controllers;
 
+[Collection("Sequential")]
 public class AuthenticationControllerTest : ControllerTestBase
 {
     [Fact]
     public async Task Login_Should_Return_A_200Ok()
     {
-        // Wait for UsersControllerTest completion
-        await Task.Delay(3000);
+        // Arrange, Act and Assert
+        _ = await Authenticate(UserMocks.CustomerCreateDto);
+    }
 
-        var email = $"login_should_return_a_200ok_{UserMocks.CustomerCreateDto.Email}";
+    [Fact]
+    public async Task Refresh_Tokens_Should_Return_A_200Ok()
+    {
         // Arrange
-        var customerCreationRequestBody = new
-        {
-            Email = email,
-            UserMocks.CustomerCreateDto.Password,
-            UserMocks.CustomerCreateDto.PhoneNumber,
-            UserMocks.CustomerCreateDto.Lastname,
-            UserMocks.CustomerCreateDto.Firstname
-        };
+        var applicationSecurityToken = await Authenticate(UserMocks.CustomerCreateDto);
 
-        var customerCreationResponse = await Client.PostAsJsonAsync("customers", customerCreationRequestBody);
-        var customerCreationResponseContent =
-            await ResponseUtils.DeserializeContentAsync<UserReadDto>(customerCreationResponse);
-        Assert.IsType<string>(customerCreationResponseContent.Id);
-        Assert.IsType<string>(customerCreationResponseContent.Email);
-        var customerId = customerCreationResponseContent.Id;
-        var customerEmail = customerCreationResponseContent.Email;
-
-        var customerLoginRequestBody = new
+        var refreshTokensBody = new
         {
-            email = customerEmail,
-            UserMocks.CustomerCreateDto.Password
+            applicationSecurityToken.AccessToken,
+            applicationSecurityToken.RefreshToken
         };
 
         // Act
-        var loginResponse = await Client.PostAsJsonAsync("authentication/login", customerLoginRequestBody);
-        loginResponse.StatusCode.Should().Be(HttpStatusCode.OK);
-        var tokens = await ResponseUtils.DeserializeContentAsync<TokenReadDto>(loginResponse);
-
-        // Assert
-        Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", tokens.AccessToken);
-        var authenticatedTrialResponse = await Client.GetAsync("trials/authenticated");
-        authenticatedTrialResponse.StatusCode.Should().Be(HttpStatusCode.OK);
-        var authenticatedTrialResponseContent = await ResponseUtils.DeserializeContentAsync(authenticatedTrialResponse);
-        authenticatedTrialResponseContent.Should()
-            .BeEquivalentTo($"YLunchApi is running, you are authenticated as {customerEmail} with Id: {customerId}");
-
-        var refreshTokensResponse = await Client.PostAsJsonAsync("authentication/refresh-tokens", tokens);
+        var refreshTokensResponse = await Client.PostAsJsonAsync("authentication/refresh-tokens", refreshTokensBody);
         refreshTokensResponse.StatusCode.Should().Be(HttpStatusCode.OK);
         var refreshedTokens = await ResponseUtils.DeserializeContentAsync<TokenReadDto>(refreshTokensResponse);
 
-        Client.DefaultRequestHeaders.Authorization =
-            new AuthenticationHeaderValue("Bearer", refreshedTokens.AccessToken);
-        var authenticatedTrialRefreshedTokensResponse = await Client.GetAsync("trials/authenticated");
-        authenticatedTrialRefreshedTokensResponse.StatusCode.Should().Be(HttpStatusCode.OK);
-        var authenticatedTrialWithExpiredTokensResponseContent =
-            await ResponseUtils.DeserializeContentAsync(authenticatedTrialRefreshedTokensResponse);
-        authenticatedTrialWithExpiredTokensResponseContent.Should()
-            .BeEquivalentTo($"YLunchApi is running, you are authenticated as {customerEmail} with Id: {customerId}");
+        // Assert
+        Assert.IsType<string>(refreshedTokens.AccessToken);
+        Assert.IsType<string>(refreshedTokens.RefreshToken);
     }
 }

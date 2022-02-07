@@ -5,6 +5,6 @@ namespace YLunchApi.Authentication.Services;
 
 public interface IJwtService
 {
-    Task<TokenReadDto> GenerateJwtToken(User user);
+    Task<TokenReadDto> GenerateJwtToken(AuthenticatedUser authenticatedUser);
     Task<TokenReadDto> RefreshJwtToken(TokenUpdateDto tokenUpdateDto);
 }

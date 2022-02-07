@@ -32,7 +32,7 @@ public class CustomWebApplicationFactory<TStartup>
 
             var sp = services.BuildServiceProvider();
 
-            var scope = sp.CreateScope();
+            using var scope = sp.CreateScope();
             var scopedServices = scope.ServiceProvider;
             var db = scopedServices.GetRequiredService<ApplicationDbContext>();
             var logger = scopedServices
@@ -40,7 +40,7 @@ public class CustomWebApplicationFactory<TStartup>
 
             try
             {
-                await DatabaseUtils.InitializeDbForTests(db);
+                await DatabaseUtils.ReinitializeDbForTests(db);
             }
             catch (Exception ex)
             {

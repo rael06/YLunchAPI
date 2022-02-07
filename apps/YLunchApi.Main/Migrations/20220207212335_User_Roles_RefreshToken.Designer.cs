@@ -11,8 +11,8 @@ using YLunchApi.Infrastructure.Database;
 namespace YLunchApi.Main.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220116114712_V1")]
-    partial class V1
+    [Migration("20220207212335_User_Roles_RefreshToken")]
+    partial class User_Roles_RefreshToken
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

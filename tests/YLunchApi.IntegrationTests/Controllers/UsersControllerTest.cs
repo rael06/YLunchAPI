@@ -9,6 +9,7 @@ using YLunchApi.UnitTests.Application.UserAggregate;
 
 namespace YLunchApi.IntegrationTests.Controllers;
 
+[Collection("Sequential")]
 public class UsersControllerTest : ControllerTestBase
 {
     [Fact]
@@ -47,6 +48,7 @@ public class UsersControllerTest : ControllerTestBase
         };
 
         // Act
+        _ = await Client.PostAsJsonAsync("restaurant-admins", body);
         var response = await Client.PostAsJsonAsync("restaurant-admins", body);
 
         // Assert

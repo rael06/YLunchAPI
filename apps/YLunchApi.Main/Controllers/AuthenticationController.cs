@@ -23,10 +23,15 @@ public class AuthenticationController : ApplicationControllerBase
     [HttpPost("login")]
     public async Task<ActionResult<string>> Login([FromBody] LoginRequestDto loginRequestDto)
     {
-        var user = await _userService.GetAuthenticatedUser(loginRequestDto);
-        if (user == null) return Unauthorized("Please login with valid credentials");
-
-        return Ok(await _jwtService.GenerateJwtToken(user));
+        try
+        {
+            var authenticatedUser = await _userService.GetAuthenticatedUser(loginRequestDto);
+            return Ok(await _jwtService.GenerateJwtToken(authenticatedUser));
+        }
+        catch
+        {
+            return Unauthorized("Please login with valid credentials");
+        }
     }
 
     [HttpPost("refresh-tokens")]

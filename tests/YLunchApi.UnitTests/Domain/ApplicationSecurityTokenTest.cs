@@ -1,7 +1,8 @@
-using System.IdentityModel.Tokens.Jwt;
+using System.Collections.Generic;
 using FluentAssertions;
 using Xunit;
 using YLunchApi.Authentication.Models;
+using YLunchApi.Domain.UserAggregate;
 using YLunchApi.UnitTests.Application.UserAggregate;
 
 namespace YLunchApi.UnitTests.Domain;
@@ -12,11 +13,10 @@ public class ApplicationSecurityTokenTest
     public void Should_Be_Valid()
     {
         // Arrange
-        var user = UserMocks.RestaurantAdminUserReadDto("03371895-6eb0-4a46-9401-57635f42f9ea");
+        var user = UserMocks.RestaurantAdminUserReadDto("095f0658-8192-442d-9a3a-2b78c4268aa3");
         const string token =
-            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJJZCI6IjAzMzcxODk1LTZlYjAtNGE0Ni05NDAxLTU3NjM1ZjQyZjllYSIsInN1YiI6ImFkbWluQHJlc3RhdXJhbnQuY29tIiwianRpIjoiNzEyZWZkZDYtNzQwZS00YmFlLThkMTYtMzY5NzM0NzMwZDdjIiwibmJmIjoxNjQyMzY4NTY3LCJleHAiOjE2NDIzNjg4NjcsImlhdCI6MTY0MjM2ODU2N30.cENrwSlv1BsFbwX2R_iGyMTgUFqAMN2FqBbFlEeZSQA";
-        var handler = new JwtSecurityTokenHandler();
-        var expected = handler.ReadJwtToken(token);
+            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJJZCI6IjA5NWYwNjU4LTgxOTItNDQyZC05YTNhLTJiNzhjNDI2OGFhMyIsInN1YiI6ImFkbWluQHJlc3RhdXJhbnQuY29tIiwiUm9sZXMiOiJSZXN0YXVyYW50QWRtaW4iLCJqdGkiOiJkYTA1OWFhNy1iY2ZkLTRhOWQtYTExNy05Y2ZiNjA1MDE4ODciLCJuYmYiOjE2NDQyNjYwMDAsImV4cCI6MTY0NDI2NjMwMCwiaWF0IjoxNjQ0MjY2MDAwfQ.iYx0VEVQI11kFq6uM6haW_4qJRNwUEmZXnH9krq7x24";
+        var expected = new ApplicationSecurityToken(token);
 
         // Act
         var actual = new ApplicationSecurityToken(token);
@@ -24,6 +24,7 @@ public class ApplicationSecurityTokenTest
             options.Excluding(x => x.UserId)
         );
         actual.UserId.Should().Be(user.Id);
-        actual.Subject.Should().Be(user.Email);
+        actual.UserEmail.Should().Be(user.Email);
+        actual.UserRoles.Should().BeEquivalentTo(new List<string> { Roles.RestaurantAdmin });
     }
 }

@@ -5,7 +5,7 @@ using YLunchApi.Domain.UserAggregate.Dto;
 
 namespace YLunchApi.Domain.UserAggregate;
 
-public sealed class User : IdentityUser
+public class User : IdentityUser
 {
     [ExcludeFromCodeCoverage]
     public User()

@@ -23,7 +23,8 @@ public class JwtService : IJwtService
     private readonly IUserRepository _userRepository;
 
     public JwtService(IRefreshTokenRepository refreshTokenRepository,
-        IOptionsMonitor<JwtConfig> jwtConfig, TokenValidationParameters tokenValidationParameters, IUserRepository userRepository)
+        IOptionsMonitor<JwtConfig> jwtConfig, TokenValidationParameters tokenValidationParameters,
+        IUserRepository userRepository)
     {
         _refreshTokenRepository = refreshTokenRepository;
         _tokenValidationParameters = tokenValidationParameters;
@@ -31,11 +32,11 @@ public class JwtService : IJwtService
         _jwtConfig = jwtConfig.CurrentValue;
     }
 
-    public async Task<TokenReadDto> GenerateJwtToken(User user)
+    public async Task<TokenReadDto> GenerateJwtToken(AuthenticatedUser authenticatedUser)
     {
-        var accessToken = CreateToken(user);
+        var accessToken = CreateToken(authenticatedUser);
 
-        var refreshToken = await CreateRefreshToken(user.Id, accessToken.SecurityToken.Id);
+        var refreshToken = await CreateRefreshToken(authenticatedUser.Id, accessToken.SecurityToken.Id);
 
         return new TokenReadDto(accessToken.StringToken, refreshToken.Token);
     }
@@ -86,11 +87,13 @@ public class JwtService : IJwtService
         await _refreshTokenRepository.Update(storedToken);
 
         // Create new access and refresh tokens
-        var dbUser = await _userRepository.GetById(storedToken.UserId);
-        return await GenerateJwtToken(dbUser!);
+        var userDb = await _userRepository.GetById(storedToken.UserId);
+        var userRoles = await _userRepository.GetUserRoles(userDb!);
+        var authenticatedUser = new AuthenticatedUser(userDb!, userRoles);
+        return await GenerateJwtToken(authenticatedUser);
     }
 
-    private Token CreateToken(User user)
+    private Token CreateToken(AuthenticatedUser authenticatedUser)
     {
         var jwtTokenHandler = new JwtSecurityTokenHandler();
 
@@ -100,8 +103,9 @@ public class JwtService : IJwtService
         {
             Subject = new ClaimsIdentity(new[]
             {
-                new Claim("Id", user.Id),
-                new Claim(JwtRegisteredClaimNames.Sub, user.UserName),
+                new Claim("Id", authenticatedUser.Id),
+                new Claim(JwtRegisteredClaimNames.Sub, authenticatedUser.UserName),
+                new Claim("Roles", string.Join(";", authenticatedUser.Roles)),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             }),
             Expires = DateTime.UtcNow.AddMinutes(5),

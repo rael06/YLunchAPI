@@ -16,5 +16,5 @@ public class RefreshToken
     public DateTime ExpirationDateTime { get; set; }
 
     [ExcludeFromCodeCoverage]
-    public virtual User User { get; set; } = null!;
+    public virtual User? User { get; set; }
 }

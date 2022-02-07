@@ -6,5 +6,5 @@ public interface IUserService
 {
     Task<UserReadDto?> Create(UserCreateDto userCreateDto, string role);
 
-    Task<User?> GetAuthenticatedUser(LoginRequestDto loginRequestDto);
+    Task<AuthenticatedUser> GetAuthenticatedUser(LoginRequestDto loginRequestDto);
 }

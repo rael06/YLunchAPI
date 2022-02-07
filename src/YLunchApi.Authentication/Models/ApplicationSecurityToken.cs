@@ -1,15 +1,29 @@
 using System.IdentityModel.Tokens.Jwt;
+using System.Text.Json;
 
 namespace YLunchApi.Authentication.Models;
 
 public sealed class ApplicationSecurityToken : JwtSecurityToken
 {
+    public string AccessToken { get; }
+    public string? RefreshToken { get; }
+    public string UserId { get; }
+    public string UserEmail { get; }
+    public List<string> UserRoles { get; }
+
     public ApplicationSecurityToken(string jwtEncodedString) : base(jwtEncodedString)
     {
         var handler = new JwtSecurityTokenHandler();
         var jwtSecurityToken = handler.ReadJwtToken(jwtEncodedString);
+        AccessToken = jwtEncodedString;
         UserId = jwtSecurityToken.Claims.First(x => x.Type.Equals("Id")).Value;
+        UserEmail = jwtSecurityToken.Claims.First(x => x.Type.Equals(JwtRegisteredClaimNames.Sub)).Value;
+        var userRolesStr = jwtSecurityToken.Claims.First(x => x.Type.Equals("Roles")).Value;
+        UserRoles = userRolesStr.Split(";").ToList();
     }
 
-    public string UserId { get; }
+    public ApplicationSecurityToken(string jwtEncodedString, string? refreshToken) : this(jwtEncodedString)
+    {
+        RefreshToken = refreshToken;
+    }
 }
