@@ -27,7 +27,6 @@ public abstract class ControllerTestBase : IClassFixture<WebApplicationFactory<P
 
     protected async Task<ApplicationSecurityToken> Authenticate(CustomerCreateDto customerCreateDto)
     {
-        // Arrange
         var customerCreationRequestBody = new
         {
             customerCreateDto.Email,
@@ -37,20 +36,42 @@ public abstract class ControllerTestBase : IClassFixture<WebApplicationFactory<P
             customerCreateDto.Firstname
         };
 
-        var customerCreationResponse = await Client.PostAsJsonAsync("customers", customerCreationRequestBody);
-        var customerCreationResponseContent =
-            await ResponseUtils.DeserializeContentAsync<UserReadDto>(customerCreationResponse);
-        Assert.IsType<string>(customerCreationResponseContent.Email);
-        var customerEmail = customerCreationResponseContent.Email;
+        _ = await Client.PostAsJsonAsync("customers", customerCreationRequestBody);
 
-        var customerLoginRequestBody = new
+        var applicationSecurityToken = await AuthenticateUser(customerCreateDto);
+        applicationSecurityToken.UserRoles.Should().BeEquivalentTo(new List<string> { Roles.Customer });
+        return applicationSecurityToken;
+    }
+
+    protected async Task<ApplicationSecurityToken> Authenticate(RestaurantAdminCreateDto restaurantAdminCreateDto)
+    {
+        var restaurantAdminCreationRequestBody = new
         {
-            email = customerEmail,
-            customerCreateDto.Password
+            restaurantAdminCreateDto.Email,
+            restaurantAdminCreateDto.Password,
+            restaurantAdminCreateDto.PhoneNumber,
+            restaurantAdminCreateDto.Lastname,
+            restaurantAdminCreateDto.Firstname
+        };
+
+        _ = await Client.PostAsJsonAsync("restaurant-admins", restaurantAdminCreationRequestBody);
+
+        var applicationSecurityToken = await AuthenticateUser(restaurantAdminCreateDto);
+        applicationSecurityToken.UserRoles.Should().BeEquivalentTo(new List<string> { Roles.RestaurantAdmin });
+        return applicationSecurityToken;
+    }
+
+    private async Task<ApplicationSecurityToken> AuthenticateUser(UserCreateDto userCreateDto)
+    {
+        // Arrange
+        var userLoginRequestBody = new
+        {
+            email = userCreateDto.Email,
+            userCreateDto.Password
         };
 
         // Act
-        var loginResponse = await Client.PostAsJsonAsync("authentication/login", customerLoginRequestBody);
+        var loginResponse = await Client.PostAsJsonAsync("authentication/login", userLoginRequestBody);
 
         // Assert
         loginResponse.StatusCode.Should().Be(HttpStatusCode.OK);
@@ -58,8 +79,7 @@ public abstract class ControllerTestBase : IClassFixture<WebApplicationFactory<P
         Assert.IsType<string>(tokens.AccessToken);
         Assert.IsType<string>(tokens.RefreshToken);
         var applicationSecurityToken = new ApplicationSecurityToken(tokens.AccessToken, tokens.RefreshToken);
-        applicationSecurityToken.UserEmail.Should().Be(customerCreateDto.Email);
-        applicationSecurityToken.UserRoles.Should().BeEquivalentTo(new List<string> { Roles.Customer });
+        applicationSecurityToken.UserEmail.Should().Be(userCreateDto.Email);
         return applicationSecurityToken;
     }
 }

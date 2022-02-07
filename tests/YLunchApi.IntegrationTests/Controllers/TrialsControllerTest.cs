@@ -24,20 +24,22 @@ public class TrialsControllerTest : ControllerTestBase
     }
 
     [Fact]
-    public async Task Get_Authenticated_Should_Return_A_200Ok()
+    public async Task Get_Authenticated_As_Customer_Should_Return_A_200Ok_As_Customer()
     {
         // Arrange
         var applicationSecurityToken = await Authenticate(UserMocks.CustomerCreateDto);
-
-        // Assert
         Client.DefaultRequestHeaders.Authorization =
             new AuthenticationHeaderValue("Bearer", applicationSecurityToken.AccessToken);
+
+        // Act
         var authenticatedTrialResponse = await Client.GetAsync("trials/authenticated");
         authenticatedTrialResponse.StatusCode.Should().Be(HttpStatusCode.OK);
         var authenticatedTrialResponseContent = await ResponseUtils.DeserializeContentAsync(authenticatedTrialResponse);
+
+        // Assert
         authenticatedTrialResponseContent.Should()
             .BeEquivalentTo(
-                $"YLunchApi is running, you are authenticated as {applicationSecurityToken.UserEmail} with Id: {applicationSecurityToken.UserId}");
+                $"YLunchApi is running, you are authenticated as {applicationSecurityToken.UserEmail} with Id: {applicationSecurityToken.UserId} and Roles: {string.Join(";", applicationSecurityToken.UserRoles)}");
 
         var refreshTokensBody = new
         {
@@ -57,6 +59,61 @@ public class TrialsControllerTest : ControllerTestBase
             await ResponseUtils.DeserializeContentAsync(authenticatedTrialRefreshedTokensResponse);
         authenticatedTrialWithExpiredTokensResponseContent.Should()
             .BeEquivalentTo(
-                $"YLunchApi is running, you are authenticated as {applicationSecurityToken.UserEmail} with Id: {applicationSecurityToken.UserId}");
+                $"YLunchApi is running, you are authenticated as {applicationSecurityToken.UserEmail} with Id: {applicationSecurityToken.UserId} and Roles: {string.Join(";", applicationSecurityToken.UserRoles)}");
+    }
+
+    [Fact]
+    public async Task Get_Authenticated_As_Customer_Should_Return_A_200Ok_As_RestaurantAdmin()
+    {
+        // Arrange
+        var applicationSecurityToken = await Authenticate(UserMocks.RestaurantAdminCreateDto);
+        Client.DefaultRequestHeaders.Authorization =
+            new AuthenticationHeaderValue("Bearer", applicationSecurityToken.AccessToken);
+
+        // Act
+        var authenticatedTrialResponse = await Client.GetAsync("trials/authenticated");
+        authenticatedTrialResponse.StatusCode.Should().Be(HttpStatusCode.OK);
+        var authenticatedTrialResponseContent = await ResponseUtils.DeserializeContentAsync(authenticatedTrialResponse);
+
+        // Assert
+        authenticatedTrialResponseContent.Should()
+            .BeEquivalentTo(
+                $"YLunchApi is running, you are authenticated as {applicationSecurityToken.UserEmail} with Id: {applicationSecurityToken.UserId} and Roles: {string.Join(";", applicationSecurityToken.UserRoles)}");
+
+        var refreshTokensBody = new
+        {
+            applicationSecurityToken.AccessToken,
+            applicationSecurityToken.RefreshToken
+        };
+        var refreshTokensResponse =
+            await Client.PostAsJsonAsync("authentication/refresh-tokens", refreshTokensBody);
+        refreshTokensResponse.StatusCode.Should().Be(HttpStatusCode.OK);
+        var refreshedTokens = await ResponseUtils.DeserializeContentAsync<TokenReadDto>(refreshTokensResponse);
+
+        Client.DefaultRequestHeaders.Authorization =
+            new AuthenticationHeaderValue("Bearer", refreshedTokens.AccessToken);
+        var authenticatedTrialRefreshedTokensResponse = await Client.GetAsync("trials/authenticated");
+        authenticatedTrialRefreshedTokensResponse.StatusCode.Should().Be(HttpStatusCode.OK);
+        var authenticatedTrialWithExpiredTokensResponseContent =
+            await ResponseUtils.DeserializeContentAsync(authenticatedTrialRefreshedTokensResponse);
+        authenticatedTrialWithExpiredTokensResponseContent.Should()
+            .BeEquivalentTo(
+                $"YLunchApi is running, you are authenticated as {applicationSecurityToken.UserEmail} with Id: {applicationSecurityToken.UserId} and Roles: {string.Join(";", applicationSecurityToken.UserRoles)}");
+    }
+
+    [Fact]
+    public async Task Get_Authenticated_As_Customer_Should_Return_A_401Unauthorized()
+    {
+        // Arrange
+        Client.DefaultRequestHeaders.Authorization =
+            new AuthenticationHeaderValue("Bearer", "Invalid AccessToken");
+
+        // Assert
+        var authenticatedTrialResponse = await Client.GetAsync("trials/authenticated");
+        authenticatedTrialResponse.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
+        var authenticatedTrialResponseContent = await ResponseUtils.DeserializeContentAsync(authenticatedTrialResponse);
+        authenticatedTrialResponseContent.Should()
+            .BeEquivalentTo(
+                "YLunchApi is running, you are authenticated");
     }
 }

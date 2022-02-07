@@ -214,10 +214,7 @@ public class AuthenticationControllerTest
         };
 
         // Act
-        async Task Act()
-        {
-            await _authenticationController.RefreshTokens(refreshTokensRequest);
-        }
+        async Task Act() => await _authenticationController.RefreshTokens(refreshTokensRequest);
 
         // Assert
         await Assert.ThrowsAsync<RefreshTokenNotFoundException>(Act);

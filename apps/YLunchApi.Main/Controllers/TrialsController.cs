@@ -17,6 +17,6 @@ public class TrialsController : ApplicationControllerBase
     [Authorize]
     public ActionResult<object> GetAuthenticatedTry()
     {
-        return Ok($"YLunchApi is running, you are authenticated as {CurrentUserEmail} with Id: {CurrentUserId}");
+        return Ok($"YLunchApi is running, you are authenticated as {CurrentUserEmail} with Id: {CurrentUserId} and Roles: {string.Join(";", CurrentUserRoles)}");
     }
 }
