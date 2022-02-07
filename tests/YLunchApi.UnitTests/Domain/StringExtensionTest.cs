@@ -13,6 +13,7 @@ public class StringExtensionTest
     [InlineData("JEaN-maRc", "Jean-Marc")]
     [InlineData("JEaN-m", "Jean-M")]
     [InlineData("jEaN-m-aBc", "Jean-M-Abc")]
+    [InlineData("jEaN-m aBc", "Jean-M Abc")]
     [InlineData("", "")]
     public void Should_Capitalize(string input, string expected)
     {

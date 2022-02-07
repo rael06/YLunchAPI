@@ -208,7 +208,7 @@ public class UsersControllerTest : ControllerTestBase
         // Arrange
         var body = new
         {
-            Email = $"post_customer_should_return_a_409conflict{UserMocks.CustomerCreateDto.Email}",
+            Email = $"post_customer_should_return_a_409conflict_{UserMocks.CustomerCreateDto.Email}",
             UserMocks.CustomerCreateDto.Password,
             UserMocks.CustomerCreateDto.PhoneNumber,
             UserMocks.CustomerCreateDto.Lastname,

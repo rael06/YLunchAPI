@@ -21,7 +21,6 @@ public static class StringExtension
     {
         return value.Length switch
         {
-            0 => string.Empty,
             1 => char.ToUpper(value[0]).ToString(),
             _ => char.ToUpper(value[0]) + value[1..].ToLower()
         };
