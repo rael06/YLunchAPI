@@ -109,7 +109,7 @@ public class TrialsControllerTest : ControllerTestBase
         var response = await Client.GetAsync("trials/authenticated");
 
         // Assert
-        await AssertUnauthorizedResponse(response);
+        await AssertResponseUtils.AssertUnauthorizedResponse(response);
     }
 
     [Fact]
@@ -123,6 +123,6 @@ public class TrialsControllerTest : ControllerTestBase
         var response = await Client.GetAsync("trials/authenticated");
 
         // Assert
-        await AssertUnauthorizedResponse(response);
+        await AssertResponseUtils.AssertUnauthorizedResponse(response);
     }
 }
