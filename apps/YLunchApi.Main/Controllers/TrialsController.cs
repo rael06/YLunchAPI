@@ -20,4 +20,11 @@ public class TrialsController : ApplicationControllerBase
     {
         return Ok($"YLunchApi is running, you are authenticated as {CurrentUserEmail} with Id: {CurrentUserId} and Roles: {string.Join(";", CurrentUserRoles)}");
     }
+
+    [HttpGet("authenticated-customer")]
+    [Authorize]
+    public ActionResult<string> GetAuthenticatedCustomerTry()
+    {
+        return Ok($"YLunchApi is running, you are authenticated as {CurrentUserEmail} with Id: {CurrentUserId} and Roles: {string.Join(";", CurrentUserRoles)}");
+    }
 }
