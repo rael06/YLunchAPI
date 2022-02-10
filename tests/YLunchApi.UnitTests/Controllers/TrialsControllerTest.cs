@@ -15,7 +15,7 @@ public class TrialsControllerTest
     }
 
     [Fact]
-    public void Get_Anonymous_Should_Return_A_200Ok()
+    public void GetAnonymousTry_Should_Return_A_200Ok()
     {
         // Act
         var response = _trialsController.GetAnonymousTry();
