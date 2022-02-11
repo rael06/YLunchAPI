@@ -8,6 +8,7 @@ using YLunchApi.Infrastructure.Database.Repositories;
 using YLunchApi.Main.Controllers;
 using YLunchApi.UnitTests.Application.UserAggregate;
 using YLunchApi.UnitTests.Core;
+using YLunchApi.UnitTests.Core.Mockers;
 
 namespace YLunchApi.UnitTests.Controllers;
 
@@ -25,7 +26,7 @@ public class UsersControllerTest
         var userRepository = new UserRepository(context, userManagerMock.Object, roleManagerMock.Object);
         var userService = new UserService(userRepository);
 
-        _usersController = new UsersController(userService);
+        _usersController = new UsersController(userService, HttpContextAccessorMocker.GetWithoutAuthorization());
     }
 
     [Fact]
