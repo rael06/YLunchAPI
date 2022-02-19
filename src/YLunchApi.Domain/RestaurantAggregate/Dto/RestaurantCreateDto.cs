@@ -1,0 +1,48 @@
+using System.ComponentModel.DataAnnotations;
+
+namespace YLunchApi.Domain.RestaurantAggregate.Dto;
+
+public class RestaurantCreateDto
+{
+    [Required] public string Name { get; set; } = null!;
+
+    [Required]
+    [RegularExpression(
+        @"^0[6-7][0-9]{8}$",
+        ErrorMessage = "PhoneNumber is invalid. Example: '0612345678'.")]
+    public string PhoneNumber { get; set; } = null!;
+
+    [Required]
+    [RegularExpression(
+        @"^[a-z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?(?:\.[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?)*\.[a-z]{2,20}$",
+        ErrorMessage = "Email is invalid. It should be lowercase email format. Example: example@example.com.")]
+    public string Email { get; set; } = null!;
+
+    [Required] public bool IsOpen { get; set; }
+
+    [Required] public bool IsPublic { get; set; }
+
+    // address
+    [Required]
+    [RegularExpression("[0-9]{0,5}", ErrorMessage = "ZipCode is invalid. Example: '06560'.")]
+    public string ZipCode { get; set; } = null!;
+
+    [Required] public string Country { get; set; } = null!;
+    [Required] public string City { get; set; } = null!;
+    [Required] public string StreetNumber { get; set; } = null!;
+    [Required] public string StreetName { get; set; } = null!;
+
+    public string AddressExtraInformation { get; set; } = "";
+    // !address
+
+    public ICollection<ClosingDateCreateDto> ClosingDates { get; set; } = new List<ClosingDateCreateDto>();
+
+    public ICollection<PlaceOpeningTimeCreateDto> PlaceOpeningTimes { get; set; } =
+        new List<PlaceOpeningTimeCreateDto>();
+
+    public ICollection<OrderOpeningTimeCreateDto> OrderOpeningTimes { get; set; } =
+        new List<OrderOpeningTimeCreateDto>();
+
+    public string? Base64Image { get; set; }
+    public string? Base64Logo { get; set; }
+}

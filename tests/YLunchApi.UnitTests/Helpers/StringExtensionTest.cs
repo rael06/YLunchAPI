@@ -1,8 +1,8 @@
 using FluentAssertions;
 using Xunit;
-using YLunchApi.Domain.Core.Utils;
+using YLunchApi.Helpers.Extensions;
 
-namespace YLunchApi.UnitTests.Domain;
+namespace YLunchApi.UnitTests.Helpers;
 
 public class StringExtensionTest
 {

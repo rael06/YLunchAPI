@@ -1,9 +1,9 @@
 using System.Diagnostics.CodeAnalysis;
 using Microsoft.AspNetCore.Identity;
-using YLunchApi.Domain.Core.Utils;
 using YLunchApi.Domain.UserAggregate.Dto;
+using YLunchApi.Helpers.Extensions;
 
-namespace YLunchApi.Domain.UserAggregate;
+namespace YLunchApi.Domain.UserAggregate.Models;
 
 public class User : IdentityUser
 {

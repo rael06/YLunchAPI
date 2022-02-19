@@ -1,7 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using YLunchApi.Domain.Exceptions;
-using YLunchApi.Domain.UserAggregate;
 using YLunchApi.Domain.UserAggregate.Dto;
+using YLunchApi.Domain.UserAggregate.Models;
+using YLunchApi.Domain.UserAggregate.Services;
 
 namespace YLunchApi.Main.Controllers;
 
@@ -11,7 +12,8 @@ public class UsersController : ApplicationControllerBase
 {
     private readonly IUserService _userService;
 
-    public UsersController(IUserService userService, IHttpContextAccessor httpContextAccessor) : base(httpContextAccessor)
+    public UsersController(IUserService userService, IHttpContextAccessor httpContextAccessor) : base(
+        httpContextAccessor)
     {
         _userService = userService;
     }

@@ -8,7 +8,8 @@ using YLunchApi.Authentication.Models;
 using YLunchApi.Authentication.Models.Dto;
 using YLunchApi.Authentication.Repositories;
 using YLunchApi.Authentication.Utils;
-using YLunchApi.Domain.UserAggregate;
+using YLunchApi.Domain.UserAggregate.Models;
+using YLunchApi.Domain.UserAggregate.Services;
 using JwtRegisteredClaimNames = Microsoft.IdentityModel.JsonWebTokens.JwtRegisteredClaimNames;
 
 namespace YLunchApi.Authentication.Services;
@@ -22,8 +23,10 @@ public class JwtService : IJwtService
     private readonly JwtSecurityTokenHandler _jwtSecurityTokenHandler;
 
     public JwtService(IRefreshTokenRepository refreshTokenRepository,
-        IOptionsMonitor<JwtConfig> jwtConfig, TokenValidationParameters tokenValidationParameters,
-        IUserRepository userRepository, JwtSecurityTokenHandler jwtSecurityTokenHandler)
+                      IOptionsMonitor<JwtConfig> jwtConfig,
+                      TokenValidationParameters tokenValidationParameters,
+                      IUserRepository userRepository,
+                      JwtSecurityTokenHandler jwtSecurityTokenHandler)
     {
         _refreshTokenRepository = refreshTokenRepository;
         _tokenValidationParameters = tokenValidationParameters;
@@ -109,7 +112,8 @@ public class JwtService : IJwtService
         var tokenDescriptor = new SecurityTokenDescriptor
         {
             Subject = new ClaimsIdentity(authClaims),
-            Expires = DateTime.UtcNow.AddMinutes(5),
+            // Todo reduce delay when prod deliver
+            Expires = DateTime.UtcNow.AddMinutes(30),
             SigningCredentials =
                 new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
         };

@@ -1,12 +1,11 @@
-using YLunchApi.Domain.Core.Utils;
-using YLunchApi.Domain.UserAggregate;
 using YLunchApi.Domain.UserAggregate.Dto;
+using YLunchApi.Domain.UserAggregate.Models;
 
 namespace YLunchApi.TestsShared.Mocks;
 
 public static class UserMocks
 {
-    public static readonly RestaurantAdminCreateDto RestaurantAdminCreateDto = new()
+    public static RestaurantAdminCreateDto RestaurantAdminCreateDto => new()
     {
         Email = "admin@restaurant.com",
         Firstname = "Jean-Marc",
@@ -15,7 +14,7 @@ public static class UserMocks
         Password = "Password1234."
     };
 
-    public static readonly CustomerCreateDto CustomerCreateDto = new()
+    public static CustomerCreateDto CustomerCreateDto => new()
     {
         Email = "anne-marie.martin@ynov.com",
         Firstname = "Anne-Marie",
@@ -34,7 +33,6 @@ public static class UserMocks
             Firstname = CustomerCreateDto.Firstname,
             Lastname = CustomerCreateDto.Lastname,
             Roles = new List<string> { Roles.Customer },
-            Link = $"{EnvironmentUtils.BaseUrl}/Users/{id}"
         };
     }
 
@@ -48,7 +46,6 @@ public static class UserMocks
             Firstname = RestaurantAdminCreateDto.Firstname,
             Lastname = RestaurantAdminCreateDto.Lastname,
             Roles = new List<string> { Roles.RestaurantAdmin },
-            Link = $"{EnvironmentUtils.BaseUrl}/Users/{id}"
         };
     }
 }

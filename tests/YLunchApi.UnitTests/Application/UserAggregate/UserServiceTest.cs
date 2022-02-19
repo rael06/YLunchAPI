@@ -5,8 +5,9 @@ using Moq;
 using Xunit;
 using YLunchApi.Application.UserAggregate;
 using YLunchApi.Domain.Exceptions;
-using YLunchApi.Domain.UserAggregate;
 using YLunchApi.Domain.UserAggregate.Dto;
+using YLunchApi.Domain.UserAggregate.Models;
+using YLunchApi.Domain.UserAggregate.Services;
 using YLunchApi.Infrastructure.Database;
 using YLunchApi.Infrastructure.Database.Repositories;
 using YLunchApi.TestsShared.Mocks;
@@ -83,7 +84,7 @@ public class UserServiceTest
         // Arrange
         var userRepositoryMock = new Mock<IUserRepository>();
         userRepositoryMock.Setup(x => x.GetByEmail(It.IsAny<string>()))
-            .ReturnsAsync(() => null);
+                          .ReturnsAsync(() => null);
         _userService = new UserService(userRepositoryMock.Object);
         var userCreateDto = UserMocks.CustomerCreateDto;
 
@@ -112,9 +113,9 @@ public class UserServiceTest
     {
         // Arrange
         _userManagerMock.Setup(x => x.CreateAsync(
-                It.IsAny<User>(),
-                It.IsAny<string>()))
-            .ReturnsAsync(IdentityResult.Failed());
+                            It.IsAny<User>(),
+                            It.IsAny<string>()))
+                        .ReturnsAsync(IdentityResult.Failed());
 
         var userRepository = new UserRepository(_context, _userManagerMock.Object, _roleManagerMock.Object);
 

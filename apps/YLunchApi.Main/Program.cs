@@ -6,12 +6,15 @@ using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.IdentityModel.Tokens;
+using YLunchApi.Application.RestaurantAggregate;
 using YLunchApi.Application.UserAggregate;
 using YLunchApi.Authentication.Models;
 using YLunchApi.Authentication.Repositories;
 using YLunchApi.Authentication.Services;
 using YLunchApi.AuthenticationShared.Repositories;
-using YLunchApi.Domain.UserAggregate;
+using YLunchApi.Domain.RestaurantAggregate.Services;
+using YLunchApi.Domain.UserAggregate.Models;
+using YLunchApi.Domain.UserAggregate.Services;
 using YLunchApi.Infrastructure.Database;
 using YLunchApi.Infrastructure.Database.Repositories;
 
@@ -26,6 +29,8 @@ builder.Services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
 
+builder.Services.AddScoped<IRestaurantRepository, RestaurantRepository>();
+builder.Services.AddScoped<IRestaurantService, RestaurantService>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -34,8 +39,8 @@ builder.Services.AddSwaggerGen();
 
 // For Identity
 builder.Services.AddIdentity<User, IdentityRole>()
-    .AddEntityFrameworkStores<ApplicationDbContext>()
-    .AddDefaultTokenProviders();
+       .AddEntityFrameworkStores<ApplicationDbContext>()
+       .AddDefaultTokenProviders();
 
 // For Jwt
 var jwtSecret = builder.Configuration["JwtSecret"];
@@ -56,30 +61,31 @@ var tokenValidationParameters = new TokenValidationParameters
 builder.Services.AddSingleton(tokenValidationParameters);
 builder.Services.Configure<JwtConfig>(jwtConfig => jwtConfig.Secret = jwtSecret);
 builder.Services.AddAuthentication(options =>
-    {
-        options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-        options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-        options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-    })
-    .AddJwtBearer(options =>
-    {
-        options.SaveToken = true;
-        options.TokenValidationParameters = tokenValidationParameters;
-        options.Events = new JwtBearerEvents
-        {
-            OnChallenge = context =>
-            {
-                context.Response.OnStarting(async () =>
-                {
-                    context.Response.StatusCode = StatusCodes.Status401Unauthorized;
-                    context.Response.ContentType = "application/json";
-                    await context.Response.WriteAsJsonAsync(new { Message = "Please login and use provided tokens" });
-                });
+       {
+           options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+           options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+           options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+       })
+       .AddJwtBearer(options =>
+       {
+           options.SaveToken = true;
+           options.TokenValidationParameters = tokenValidationParameters;
+           options.Events = new JwtBearerEvents
+           {
+               OnChallenge = context =>
+               {
+                   context.Response.OnStarting(async () =>
+                   {
+                       context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                       context.Response.ContentType = "application/json";
+                       await context.Response.WriteAsJsonAsync(new
+                           { Message = "Please login and use provided tokens" });
+                   });
 
-                return Task.CompletedTask;
-            }
-        };
-    });
+                   return Task.CompletedTask;
+               }
+           };
+       });
 
 // For Entity Framework
 var database = builder.Configuration["DbName"];
@@ -144,7 +150,7 @@ else
         {
             context.Response.StatusCode = StatusCodes.Status400BadRequest;
             context.Response.ContentType = "application/json";
-            await context.Response.WriteAsJsonAsync(new { Message = "Something went wrong, try again later"});
+            await context.Response.WriteAsJsonAsync(new { Message = "Something went wrong, try again later" });
         });
     });
 }

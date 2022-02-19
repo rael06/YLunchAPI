@@ -1,13 +1,12 @@
-using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
-using YLunchApi.Domain.UserAggregate;
+using YLunchApi.Domain.UserAggregate.Models;
 
 namespace YLunchApi.Authentication.Models;
 
 public class RefreshToken
 {
     public string Id { get; set; } = null!;
-    [Required] public string UserId { get; set; } = null!;
+    public string UserId { get; set; } = null!;
     public string Token { get; set; } = null!;
     public string JwtId { get; set; } = null!;
     public bool IsUsed { get; set; }
