@@ -6,7 +6,9 @@ using System.Net.Http.Json;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using FluentAssertions;
+using Mapster;
 using Xunit;
+using YLunchApi.Domain.Core.Utils;
 using YLunchApi.Domain.RestaurantAggregate.Dto;
 using YLunchApi.Helpers.Extensions;
 using YLunchApi.IntegrationTests.Core.Extensions;
@@ -36,24 +38,37 @@ public class RestaurantsControllerTest : ControllerTestBase
             RestaurantMocks.RestaurantCreateDto.StreetNumber,
             RestaurantMocks.RestaurantCreateDto.IsOpen,
             RestaurantMocks.RestaurantCreateDto.IsPublic,
-            ClosingDates = new List<ClosingDateCreateDto>
+            ClosingDates = new List<dynamic>
             {
-                new() { ClosingDateTime = DateTime.Parse("2021-12-25") }
+                new { ClosingDateTime = DateTime.Parse("2021-12-31") },
+                new { ClosingDateTime = DateTime.Parse("2021-12-25") }
             },
-            PlaceOpeningTimes = new List<OpeningTimeCreateDto>
+            PlaceOpeningTimes = new List<dynamic>
             {
-                new()
+                new
                 {
-                    DayOfWeek = utcNow.DayOfWeek,
+                    utcNow.AddDays(-1).DayOfWeek,
+                    OffsetOpenMinutes = utcNow.MinutesFromMidnight(),
+                    OpenMinutes = 2 * 60
+                },
+                new
+                {
+                    utcNow.DayOfWeek,
                     OffsetOpenMinutes = utcNow.MinutesFromMidnight(),
                     OpenMinutes = 2 * 60
                 }
             },
-            OrderOpeningTimes = new List<OpeningTimeCreateDto>
+            OrderOpeningTimes = new List<dynamic>
             {
-                new()
+                new
                 {
-                    DayOfWeek = utcNow.DayOfWeek,
+                    utcNow.AddDays(-1).DayOfWeek,
+                    OffsetOpenMinutes = utcNow.MinutesFromMidnight(),
+                    OpenMinutes = 2 * 60
+                },
+                new
+                {
+                    utcNow.DayOfWeek,
                     OffsetOpenMinutes = utcNow.MinutesFromMidnight(),
                     OpenMinutes = 2 * 60
                 }
@@ -86,24 +101,37 @@ public class RestaurantsControllerTest : ControllerTestBase
             RestaurantMocks.RestaurantCreateDto.StreetNumber,
             RestaurantMocks.RestaurantCreateDto.IsOpen,
             RestaurantMocks.RestaurantCreateDto.IsPublic,
-            ClosingDates = new List<ClosingDateCreateDto>
+            ClosingDates = new List<dynamic>
             {
-                new() { ClosingDateTime = DateTime.Parse("2021-12-25") }
+                new { ClosingDateTime = DateTime.Parse("2021-12-31") },
+                new { ClosingDateTime = DateTime.Parse("2021-12-25") }
             },
-            PlaceOpeningTimes = new List<OpeningTimeCreateDto>
+            PlaceOpeningTimes = new List<dynamic>
             {
-                new()
+                new
                 {
-                    DayOfWeek = utcNow.DayOfWeek,
+                    utcNow.AddDays(-1).DayOfWeek,
+                    OffsetOpenMinutes = utcNow.MinutesFromMidnight(),
+                    OpenMinutes = 2 * 60
+                },
+                new
+                {
+                    utcNow.DayOfWeek,
                     OffsetOpenMinutes = utcNow.MinutesFromMidnight(),
                     OpenMinutes = 2 * 60
                 }
             },
-            OrderOpeningTimes = new List<OpeningTimeCreateDto>
+            OrderOpeningTimes = new List<dynamic>
             {
-                new()
+                new
                 {
-                    DayOfWeek = utcNow.DayOfWeek,
+                    utcNow.AddDays(-1).DayOfWeek,
+                    OffsetOpenMinutes = utcNow.MinutesFromMidnight(),
+                    OpenMinutes = 2 * 60
+                },
+                new
+                {
+                    utcNow.DayOfWeek,
                     OffsetOpenMinutes = utcNow.MinutesFromMidnight(),
                     OpenMinutes = 2 * 60
                 }
@@ -131,16 +159,22 @@ public class RestaurantsControllerTest : ControllerTestBase
         responseBody.IsOpen.Should().Be(body.IsOpen);
         responseBody.IsPublic.Should().Be(body.IsPublic);
 
-        responseBody.ClosingDates.Should().BeEquivalentTo(body.ClosingDates);
+        responseBody.ClosingDates.Should().BeEquivalentTo(body.ClosingDates)
+                    .And
+                    .BeInAscendingOrder(x => x.ClosingDateTime);
 
-        responseBody.PlaceOpeningTimes.Should().BeEquivalentTo(body.PlaceOpeningTimes);
+        responseBody.PlaceOpeningTimes.Should().BeEquivalentTo(
+            OpeningTimeUtils.AscendingOrder(body.PlaceOpeningTimes.Adapt<List<OpeningTimeCreateDto>>()),
+            options => options.WithStrictOrdering());
         responseBody.PlaceOpeningTimes.Aggregate(true, (acc, x) => acc && new Regex(GuidUtils.Regex).IsMatch(x.Id))
                     .Should().BeTrue();
         responseBody.PlaceOpeningTimes.Aggregate(true, (acc, x) => acc && x.RestaurantId == responseBody.Id)
                     .Should().BeTrue();
         responseBody.IsCurrentlyOpenInPlace.Should().Be(true);
 
-        responseBody.OrderOpeningTimes.Should().BeEquivalentTo(body.OrderOpeningTimes);
+        responseBody.OrderOpeningTimes.Should().BeEquivalentTo(
+            OpeningTimeUtils.AscendingOrder(body.OrderOpeningTimes.Adapt<List<OpeningTimeCreateDto>>()),
+            options => options.WithStrictOrdering());
         responseBody.OrderOpeningTimes.Aggregate(true, (acc, x) => acc && new Regex(GuidUtils.Regex).IsMatch(x.Id))
                     .Should().BeTrue();
         responseBody.OrderOpeningTimes.Aggregate(true, (acc, x) => acc && x.RestaurantId == responseBody.Id)
@@ -432,7 +466,43 @@ public class RestaurantsControllerTest : ControllerTestBase
         response.StatusCode.Should().Be(HttpStatusCode.OK);
         var responseBody = await ResponseUtils.DeserializeContentAsync<RestaurantReadDto>(response);
 
-        responseBody.Should().BeEquivalentTo(restaurant);
+        responseBody.Id.Should().Be(restaurant.Id);
+        responseBody.AdminId.Should().Be(restaurant.AdminId);
+        responseBody.Email.Should().Be(restaurant.Email);
+        responseBody.PhoneNumber.Should().Be(restaurant.PhoneNumber);
+        responseBody.CreationDateTime.Should().BeCloseTo(DateTime.UtcNow, TimeSpan.FromSeconds(5));
+        responseBody.Name.Should().Be(restaurant.Name);
+        responseBody.City.Should().Be(restaurant.City);
+        responseBody.Country.Should().Be(restaurant.Country);
+        responseBody.StreetName.Should().Be(restaurant.StreetName);
+        responseBody.ZipCode.Should().Be(restaurant.ZipCode);
+        responseBody.StreetNumber.Should().Be(restaurant.StreetNumber);
+        responseBody.IsOpen.Should().Be(restaurant.IsOpen);
+        responseBody.IsPublic.Should().Be(restaurant.IsPublic);
+
+        responseBody.ClosingDates.Should().BeEquivalentTo(restaurant.ClosingDates)
+                    .And
+                    .BeInAscendingOrder(x => x.ClosingDateTime);
+
+        responseBody.PlaceOpeningTimes.Should().BeEquivalentTo(
+            OpeningTimeUtils.AscendingOrder(restaurant.PlaceOpeningTimes.Adapt<List<OpeningTimeCreateDto>>()),
+            options => options.WithStrictOrdering());
+        responseBody.PlaceOpeningTimes.Aggregate(true, (acc, x) => acc && new Regex(GuidUtils.Regex).IsMatch(x.Id))
+                    .Should().BeTrue();
+        responseBody.PlaceOpeningTimes.Aggregate(true, (acc, x) => acc && x.RestaurantId == responseBody.Id)
+                    .Should().BeTrue();
+        responseBody.IsCurrentlyOpenInPlace.Should().Be(true);
+
+        responseBody.OrderOpeningTimes.Should().BeEquivalentTo(
+            OpeningTimeUtils.AscendingOrder(restaurant.OrderOpeningTimes.Adapt<List<OpeningTimeCreateDto>>()),
+            options => options.WithStrictOrdering());
+        responseBody.OrderOpeningTimes.Aggregate(true, (acc, x) => acc && new Regex(GuidUtils.Regex).IsMatch(x.Id))
+                    .Should().BeTrue();
+        responseBody.OrderOpeningTimes.Aggregate(true, (acc, x) => acc && x.RestaurantId == responseBody.Id)
+                    .Should().BeTrue();
+        responseBody.IsCurrentlyOpenToOrder.Should().Be(true);
+
+        responseBody.IsPublished.Should().Be(true);
     }
 
     #endregion
