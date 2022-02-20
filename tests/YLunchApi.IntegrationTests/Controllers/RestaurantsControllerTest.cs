@@ -44,7 +44,7 @@ public class RestaurantsControllerTest : ControllerTestBase
             {
                 new() { ClosingDateTime = DateTime.Parse("2021-12-25") }
             },
-            PlaceOpeningTimes = new List<PlaceOpeningTimeCreateDto>
+            PlaceOpeningTimes = new List<OpeningTimeCreateDto>
             {
                 new()
                 {
@@ -53,7 +53,7 @@ public class RestaurantsControllerTest : ControllerTestBase
                     OpenMinutes = 2 * 60
                 }
             },
-            OrderOpeningTimes = new List<OrderOpeningTimeCreateDto>
+            OrderOpeningTimes = new List<OpeningTimeCreateDto>
             {
                 new()
                 {
@@ -150,7 +150,10 @@ public class RestaurantsControllerTest : ControllerTestBase
             RestaurantMocks.RestaurantCreateDto.StreetNumber,
             RestaurantMocks.RestaurantCreateDto.IsOpen,
             RestaurantMocks.RestaurantCreateDto.IsPublic,
-            ClosingDates = new List<dynamic>(),
+            ClosingDates = new List<dynamic>
+            {
+                new {}
+            },
             PlaceOpeningTimes = new List<dynamic>
             {
                 new
@@ -198,6 +201,72 @@ public class RestaurantsControllerTest : ControllerTestBase
                     .MatchRegex(@"OrderOpeningTimes.*OpenMinutes should be less than number of minutes in a week\.");
     }
 
+        [Fact]
+    public async Task Post_Restaurant_Should_Return_A_400BadRequest_When_Overriding_Opening_Times()
+    {
+        // Arrange
+        var authenticatedUserInfo = await Authenticate(UserMocks.RestaurantAdminCreateDto);
+        Client.SetAuthorizationHeader(authenticatedUserInfo.AccessToken);
+        var body = new
+        {
+            RestaurantMocks.RestaurantCreateDto.Name,
+            RestaurantMocks.RestaurantCreateDto.Email,
+            RestaurantMocks.RestaurantCreateDto.PhoneNumber,
+            RestaurantMocks.RestaurantCreateDto.Country,
+            RestaurantMocks.RestaurantCreateDto.City,
+            RestaurantMocks.RestaurantCreateDto.ZipCode,
+            RestaurantMocks.RestaurantCreateDto.StreetName,
+            RestaurantMocks.RestaurantCreateDto.StreetNumber,
+            RestaurantMocks.RestaurantCreateDto.IsOpen,
+            RestaurantMocks.RestaurantCreateDto.IsPublic,
+            PlaceOpeningTimes = new List<dynamic>
+            {
+                new
+                {
+                    DayOfWeek = 1,
+                    OffsetOpenMinutes = 2 * 60,
+                    OpenMinutes = 60
+                },
+                new
+                {
+                    DayOfWeek = 1,
+                    OffsetOpenMinutes = 60,
+                    OpenMinutes = 120
+                }
+            },
+            OrderOpeningTimes = new List<dynamic>
+            {
+                new
+                {
+                    DayOfWeek = 1,
+                    OffsetOpenMinutes = 2 * 60,
+                    OpenMinutes = 60
+                },
+                new
+                {
+                    DayOfWeek = 1,
+                    OffsetOpenMinutes = 60,
+                    OpenMinutes = 120
+                }
+            }
+        };
+
+        // Act
+        var response = await Client.PostAsJsonAsync("restaurants", body);
+
+        // Assert
+        response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+        var responseBody = await ResponseUtils.DeserializeContentAsync(response);
+
+
+        responseBody.Should()
+                    .MatchRegex(
+                        @"PlaceOpeningTimes.*Some opening times override others\.");
+
+        responseBody.Should()
+                    .MatchRegex(@"OrderOpeningTimes.*Some opening times override others\.");
+    }
+
     [Fact]
     public async Task Post_Restaurant_Should_Return_A_401Unauthorized()
     {
@@ -218,7 +287,7 @@ public class RestaurantsControllerTest : ControllerTestBase
             {
                 new() { ClosingDateTime = DateTime.Parse("2021-12-25") }
             },
-            PlaceOpeningTimes = new List<PlaceOpeningTimeCreateDto>
+            PlaceOpeningTimes = new List<OpeningTimeCreateDto>
             {
                 new()
                 {
@@ -227,7 +296,7 @@ public class RestaurantsControllerTest : ControllerTestBase
                     OpenMinutes = 1439 //23H59
                 }
             },
-            OrderOpeningTimes = new List<OrderOpeningTimeCreateDto>
+            OrderOpeningTimes = new List<OpeningTimeCreateDto>
             {
                 new()
                 {
@@ -270,7 +339,7 @@ public class RestaurantsControllerTest : ControllerTestBase
             {
                 new() { ClosingDateTime = DateTime.Parse("2021-12-25") }
             },
-            PlaceOpeningTimes = new List<PlaceOpeningTimeCreateDto>
+            PlaceOpeningTimes = new List<OpeningTimeCreateDto>
             {
                 new()
                 {
@@ -279,7 +348,7 @@ public class RestaurantsControllerTest : ControllerTestBase
                     OpenMinutes = 1439 //23H59
                 }
             },
-            OrderOpeningTimes = new List<OrderOpeningTimeCreateDto>
+            OrderOpeningTimes = new List<OpeningTimeCreateDto>
             {
                 new()
                 {
