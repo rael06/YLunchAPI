@@ -19,10 +19,57 @@ namespace YLunchApi.IntegrationTests.Controllers;
 [Collection("Sequential")]
 public class RestaurantsControllerTest : ControllerTestBase
 {
-    #region Post_Restaurant_Tests
+
+    private async Task<RestaurantReadDto> CreateRestaurant()
+    {
+        var authenticatedUserInfo = await Authenticate(UserMocks.RestaurantAdminCreateDto);
+        Client.SetAuthorizationHeader(authenticatedUserInfo.AccessToken);
+        var utcNow = DateTime.UtcNow;
+        var body = new
+        {
+            RestaurantMocks.RestaurantCreateDto.Name,
+            RestaurantMocks.RestaurantCreateDto.Email,
+            RestaurantMocks.RestaurantCreateDto.PhoneNumber,
+            RestaurantMocks.RestaurantCreateDto.Country,
+            RestaurantMocks.RestaurantCreateDto.City,
+            RestaurantMocks.RestaurantCreateDto.ZipCode,
+            RestaurantMocks.RestaurantCreateDto.StreetName,
+            RestaurantMocks.RestaurantCreateDto.StreetNumber,
+            RestaurantMocks.RestaurantCreateDto.IsOpen,
+            RestaurantMocks.RestaurantCreateDto.IsPublic,
+            ClosingDates = new List<ClosingDateCreateDto>
+            {
+                new() { ClosingDateTime = DateTime.Parse("2021-12-25") }
+            },
+            PlaceOpeningTimes = new List<OpeningTimeCreateDto>
+            {
+                new()
+                {
+                    DayOfWeek = utcNow.DayOfWeek,
+                    OffsetOpenMinutes = utcNow.MinutesFromMidnight(),
+                    OpenMinutes = 2 * 60
+                }
+            },
+            OrderOpeningTimes = new List<OpeningTimeCreateDto>
+            {
+                new()
+                {
+                    DayOfWeek = utcNow.DayOfWeek,
+                    OffsetOpenMinutes = utcNow.MinutesFromMidnight(),
+                    OpenMinutes = 2 * 60
+                }
+            }
+        };
+
+        var restaurantCreationResponse = await Client.PostAsJsonAsync("restaurants", body);
+        restaurantCreationResponse.StatusCode.Should().Be(HttpStatusCode.Created);
+        return await ResponseUtils.DeserializeContentAsync<RestaurantReadDto>(restaurantCreationResponse);
+    }
+
+    #region CreateRestaurant_Tests
 
     [Fact]
-    public async Task Post_Restaurant_Should_Return_A_201Created()
+    public async Task CreateRestaurant_Should_Return_A_201Created()
     {
         // Arrange
         var authenticatedUserInfo = await Authenticate(UserMocks.RestaurantAdminCreateDto);
@@ -105,7 +152,7 @@ public class RestaurantsControllerTest : ControllerTestBase
     }
 
     [Fact]
-    public async Task Post_Restaurant_Should_Return_A_400BadRequest_When_Missing_Fields()
+    public async Task CreateRestaurant_Should_Return_A_400BadRequest_When_Missing_Fields()
     {
         // Arrange
         var authenticatedUserInfo = await Authenticate(UserMocks.RestaurantAdminCreateDto);
@@ -133,7 +180,7 @@ public class RestaurantsControllerTest : ControllerTestBase
     }
 
     [Fact]
-    public async Task Post_Restaurant_Should_Return_A_400BadRequest_When_Invalid_Fields()
+    public async Task CreateRestaurant_Should_Return_A_400BadRequest_When_Invalid_Fields()
     {
         // Arrange
         var authenticatedUserInfo = await Authenticate(UserMocks.RestaurantAdminCreateDto);
@@ -202,7 +249,7 @@ public class RestaurantsControllerTest : ControllerTestBase
     }
 
     [Fact]
-    public async Task Post_Restaurant_Should_Return_A_400BadRequest_When_Overriding_Opening_Times()
+    public async Task CreateRestaurant_Should_Return_A_400BadRequest_When_Overriding_Opening_Times()
     {
         // Arrange
         var authenticatedUserInfo = await Authenticate(UserMocks.RestaurantAdminCreateDto);
@@ -268,7 +315,7 @@ public class RestaurantsControllerTest : ControllerTestBase
     }
 
     [Fact]
-    public async Task Post_Restaurant_Should_Return_A_401Unauthorized()
+    public async Task CreateRestaurant_Should_Return_A_401Unauthorized()
     {
         // Arrange
         var body = new
@@ -318,7 +365,7 @@ public class RestaurantsControllerTest : ControllerTestBase
     }
 
     [Fact]
-    public async Task Post_Restaurant_Should_Return_A_403Forbidden()
+    public async Task CreateRestaurant_Should_Return_A_403Forbidden()
     {
         // Arrange
         var authenticatedUserInfo = await Authenticate(UserMocks.CustomerCreateDto);
@@ -367,6 +414,26 @@ public class RestaurantsControllerTest : ControllerTestBase
         var responseBody = await ResponseUtils.DeserializeContentAsync(response);
 
         responseBody.Should().Be("");
+    }
+
+    #endregion
+
+    #region GetRestaurantById_Tests
+
+    [Fact]
+    public async Task GetRestaurantById_Should_Return_A_200Ok()
+    {
+        // Arrange
+        var restaurant = await CreateRestaurant();
+
+        // Act
+        var response = await Client.GetAsync($"restaurants/{restaurant.Id}");
+
+        // Assert
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
+        var responseBody = await ResponseUtils.DeserializeContentAsync<RestaurantReadDto>(response);
+
+        responseBody.Should().BeEquivalentTo(restaurant);
     }
 
     #endregion
