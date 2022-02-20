@@ -152,7 +152,7 @@ public class RestaurantsControllerTest : ControllerTestBase
             RestaurantMocks.RestaurantCreateDto.IsPublic,
             ClosingDates = new List<dynamic>
             {
-                new {}
+                new { }
             },
             PlaceOpeningTimes = new List<dynamic>
             {
@@ -201,7 +201,7 @@ public class RestaurantsControllerTest : ControllerTestBase
                     .MatchRegex(@"OrderOpeningTimes.*OpenMinutes should be less than number of minutes in a week\.");
     }
 
-        [Fact]
+    [Fact]
     public async Task Post_Restaurant_Should_Return_A_400BadRequest_When_Overriding_Opening_Times()
     {
         // Arrange
