@@ -48,14 +48,14 @@ public class RestaurantsControllerTest : ControllerTestBase
                 new
                 {
                     utcNow.AddDays(-1).DayOfWeek,
-                    OffsetOpenMinutes = utcNow.MinutesFromMidnight(),
-                    OpenMinutes = 2 * 60
+                    OffsetInMinutes = utcNow.MinutesFromMidnight(),
+                    DurationInMinutes = 2 * 60
                 },
                 new
                 {
                     utcNow.DayOfWeek,
-                    OffsetOpenMinutes = utcNow.MinutesFromMidnight(),
-                    OpenMinutes = 2 * 60
+                    OffsetInMinutes = utcNow.MinutesFromMidnight(),
+                    DurationInMinutes = 2 * 60
                 }
             },
             OrderOpeningTimes = new List<dynamic>
@@ -63,14 +63,14 @@ public class RestaurantsControllerTest : ControllerTestBase
                 new
                 {
                     utcNow.AddDays(-1).DayOfWeek,
-                    OffsetOpenMinutes = utcNow.MinutesFromMidnight(),
-                    OpenMinutes = 2 * 60
+                    OffsetInMinutes = utcNow.MinutesFromMidnight(),
+                    DurationInMinutes = 2 * 60
                 },
                 new
                 {
                     utcNow.DayOfWeek,
-                    OffsetOpenMinutes = utcNow.MinutesFromMidnight(),
-                    OpenMinutes = 2 * 60
+                    OffsetInMinutes = utcNow.MinutesFromMidnight(),
+                    DurationInMinutes = 2 * 60
                 }
             }
         };
@@ -111,14 +111,14 @@ public class RestaurantsControllerTest : ControllerTestBase
                 new
                 {
                     utcNow.AddDays(-1).DayOfWeek,
-                    OffsetOpenMinutes = utcNow.MinutesFromMidnight(),
-                    OpenMinutes = 2 * 60
+                    OffsetInMinutes = utcNow.MinutesFromMidnight(),
+                    DurationInMinutes = 2 * 60
                 },
                 new
                 {
                     utcNow.DayOfWeek,
-                    OffsetOpenMinutes = utcNow.MinutesFromMidnight(),
-                    OpenMinutes = 2 * 60
+                    OffsetInMinutes = utcNow.MinutesFromMidnight(),
+                    DurationInMinutes = 2 * 60
                 }
             },
             OrderOpeningTimes = new List<dynamic>
@@ -126,14 +126,14 @@ public class RestaurantsControllerTest : ControllerTestBase
                 new
                 {
                     utcNow.AddDays(-1).DayOfWeek,
-                    OffsetOpenMinutes = utcNow.MinutesFromMidnight(),
-                    OpenMinutes = 2 * 60
+                    OffsetInMinutes = utcNow.MinutesFromMidnight(),
+                    DurationInMinutes = 2 * 60
                 },
                 new
                 {
                     utcNow.DayOfWeek,
-                    OffsetOpenMinutes = utcNow.MinutesFromMidnight(),
-                    OpenMinutes = 2 * 60
+                    OffsetInMinutes = utcNow.MinutesFromMidnight(),
+                    DurationInMinutes = 2 * 60
                 }
             }
         };
@@ -192,7 +192,15 @@ public class RestaurantsControllerTest : ControllerTestBase
         Client.SetAuthorizationHeader(authenticatedUserInfo.AccessToken);
         var body = new
         {
-            Name = ""
+            Name = "",
+            PlaceOpeningTimes = new List<dynamic>
+            {
+                new { }
+            },
+            OrderOpeningTimes = new List<dynamic>
+            {
+                new { }
+            }
         };
 
         // Act
@@ -210,6 +218,21 @@ public class RestaurantsControllerTest : ControllerTestBase
         responseBody.Should().Contain("The ZipCode field is required.");
         responseBody.Should().Contain("The StreetName field is required.");
         responseBody.Should().Contain("The StreetNumber field is required.");
+        responseBody.Should().MatchRegex(@"PlaceOpeningTimes.*The DayOfWeek field is required\.");
+        responseBody.Should()
+                    .MatchRegex(
+                        @"PlaceOpeningTimes.*The OffsetInMinutes field is required\.");
+        responseBody.Should()
+                    .MatchRegex(
+                        @"PlaceOpeningTimes.*The DurationInMinutes field is required\.");
+
+        responseBody.Should().MatchRegex(@"OrderOpeningTimes.*The DayOfWeek field is required\.");
+        responseBody.Should()
+                    .MatchRegex(
+                        @"OrderOpeningTimes.*The OffsetInMinutes field is required\.");
+        responseBody.Should()
+                    .MatchRegex(
+                        @"OrderOpeningTimes.*The DurationInMinutes field is required\.");
     }
 
     [Fact]
@@ -239,8 +262,8 @@ public class RestaurantsControllerTest : ControllerTestBase
                 new
                 {
                     DayOfWeek = 7,
-                    OffsetOpenMinutes = 24 * 60,
-                    OpenMinutes = 7 * 24 * 60
+                    OffsetInMinutes = 24 * 60,
+                    DurationInMinutes = 7 * 24 * 60
                 }
             },
             OrderOpeningTimes = new List<dynamic>
@@ -248,8 +271,8 @@ public class RestaurantsControllerTest : ControllerTestBase
                 new
                 {
                     DayOfWeek = 7,
-                    OffsetOpenMinutes = 24 * 60,
-                    OpenMinutes = 7 * 24 * 60
+                    OffsetInMinutes = 24 * 60,
+                    DurationInMinutes = 7 * 24 * 60
                 }
             }
         };
@@ -269,16 +292,18 @@ public class RestaurantsControllerTest : ControllerTestBase
         responseBody.Should().MatchRegex(@"PlaceOpeningTimes.*Day must be in range 0-6, 0 is sunday, 6 is saturday\.");
         responseBody.Should()
                     .MatchRegex(
-                        @"PlaceOpeningTimes.*OffsetOpenMinutes should be less than number of minutes in a day\.");
+                        @"PlaceOpeningTimes.*OffsetInMinutes should be less than number of minutes in a day\.");
         responseBody.Should()
-                    .MatchRegex(@"PlaceOpeningTimes.*OpenMinutes should be less than number of minutes in a week\.");
+                    .MatchRegex(
+                        @"PlaceOpeningTimes.*DurationInMinutes should be less than number of minutes in a week\.");
 
         responseBody.Should().MatchRegex(@"OrderOpeningTimes.*Day must be in range 0-6, 0 is sunday, 6 is saturday\.");
         responseBody.Should()
                     .MatchRegex(
-                        @"OrderOpeningTimes.*OffsetOpenMinutes should be less than number of minutes in a day\.");
+                        @"OrderOpeningTimes.*OffsetInMinutes should be less than number of minutes in a day\.");
         responseBody.Should()
-                    .MatchRegex(@"OrderOpeningTimes.*OpenMinutes should be less than number of minutes in a week\.");
+                    .MatchRegex(
+                        @"OrderOpeningTimes.*DurationInMinutes should be less than number of minutes in a week\.");
     }
 
     [Fact]
@@ -304,14 +329,14 @@ public class RestaurantsControllerTest : ControllerTestBase
                 new
                 {
                     DayOfWeek = 1,
-                    OffsetOpenMinutes = 2 * 60,
-                    OpenMinutes = 60
+                    OffsetInMinutes = 2 * 60,
+                    DurationInMinutes = 60
                 },
                 new
                 {
                     DayOfWeek = 1,
-                    OffsetOpenMinutes = 60,
-                    OpenMinutes = 120
+                    OffsetInMinutes = 60,
+                    DurationInMinutes = 120
                 }
             },
             OrderOpeningTimes = new List<dynamic>
@@ -319,14 +344,14 @@ public class RestaurantsControllerTest : ControllerTestBase
                 new
                 {
                     DayOfWeek = 1,
-                    OffsetOpenMinutes = 2 * 60,
-                    OpenMinutes = 60
+                    OffsetInMinutes = 2 * 60,
+                    DurationInMinutes = 60
                 },
                 new
                 {
                     DayOfWeek = 1,
-                    OffsetOpenMinutes = 60,
-                    OpenMinutes = 120
+                    OffsetInMinutes = 60,
+                    DurationInMinutes = 120
                 }
             }
         };
@@ -372,8 +397,8 @@ public class RestaurantsControllerTest : ControllerTestBase
                 new()
                 {
                     DayOfWeek = DateTime.UtcNow.DayOfWeek,
-                    OffsetOpenMinutes = 0,
-                    OpenMinutes = 1439 //23H59
+                    OffsetInMinutes = 0,
+                    DurationInMinutes = 1439 //23H59
                 }
             },
             OrderOpeningTimes = new List<OpeningTimeCreateDto>
@@ -381,8 +406,8 @@ public class RestaurantsControllerTest : ControllerTestBase
                 new()
                 {
                     DayOfWeek = DateTime.UtcNow.DayOfWeek,
-                    OffsetOpenMinutes = 0,
-                    OpenMinutes = 1439 //23H59
+                    OffsetInMinutes = 0,
+                    DurationInMinutes = 1439 //23H59
                 }
             }
         };
@@ -424,8 +449,8 @@ public class RestaurantsControllerTest : ControllerTestBase
                 new()
                 {
                     DayOfWeek = DateTime.UtcNow.DayOfWeek,
-                    OffsetOpenMinutes = 0,
-                    OpenMinutes = 1439 //23H59
+                    OffsetInMinutes = 0,
+                    DurationInMinutes = 1439 //23H59
                 }
             },
             OrderOpeningTimes = new List<OpeningTimeCreateDto>
@@ -433,8 +458,8 @@ public class RestaurantsControllerTest : ControllerTestBase
                 new()
                 {
                     DayOfWeek = DateTime.UtcNow.DayOfWeek,
-                    OffsetOpenMinutes = 0,
-                    OpenMinutes = 1439 //23H59
+                    OffsetInMinutes = 0,
+                    DurationInMinutes = 1439 //23H59
                 }
             }
         };
