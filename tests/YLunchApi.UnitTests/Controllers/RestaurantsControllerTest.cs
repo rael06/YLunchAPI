@@ -14,7 +14,7 @@ using YLunchApi.Helpers.Extensions;
 using YLunchApi.Main.Controllers;
 using YLunchApi.TestsShared;
 using YLunchApi.TestsShared.Mocks;
-using YLunchApi.UnitTests.Configuration;
+using YLunchApi.UnitTests.Core.Configuration;
 
 namespace YLunchApi.UnitTests.Controllers;
 
@@ -165,7 +165,7 @@ public class RestaurantsControllerTest : UnitTestFixture
         {
             new()
             {
-                DayOfWeek = DateTime.UtcNow.DayOfWeek,
+                DayOfWeek = dateTimeBeforeUtcNow.DayOfWeek,
                 OffsetInMinutes = dateTimeBeforeUtcNow.MinutesFromMidnight(),
                 DurationInMinutes = 2 * 60
             }
