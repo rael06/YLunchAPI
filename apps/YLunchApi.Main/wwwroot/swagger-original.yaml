@@ -39,7 +39,7 @@ paths:
       responses:
         '200':
           description: |
-            Success:
+            Success
             - The anonymous trial Json object
           content:
             application/json:
@@ -49,7 +49,7 @@ paths:
                 message: YLunchApi is running, you are anonymous.
         '400':
           description: |
-            Bad request:
+            Bad request
           content:
             application/json:
               schema:
@@ -72,7 +72,7 @@ paths:
       responses:
         '200':
           description: |
-            Success:
+            Success
             - The authenticated trial Json object
           content:
             application/json:
@@ -82,7 +82,7 @@ paths:
                 message: 'YLunchApi is running, you are authenticated as {CurrentUserEmail} with Id: {CurrentUserId} and Roles: {CurrentUserRoles}.'
         '400':
           description: |
-            Bad request:
+            Bad request
           content:
             application/json:
               schema:
@@ -94,7 +94,7 @@ paths:
                   reasons: ["Something went wrong, please try again later."]
         '401':
           description: |
-            Unauthorized:
+            Unauthorized
           content:
             application/json:
               schema:
@@ -117,7 +117,7 @@ paths:
       responses:
         '200':
           description: |
-            Success:
+            Success
             - The authenticated trial Json object
           content:
             application/json:
@@ -127,7 +127,7 @@ paths:
                 message: 'YLunchApi is running, you are authenticated as {CurrentUserEmail} with Id: {CurrentUserId} and Roles: {CurrentUserRoles}.'
         '400':
           description: |
-            Bad request:
+            Bad request
           content:
             application/json:
               schema:
@@ -139,7 +139,7 @@ paths:
                   reasons: ["Something went wrong, please try again later."]
         '401':
           description: |
-            Unauthorized:
+            Unauthorized
           content:
             application/json:
               schema:
@@ -151,7 +151,7 @@ paths:
                   reasons: ["Please login and use provided tokens."]
         '403':
           description: |
-            Forbidden:
+            Forbidden
           content:
             application/json:
               schema:
@@ -174,7 +174,7 @@ paths:
       responses:
         '200':
           description: |
-            Success:
+            Success
             - The authenticated trial Json object
           content:
             application/json:
@@ -184,7 +184,7 @@ paths:
                 message: 'YLunchApi is running, you are authenticated as {CurrentUserEmail} with Id: {CurrentUserId} and Roles: {CurrentUserRoles}.'
         '400':
           description: |
-            Bad request:
+            Bad request
           content:
             application/json:
               schema:
@@ -196,7 +196,7 @@ paths:
                   reasons: ["Something went wrong, please try again later."]
         '401':
           description: |
-            Unauthorized:
+            Unauthorized
           content:
             application/json:
               schema:
@@ -208,7 +208,7 @@ paths:
                   reasons: ["Please login and use provided tokens."]
         '403':
           description: |
-            Forbidden:
+            Forbidden
           content:
             application/json:
               schema:
@@ -245,7 +245,7 @@ paths:
       responses:
         '200':
           description: |
-            Success:
+            Success
             - The access and refresh tokens
           content:
             application/json:
@@ -253,7 +253,7 @@ paths:
                 $ref: '#/components/schemas/TokenReadDto'
         '400':
           description: |
-            Bad request:
+            Bad request
           content:
             application/json:
               schema:
@@ -273,7 +273,7 @@ paths:
                       reasons: ["Something went wrong, please try again later."]
         '401':
           description: |
-            Unauthorized:
+            Unauthorized
           content:
             application/json:
               schema:
@@ -301,7 +301,7 @@ paths:
       responses:
         '200':
           description: |
-            Success:
+            Success
             - The new access and refresh tokens
           content:
             application/json:
@@ -309,7 +309,7 @@ paths:
                 $ref: '#/components/schemas/TokenReadDto'
         '400':
           description: |
-            Bad request:
+            Bad request
           content:
             application/json:
               schema:
@@ -329,7 +329,7 @@ paths:
                       reasons: ["Something went wrong, please try again later."]
         '401':
           description: |
-            Unauthorized:
+            Unauthorized
           content:
             application/json:
               schema:
@@ -352,7 +352,7 @@ paths:
       responses:
         '200':
           description: |
-            Success:
+            Success
             - The current user Json object
           content:
             application/json:
@@ -360,7 +360,7 @@ paths:
                 $ref: '#/components/schemas/UserReadDto'
         '400':
           description: |
-            Bad request:
+            Bad request
           content:
             application/json:
               schema:
@@ -372,7 +372,7 @@ paths:
                   reasons: ["Something went wrong, please try again later."]
         '401':
           description: |
-            Unauthorized:
+            Unauthorized
           content:
             application/json:
               schema:
@@ -405,7 +405,7 @@ paths:
                 $ref: '#/components/schemas/UserReadDto'
         '400':
           description: |
-            Bad request:
+            Bad request
           content:
             application/json:
               schema:
@@ -425,7 +425,7 @@ paths:
                       reasons: ["Something went wrong, please try again later."]
         '409':
           description: |
-            Conflict:
+            Conflict
           content:
             application/json:
               schema:
@@ -458,7 +458,7 @@ paths:
                 $ref: '#/components/schemas/UserReadDto'
         '400':
           description: |
-            Bad request:
+            Bad request
           content:
             application/json:
               schema:
@@ -478,7 +478,7 @@ paths:
                       reasons: ["Something went wrong, please try again later."]
         '409':
           description: |
-            Conflict:
+            Conflict
           content:
             application/json:
               schema:
@@ -513,7 +513,7 @@ paths:
                 $ref: '#/components/schemas/RestaurantReadDto'
         '400':
           description: |
-            Bad request:
+            Bad request
           content:
             application/json:
               schema:
@@ -533,7 +533,7 @@ paths:
                       reasons: ["Something went wrong, please try again later."]
         '409':
           description: |
-            Conflict:
+            Conflict
           content:
             application/json:
               schema:
@@ -563,7 +563,7 @@ paths:
       responses:
         '200':
           description: |
-            Success:
+            Success
             - The restaurant
           content:
             application/json:
@@ -571,7 +571,7 @@ paths:
                 $ref: '#/components/schemas/RestaurantReadDto'
         '400':
           description: |
-            Bad request:
+            Bad request
           content:
             application/json:
               schema:
@@ -583,7 +583,7 @@ paths:
                   reasons: ["Something went wrong, please try again later."]
         '401':
           description: |
-            Unauthorized:
+            Unauthorized
           content:
             application/json:
               schema:
