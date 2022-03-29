@@ -4,15 +4,14 @@ using YLunchApi.Domain.RestaurantAggregate.Models.Enums;
 
 namespace YLunchApi.Domain.RestaurantAggregate.Models;
 
-// Todo remove coverage exclusion
-[ExcludeFromCodeCoverage]
 public class Product : Entity
 {
     public string RestaurantId { get; set; } = null!;
-    public virtual Restaurant? Restaurant { get; set; }
+
+    [ExcludeFromCodeCoverage] public virtual Restaurant? Restaurant { get; set; }
 
     public string Name { get; set; } = null!;
-    public string Description { get; set; } = null!;
+    public string? Description { get; set; }
     public double Price { get; set; }
     public bool IsActive { get; set; }
 
