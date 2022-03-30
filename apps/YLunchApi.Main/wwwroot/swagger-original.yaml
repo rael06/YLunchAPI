@@ -549,6 +549,8 @@ paths:
       tags:
         - restaurants
       summary: Gets restaurants
+      description: |
+        - Authorization header: **no**
       operationId: getRestaurants
       parameters:
         - in: query
@@ -599,14 +601,12 @@ paths:
                 errors:
                   reasons: ["Something went wrong, please try again later."]
   /restaurants/{restaurantId}:
-    description: |
-      - Authorization header: **yes**
-      - Granted roles:
-        - All
     get:
       tags:
         - restaurants
       summary: Gets a restaurant by id
+      description: |
+        - Authorization header: **no**
       operationId: getRestaurantById
       parameters:
         - in: path
@@ -733,6 +733,8 @@ paths:
       tags:
         - products
       summary: Gets a product by id
+      description: |
+        - Authorization header: **no**
       operationId: getProductById
       parameters:
         - in: path

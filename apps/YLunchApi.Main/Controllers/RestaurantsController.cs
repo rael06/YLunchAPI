@@ -52,8 +52,6 @@ public class RestaurantsController : ApplicationControllerBase
         }
     }
 
-
-    //get All restaurants
     [HttpGet]
     public async Task<ActionResult<ICollection<RestaurantReadDto>>> GetRestaurants([FromQuery] RestaurantFilter? restaurantFilter = null)
     {
@@ -61,5 +59,4 @@ public class RestaurantsController : ApplicationControllerBase
         var restaurantReadDto = await _restaurantService.GetRestaurants(filter);
         return Ok(restaurantReadDto);
     }
-    //Fin
 }
