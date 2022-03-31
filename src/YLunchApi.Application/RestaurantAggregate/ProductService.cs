@@ -2,6 +2,7 @@
 using YLunchApi.Domain.CommonAggregate.Services;
 using YLunchApi.Domain.Exceptions;
 using YLunchApi.Domain.RestaurantAggregate.Dto;
+using YLunchApi.Domain.RestaurantAggregate.Filters;
 using YLunchApi.Domain.RestaurantAggregate.Models;
 using YLunchApi.Domain.RestaurantAggregate.Services;
 
@@ -14,7 +15,10 @@ public class ProductService : IProductService
     private readonly IProductTagRepository _productTagRepository;
     private readonly IDateTimeProvider _dateTimeProvider;
 
-    public ProductService(IDateTimeProvider dateTimeProvider, IProductRepository productRepository, IAllergenRepository allergenRepository, IProductTagRepository productTagRepository)
+    public ProductService(IDateTimeProvider dateTimeProvider,
+                          IProductRepository productRepository,
+                          IAllergenRepository allergenRepository,
+                          IProductTagRepository productTagRepository)
     {
         _dateTimeProvider = dateTimeProvider;
         _productRepository = productRepository;
@@ -68,5 +72,11 @@ public class ProductService : IProductService
     {
         var product = await _productRepository.GetById(productId);
         return product.Adapt<ProductReadDto>();
+    }
+
+    public async Task<ICollection<ProductReadDto>> GetProducts(ProductFilter productFilter)
+    {
+        var products = await _productRepository.GetProducts(productFilter);
+        return products.Adapt<ICollection<ProductReadDto>>();
     }
 }

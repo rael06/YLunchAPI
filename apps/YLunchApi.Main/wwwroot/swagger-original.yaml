@@ -728,6 +728,70 @@ paths:
                 statusCode: 409
                 errors:
                   reasons: ["Product already exists."]
+    get:
+      tags:
+        - products
+      summary: Gets products
+      description: |
+        - Authorization header: **no**
+      operationId: getProducts
+      parameters:
+        - in: path
+          name: restaurantId
+          required: true
+          description: The id of the restaurant you want to get the products.
+          schema:
+            type: string
+        - in: query
+          name: page
+          required: false
+          description: The page you want within 1 and 10 000. Default 1.
+          schema:
+            type: number
+        - in: query
+          name: size
+          required: false
+          description: The size you want within 1 and 50. Default 50.
+          schema:
+            type: number
+        - in: query
+          name: isAvailable
+          required: false
+          description: To filter the restaurants that are available or not. Default null to get both. A product is available when isActive is true, quantity is null or > 1, expirationDateTime is null or in the future.
+          schema:
+            type: boolean
+      responses:
+        '200':
+          description: |
+            Success
+            - The products
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProductReadDto'
+        '400':
+          description: |
+            Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDto'
+              example:
+                title: "BadRequest"
+                statusCode: 400
+                errors:
+                  reasons: ["Something went wrong, please try again later."]
+        '404':
+          description: |
+            Not found:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageDto'
+              example:
+                message: Restaurant not found.
   /products/{productId}:
     get:
       tags:
