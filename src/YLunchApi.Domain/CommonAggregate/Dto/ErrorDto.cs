@@ -6,7 +6,7 @@ namespace YLunchApi.Domain.CommonAggregate.Dto;
 public class ErrorDto
 {
     public string Title { get; set; } = null!;
-    public int StatusCode { get; set; }
+    public int Status { get; set; }
     public Errors Errors { get; set; } = null!;
 
     // because of deserialization usage
@@ -18,7 +18,7 @@ public class ErrorDto
     public ErrorDto(HttpStatusCode status, string error)
     {
         Title = status.ToString();
-        StatusCode = (int)status;
+        Status = (int)status;
         Errors = new Errors(error);
     }
 }
