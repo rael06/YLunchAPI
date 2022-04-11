@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using YLunchApi.Infrastructure.Database;
 
@@ -10,9 +11,10 @@ using YLunchApi.Infrastructure.Database;
 namespace YLunchApi.Main.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220404205549_Change_OrderedProduct_Description_To_Nullable_And_Rename_Order_UserId_Into_CustomerId")]
+    partial class Change_OrderedProduct_Description_To_Nullable_And_Rename_Order_UserId_Into_CustomerId
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -269,6 +271,10 @@ namespace YLunchApi.Main.Migrations
                     b.Property<string>("CustomerComment")
                         .HasColumnType("longtext");
 
+                    b.Property<string>("CustomerId")
+                        .IsRequired()
+                        .HasColumnType("varchar(255)");
+
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("tinyint(1)");
 
@@ -285,15 +291,11 @@ namespace YLunchApi.Main.Migrations
                     b.Property<double>("TotalPrice")
                         .HasColumnType("double");
 
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("varchar(255)");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("RestaurantId");
+                    b.HasIndex("CustomerId");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("RestaurantId");
 
                     b.ToTable("Orders");
                 });
@@ -312,9 +314,6 @@ namespace YLunchApi.Main.Migrations
 
                     b.Property<string>("Description")
                         .HasColumnType("longtext");
-
-                    b.Property<DateTime?>("ExpirationDateTime")
-                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("Image")
                         .HasColumnType("longtext");
@@ -338,14 +337,7 @@ namespace YLunchApi.Main.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<int>("ProductType")
-                        .HasColumnType("int");
-
                     b.Property<string>("RestaurantId")
-                        .IsRequired()
-                        .HasColumnType("varchar(255)");
-
-                    b.Property<string>("UserId")
                         .IsRequired()
                         .HasColumnType("varchar(255)");
 
@@ -356,8 +348,6 @@ namespace YLunchApi.Main.Migrations
                     b.HasIndex("ProductId");
 
                     b.HasIndex("RestaurantId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("OrderedProducts");
                 });
@@ -751,21 +741,21 @@ namespace YLunchApi.Main.Migrations
 
             modelBuilder.Entity("YLunchApi.Domain.RestaurantAggregate.Models.Order", b =>
                 {
+                    b.HasOne("YLunchApi.Domain.UserAggregate.Models.User", "Customer")
+                        .WithMany()
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("YLunchApi.Domain.RestaurantAggregate.Models.Restaurant", "Restaurant")
                         .WithMany("Orders")
                         .HasForeignKey("RestaurantId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("YLunchApi.Domain.UserAggregate.Models.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Navigation("Customer");
 
                     b.Navigation("Restaurant");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("YLunchApi.Domain.RestaurantAggregate.Models.OrderedProduct", b =>
@@ -788,19 +778,11 @@ namespace YLunchApi.Main.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("YLunchApi.Domain.UserAggregate.Models.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Order");
 
                     b.Navigation("Product");
 
                     b.Navigation("Restaurant");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("YLunchApi.Domain.RestaurantAggregate.Models.OrderOpeningTime", b =>

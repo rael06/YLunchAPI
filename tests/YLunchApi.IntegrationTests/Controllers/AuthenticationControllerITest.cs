@@ -20,8 +20,11 @@ public class AuthenticationControllerITest : ControllerITestBase
     [Fact]
     public async Task Login_Should_Return_A_200Ok()
     {
-        // Arrange, Act and Assert
-        _ = await Authenticate(UserMocks.CustomerCreateDto);
+        // Arrange
+        var user = await CreateUser(UserMocks.CustomerCreateDto);
+
+        // Act and Assert
+        _ = await LoginUser(user.Email, UserMocks.CustomerCreateDto.Password);
     }
 
     [Fact]
@@ -74,12 +77,12 @@ public class AuthenticationControllerITest : ControllerITestBase
     public async Task RefreshTokens_Should_Return_A_200Ok()
     {
         // Arrange
-        var authenticatedUserInfo = await Authenticate(UserMocks.CustomerCreateDto);
+        var decodedTokens = await CreateAndLoginUser(UserMocks.CustomerCreateDto);
 
         var refreshTokensBody = new
         {
-            authenticatedUserInfo.AccessToken,
-            authenticatedUserInfo.RefreshToken
+            decodedTokens.AccessToken,
+            decodedTokens.RefreshToken
         };
 
         // Act
@@ -142,8 +145,8 @@ public class AuthenticationControllerITest : ControllerITestBase
     public async Task GetCurrentUser_Should_Return_A_200Ok()
     {
         // Arrange
-        var authenticatedUserInfo = await Authenticate(UserMocks.CustomerCreateDto);
-        Client.SetAuthorizationHeader(authenticatedUserInfo.AccessToken);
+        var decodedTokens = await CreateAndLoginUser(UserMocks.CustomerCreateDto);
+        Client.SetAuthorizationHeader(decodedTokens.AccessToken);
 
         // Act
         var response = await Client.GetAsync("authentication/current-user");
@@ -151,7 +154,7 @@ public class AuthenticationControllerITest : ControllerITestBase
         var responseBody = await ResponseUtils.DeserializeContentAsync<UserReadDto>(response);
 
         // Assert
-        responseBody.Should().BeEquivalentTo(UserMocks.CustomerUserReadDto(authenticatedUserInfo.UserId));
+        responseBody.Should().BeEquivalentTo(UserMocks.CustomerUserReadDto(decodedTokens.UserId));
     }
 
     [Fact]

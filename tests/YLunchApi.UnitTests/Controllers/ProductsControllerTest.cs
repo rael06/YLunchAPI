@@ -10,10 +10,10 @@ using Moq;
 using Xunit;
 using YLunchApi.Domain.CommonAggregate.Dto;
 using YLunchApi.Domain.CommonAggregate.Services;
+using YLunchApi.Domain.Core.Utils;
 using YLunchApi.Domain.RestaurantAggregate.Dto;
 using YLunchApi.Domain.RestaurantAggregate.Filters;
 using YLunchApi.Main.Controllers;
-using YLunchApi.TestsShared;
 using YLunchApi.TestsShared.Mocks;
 using YLunchApi.UnitTests.Core.Configuration;
 
@@ -21,16 +21,13 @@ namespace YLunchApi.UnitTests.Controllers;
 
 public class ProductsControllerTest : UnitTestFixture
 {
-    private RestaurantReadDto _restaurant = null!;
-    private ProductsController _productsController = null!;
-
     public ProductsControllerTest(UnitTestFixtureBase fixture) : base(fixture)
     {
     }
 
     #region Utils
 
-    private async Task<RestaurantReadDto> CreateRestaurant(DateTime? customDateTime = null, string? restaurantName = null)
+    private ProductsController InitProductsController(DateTime? customDateTime = null)
     {
         var dateTimeProviderMock = new Mock<IDateTimeProvider>();
         dateTimeProviderMock.Setup(x => x.UtcNow).Returns(customDateTime ?? DateTime.UtcNow);
@@ -39,27 +36,6 @@ public class ProductsControllerTest : UnitTestFixture
             configuration.AccessToken = TokenMocks.ValidRestaurantAdminAccessToken;
             configuration.DateTimeProvider = dateTimeProviderMock.Object;
         });
-        var restaurantsController = Fixture.GetImplementationFromService<RestaurantsController>();
-        var restaurantCreateDto = RestaurantMocks.SimpleRestaurantCreateDto;
-        restaurantCreateDto.Name = restaurantName ?? restaurantCreateDto.Name;
-        var restaurantCreationResponse = await restaurantsController.CreateRestaurant(restaurantCreateDto);
-        var restaurantCreationResponseResult = Assert.IsType<CreatedResult>(restaurantCreationResponse.Result);
-        return Assert.IsType<RestaurantReadDto>(restaurantCreationResponseResult.Value);
-    }
-
-    private async Task<ProductReadDto> CreateProduct(ProductCreateDto productCreateDto)
-    {
-        // Act
-        var response = await _productsController.CreateProduct(_restaurant.Id, productCreateDto);
-
-        // Assert
-        var responseResult = Assert.IsType<CreatedResult>(response.Result);
-        return Assert.IsType<ProductReadDto>(responseResult.Value);
-    }
-
-    private async Task<ProductsController> InitProductsController(DateTime? customDateTime = null)
-    {
-        _restaurant = await CreateRestaurant(customDateTime);
         return Fixture.GetImplementationFromService<ProductsController>();
     }
 
@@ -72,18 +48,20 @@ public class ProductsControllerTest : UnitTestFixture
     {
         // Arrange
         var dateTime = DateTimeMocks.Monday20220321T1000Utc;
-        _productsController = await InitProductsController(dateTime);
+        var restaurant = await CreateRestaurant(RestaurantMocks.SimpleRestaurantCreateDto, dateTime);
+        var productsController = InitProductsController(dateTime);
         var productCreateDto = ProductMocks.ProductCreateDto;
+        productCreateDto.ExpirationDateTime = dateTime.AddDays(1);
 
         // Act
-        var response = await _productsController.CreateProduct(_restaurant.Id, productCreateDto);
+        var response = await productsController.CreateProduct(restaurant.Id, productCreateDto);
 
         // Assert
         var responseResult = Assert.IsType<CreatedResult>(response.Result);
         var responseBody = Assert.IsType<ProductReadDto>(responseResult.Value);
 
         responseBody.Id.Should().MatchRegex(GuidUtils.Regex);
-        responseBody.RestaurantId.Should().Be(_restaurant.Id);
+        responseBody.RestaurantId.Should().Be(restaurant.Id);
         responseBody.Name.Should().Be(productCreateDto.Name);
         responseBody.Price.Should().Be(productCreateDto.Price);
         responseBody.Description.Should().Be(productCreateDto.Description);
@@ -110,20 +88,23 @@ public class ProductsControllerTest : UnitTestFixture
     {
         // Arrange
         var dateTime = DateTimeMocks.Monday20220321T1000Utc;
-        var otherRestaurant = await CreateRestaurant(dateTime, "other restaurant");
-        _productsController = await InitProductsController(dateTime);
+        var restaurantCreateDto = RestaurantMocks.SimpleRestaurantCreateDto;
+        restaurantCreateDto.Name = "other restaurant";
+        var otherRestaurant = await CreateRestaurant(restaurantCreateDto, dateTime);
+        var restaurant = await CreateRestaurant(RestaurantMocks.SimpleRestaurantCreateDto, dateTime);
+        var productsController = InitProductsController(dateTime);
         var productCreateDto = ProductMocks.ProductCreateDto;
 
         // Act
-        _ = await _productsController.CreateProduct(otherRestaurant.Id, productCreateDto);
-        var response = await _productsController.CreateProduct(_restaurant.Id, productCreateDto);
+        _ = await productsController.CreateProduct(otherRestaurant.Id, productCreateDto);
+        var response = await productsController.CreateProduct(restaurant.Id, productCreateDto);
 
         // Assert
         var responseResult = Assert.IsType<CreatedResult>(response.Result);
         var responseBody = Assert.IsType<ProductReadDto>(responseResult.Value);
 
         responseBody.Id.Should().MatchRegex(GuidUtils.Regex);
-        responseBody.RestaurantId.Should().Be(_restaurant.Id);
+        responseBody.RestaurantId.Should().Be(restaurant.Id);
         responseBody.Name.Should().Be(productCreateDto.Name);
         responseBody.Price.Should().Be(productCreateDto.Price);
         responseBody.Description.Should().Be(productCreateDto.Description);
@@ -132,7 +113,7 @@ public class ProductsControllerTest : UnitTestFixture
         responseBody.ProductType.Should().Be(productCreateDto.ProductType);
         responseBody.Image.Should().Be(productCreateDto.Image);
         responseBody.CreationDateTime.Should().BeCloseTo(dateTime, TimeSpan.FromSeconds(5));
-        responseBody.ExpirationDateTime.Should().BeCloseTo(dateTime.AddDays(1), TimeSpan.FromSeconds(5));
+        responseBody.ExpirationDateTime.Should().BeNull();
         responseBody.Allergens.Should().BeEquivalentTo(productCreateDto.Allergens)
                     .And
                     .BeInAscendingOrder(x => x.Name);
@@ -149,12 +130,13 @@ public class ProductsControllerTest : UnitTestFixture
     public async Task CreateProduct_Should_Return_A_409Conflict()
     {
         // Arrange
-        _productsController = await InitProductsController();
+        var restaurant = await CreateRestaurant(RestaurantMocks.SimpleRestaurantCreateDto, DateTimeMocks.Monday20220321T1000Utc);
+        var productsController = InitProductsController();
         var productCreateDto = ProductMocks.ProductCreateDto;
 
         // Act
-        _ = await _productsController.CreateProduct(_restaurant.Id, productCreateDto);
-        var response = await _productsController.CreateProduct(_restaurant.Id, productCreateDto);
+        _ = await productsController.CreateProduct(restaurant.Id, productCreateDto);
+        var response = await productsController.CreateProduct(restaurant.Id, productCreateDto);
 
         // Assert
         var responseResult = Assert.IsType<ConflictObjectResult>(response.Result);
@@ -166,11 +148,11 @@ public class ProductsControllerTest : UnitTestFixture
     public async Task CreateProduct_Should_Return_A_404NotFound()
     {
         // Arrange
-        _productsController = await InitProductsController();
+        var productsController = InitProductsController();
         var productCreateDto = ProductMocks.ProductCreateDto;
 
         // Act
-        var response = await _productsController.CreateProduct("NON_EXISTENT_RESTAURANT_ID", productCreateDto);
+        var response = await productsController.CreateProduct("NON_EXISTENT_RESTAURANT_ID", productCreateDto);
 
         // Assert
         var responseResult = Assert.IsType<NotFoundObjectResult>(response.Result);
@@ -183,11 +165,12 @@ public class ProductsControllerTest : UnitTestFixture
     {
         // Arrange
         var dateTime = DateTimeMocks.Monday20220321T1000Utc;
-        _productsController = await InitProductsController(dateTime);
+        var restaurant = await CreateRestaurant(RestaurantMocks.SimpleRestaurantCreateDto, dateTime);
+        var productsController = InitProductsController(dateTime);
         var initialProductCreateDto = ProductMocks.ProductCreateDto;
         initialProductCreateDto.Name = "first pizza";
 
-        var initialProductCreationResponse = await _productsController.CreateProduct(_restaurant.Id, initialProductCreateDto);
+        var initialProductCreationResponse = await productsController.CreateProduct(restaurant.Id, initialProductCreateDto);
         var initialProductCreationResponseResult = Assert.IsType<CreatedResult>(initialProductCreationResponse.Result);
         var initialProductCreationResponseBody = Assert.IsType<ProductReadDto>(initialProductCreationResponseResult.Value);
 
@@ -197,7 +180,7 @@ public class ProductsControllerTest : UnitTestFixture
         var productCreateDto = ProductMocks.ProductCreateDto;
 
         // Act
-        var response = await _productsController.CreateProduct(_restaurant.Id, productCreateDto);
+        var response = await productsController.CreateProduct(restaurant.Id, productCreateDto);
 
         // Assert
         var responseResult = Assert.IsType<CreatedResult>(response.Result);
@@ -216,21 +199,23 @@ public class ProductsControllerTest : UnitTestFixture
     {
         // Arrange
         var dateTime = DateTimeMocks.Monday20220321T1000Utc;
-        _productsController = await InitProductsController(dateTime);
+        var restaurant = await CreateRestaurant(RestaurantMocks.SimpleRestaurantCreateDto, dateTime);
+        var productsController = InitProductsController(dateTime);
         var productCreateDto = ProductMocks.ProductCreateDto;
+        productCreateDto.ExpirationDateTime = dateTime.AddDays(1);
 
-        var productCreationResponse = await _productsController.CreateProduct(_restaurant.Id, productCreateDto);
+        var productCreationResponse = await productsController.CreateProduct(restaurant.Id, productCreateDto);
         var productCreationResponseResult = Assert.IsType<CreatedResult>(productCreationResponse.Result);
         var productCreationResponseBody = Assert.IsType<ProductReadDto>(productCreationResponseResult.Value);
 
         // Act
-        var response = await _productsController.GetProductById(productCreationResponseBody.Id);
+        var response = await productsController.GetProductById(productCreationResponseBody.Id);
         var responseResult = Assert.IsType<OkObjectResult>(response.Result);
         var responseBody = Assert.IsType<ProductReadDto>(responseResult.Value);
 
         // Assert
         responseBody.Id.Should().Be(productCreationResponseBody.Id);
-        responseBody.RestaurantId.Should().Be(_restaurant.Id);
+        responseBody.RestaurantId.Should().Be(restaurant.Id);
         responseBody.Name.Should().Be(productCreateDto.Name);
         responseBody.Price.Should().Be(productCreateDto.Price);
         responseBody.Description.Should().Be(productCreateDto.Description);
@@ -252,18 +237,18 @@ public class ProductsControllerTest : UnitTestFixture
     public async Task GetProductById_Should_Return_A_404NotFound()
     {
         // Arrange
-        _productsController = await InitProductsController();
+        var productsController = InitProductsController();
         var notExistingProductId = Guid.NewGuid().ToString();
 
         // Act
-        var response = await _productsController.GetProductById(notExistingProductId);
+        var response = await productsController.GetProductById(notExistingProductId);
 
         // Assert
         var responseResult = Assert.IsType<NotFoundObjectResult>(response.Result);
         var responseBody = Assert.IsType<ErrorDto>(responseResult.Value);
         responseBody.Should()
                     .BeEquivalentTo(new ErrorDto(HttpStatusCode.NotFound,
-                        $"Product {notExistingProductId} not found."));
+                        $"Product: {notExistingProductId} not found."));
     }
 
     #endregion
@@ -275,15 +260,17 @@ public class ProductsControllerTest : UnitTestFixture
     {
         // Arrange
         var dateTime = DateTimeMocks.Monday20220321T1000Utc;
-        _productsController = await InitProductsController(dateTime);
+        var restaurant = await CreateRestaurant(RestaurantMocks.SimpleRestaurantCreateDto, dateTime);
+        var productsController = InitProductsController(dateTime);
 
         var productCreateDto1 = ProductMocks.ProductCreateDto;
         productCreateDto1.Name = "product1";
-        var product1 = await CreateProduct(productCreateDto1);
+        productCreateDto1.ExpirationDateTime = dateTime.AddDays(1);
+        var product1 = await CreateProduct(restaurant.Id, dateTime, productCreateDto1);
 
         var productCreateDto2 = ProductMocks.ProductCreateDto;
         productCreateDto2.Name = "product2";
-        var product2 = await CreateProduct(productCreateDto2);
+        var product2 = await CreateProduct(restaurant.Id, dateTime, productCreateDto2);
 
         var expectedProducts = new List<ProductReadDto>
         {
@@ -292,7 +279,7 @@ public class ProductsControllerTest : UnitTestFixture
         };
 
         // Act
-        var response = await _productsController.GetProductsByRestaurantId(_restaurant.Id);
+        var response = await productsController.GetProductsByRestaurantId(restaurant.Id);
 
         // Assert
         var responseResult = Assert.IsType<OkObjectResult>(response.Result);
@@ -305,7 +292,7 @@ public class ProductsControllerTest : UnitTestFixture
             var expectedProduct = expectedProducts[i];
 
             actualProduct.Id.Should().Be(expectedProduct.Id);
-            actualProduct.RestaurantId.Should().Be(_restaurant.Id);
+            actualProduct.RestaurantId.Should().Be(restaurant.Id);
             actualProduct.Name.Should().Be(expectedProduct.Name);
             actualProduct.Price.Should().Be(expectedProduct.Price);
             actualProduct.Description.Should().Be(expectedProduct.Description);
@@ -314,7 +301,11 @@ public class ProductsControllerTest : UnitTestFixture
             actualProduct.ProductType.Should().Be(expectedProduct.ProductType);
             actualProduct.Image.Should().Be(expectedProduct.Image);
             actualProduct.CreationDateTime.Should().BeCloseTo(dateTime, TimeSpan.FromSeconds(5));
-            actualProduct.ExpirationDateTime.Should().BeCloseTo(dateTime.AddDays(1), TimeSpan.FromSeconds(5));
+            _ = expectedProduct.ExpirationDateTime switch
+            {
+                null => actualProduct.ExpirationDateTime.Should().BeNull(),
+                { } dt => actualProduct.ExpirationDateTime.Should().BeCloseTo(dt, TimeSpan.FromSeconds(5))
+            };
             actualProduct.Allergens.Should().BeEquivalentTo(expectedProduct.Allergens)
                          .And
                          .BeInAscendingOrder(x => x.Name);
@@ -329,27 +320,28 @@ public class ProductsControllerTest : UnitTestFixture
     {
         // Arrange
         var dateTime = DateTimeMocks.Monday20220321T1000Utc;
-        _productsController = await InitProductsController(dateTime);
-
+        var restaurant = await CreateRestaurant(RestaurantMocks.SimpleRestaurantCreateDto, dateTime);
+        var productsController = InitProductsController(dateTime);
         var productCreateDto1 = ProductMocks.ProductCreateDto;
         productCreateDto1.Name = "product1";
-        await CreateProduct(productCreateDto1);
+        await CreateProduct(restaurant.Id, dateTime, productCreateDto1);
 
         var productCreateDto2 = ProductMocks.ProductCreateDto;
         productCreateDto2.Name = "product2";
-        await CreateProduct(productCreateDto2);
+        await CreateProduct(restaurant.Id, dateTime, productCreateDto2);
 
         var productCreateDto3 = ProductMocks.ProductCreateDto;
         productCreateDto3.Name = "product3";
-        var product3 = await CreateProduct(productCreateDto3);
+        var product3 = await CreateProduct(restaurant.Id, dateTime, productCreateDto3);
 
         var productCreateDto4 = ProductMocks.ProductCreateDto;
         productCreateDto4.Name = "product4";
-        var product4 = await CreateProduct(productCreateDto4);
+        productCreateDto4.ExpirationDateTime = dateTime.AddDays(1);
+        var product4 = await CreateProduct(restaurant.Id, dateTime, productCreateDto4);
 
         var productCreateDto5 = ProductMocks.ProductCreateDto;
         productCreateDto5.Name = "product5";
-        await CreateProduct(productCreateDto5);
+        await CreateProduct(restaurant.Id, dateTime, productCreateDto5);
 
         var expectedProducts = new List<ProductReadDto>
         {
@@ -364,7 +356,7 @@ public class ProductsControllerTest : UnitTestFixture
         };
 
         // Act
-        var response = await _productsController.GetProductsByRestaurantId(_restaurant.Id, filter);
+        var response = await productsController.GetProductsByRestaurantId(restaurant.Id, filter);
 
         // Assert
         var responseResult = Assert.IsType<OkObjectResult>(response.Result);
@@ -380,7 +372,7 @@ public class ProductsControllerTest : UnitTestFixture
             var expectedProduct = expectedProducts[i];
 
             actualProduct.Id.Should().Be(expectedProduct.Id);
-            actualProduct.RestaurantId.Should().Be(_restaurant.Id);
+            actualProduct.RestaurantId.Should().Be(restaurant.Id);
             actualProduct.Name.Should().Be(expectedProduct.Name);
             actualProduct.Price.Should().Be(expectedProduct.Price);
             actualProduct.Description.Should().Be(expectedProduct.Description);
@@ -389,7 +381,11 @@ public class ProductsControllerTest : UnitTestFixture
             actualProduct.ProductType.Should().Be(expectedProduct.ProductType);
             actualProduct.Image.Should().Be(expectedProduct.Image);
             actualProduct.CreationDateTime.Should().BeCloseTo(dateTime, TimeSpan.FromSeconds(5));
-            actualProduct.ExpirationDateTime.Should().BeCloseTo(dateTime.AddDays(1), TimeSpan.FromSeconds(5));
+            _ = expectedProduct.ExpirationDateTime switch
+            {
+                null => actualProduct.ExpirationDateTime.Should().BeNull(),
+                { } dt => actualProduct.ExpirationDateTime.Should().BeCloseTo(dt, TimeSpan.FromSeconds(5))
+            };
             actualProduct.Allergens.Should().BeEquivalentTo(expectedProduct.Allergens)
                          .And
                          .BeInAscendingOrder(x => x.Name);
@@ -404,31 +400,32 @@ public class ProductsControllerTest : UnitTestFixture
     {
         // Arrange
         var dateTime = DateTimeMocks.Monday20220321T1000Utc;
-        _productsController = await InitProductsController(dateTime);
-
+        var restaurant = await CreateRestaurant(RestaurantMocks.SimpleRestaurantCreateDto, dateTime);
+        var productsController = InitProductsController(dateTime);
         var productCreateDto1 = ProductMocks.ProductCreateDto;
         productCreateDto1.Name = "product1";
         productCreateDto1.Quantity = 0;
-        await CreateProduct(productCreateDto1);
+        await CreateProduct(restaurant.Id, dateTime, productCreateDto1);
 
         var productCreateDto2 = ProductMocks.ProductCreateDto;
         productCreateDto2.Name = "product2";
         productCreateDto2.IsActive = false;
-        await CreateProduct(productCreateDto2);
+        await CreateProduct(restaurant.Id, dateTime, productCreateDto2);
 
         var productCreateDto3 = ProductMocks.ProductCreateDto;
         productCreateDto3.Name = "product3";
         productCreateDto1.Quantity = null;
-        var product3 = await CreateProduct(productCreateDto3);
+        var product3 = await CreateProduct(restaurant.Id, dateTime, productCreateDto3);
 
         var productCreateDto4 = ProductMocks.ProductCreateDto;
         productCreateDto4.Name = "product4";
         productCreateDto4.ExpirationDateTime = dateTime.AddDays(-1);
-        await CreateProduct(productCreateDto4);
+        await CreateProduct(restaurant.Id, dateTime, productCreateDto4);
 
         var productCreateDto5 = ProductMocks.ProductCreateDto;
         productCreateDto5.Name = "product5";
-        var product5 = await CreateProduct(productCreateDto5);
+        productCreateDto5.ExpirationDateTime = dateTime.AddDays(1);
+        var product5 = await CreateProduct(restaurant.Id, dateTime, productCreateDto5);
 
         var expectedProducts = new List<ProductReadDto>
         {
@@ -442,7 +439,7 @@ public class ProductsControllerTest : UnitTestFixture
         };
 
         // Act
-        var response = await _productsController.GetProductsByRestaurantId(_restaurant.Id, filter);
+        var response = await productsController.GetProductsByRestaurantId(restaurant.Id, filter);
 
         // Assert
         var responseResult = Assert.IsType<OkObjectResult>(response.Result);
@@ -458,7 +455,7 @@ public class ProductsControllerTest : UnitTestFixture
             var expectedProduct = expectedProducts[i];
 
             actualProduct.Id.Should().Be(expectedProduct.Id);
-            actualProduct.RestaurantId.Should().Be(_restaurant.Id);
+            actualProduct.RestaurantId.Should().Be(restaurant.Id);
             actualProduct.Name.Should().Be(expectedProduct.Name);
             actualProduct.Price.Should().Be(expectedProduct.Price);
             actualProduct.Description.Should().Be(expectedProduct.Description);
@@ -467,7 +464,11 @@ public class ProductsControllerTest : UnitTestFixture
             actualProduct.ProductType.Should().Be(expectedProduct.ProductType);
             actualProduct.Image.Should().Be(expectedProduct.Image);
             actualProduct.CreationDateTime.Should().BeCloseTo(dateTime, TimeSpan.FromSeconds(5));
-            actualProduct.ExpirationDateTime.Should().BeCloseTo(dateTime.AddDays(1), TimeSpan.FromSeconds(5));
+            _ = expectedProduct.ExpirationDateTime switch
+            {
+                null => actualProduct.ExpirationDateTime.Should().BeNull(),
+                { } dt => actualProduct.ExpirationDateTime.Should().BeCloseTo(dt, TimeSpan.FromSeconds(5))
+            };
             actualProduct.Allergens.Should().BeEquivalentTo(expectedProduct.Allergens)
                          .And
                          .BeInAscendingOrder(x => x.Name);
@@ -482,31 +483,32 @@ public class ProductsControllerTest : UnitTestFixture
     {
         // Arrange
         var dateTime = DateTimeMocks.Monday20220321T1000Utc;
-        _productsController = await InitProductsController(dateTime);
-
+        var restaurant = await CreateRestaurant(RestaurantMocks.SimpleRestaurantCreateDto, dateTime);
+        var productsController = InitProductsController(dateTime);
         var productCreateDto1 = ProductMocks.ProductCreateDto;
         productCreateDto1.Name = "product1";
         productCreateDto1.Quantity = 0;
-        var product1 = await CreateProduct(productCreateDto1);
+        var product1 = await CreateProduct(restaurant.Id, dateTime, productCreateDto1);
 
         var productCreateDto2 = ProductMocks.ProductCreateDto;
         productCreateDto2.Name = "product2";
         productCreateDto2.IsActive = false;
-        var product2 = await CreateProduct(productCreateDto2);
+        var product2 = await CreateProduct(restaurant.Id, dateTime, productCreateDto2);
 
         var productCreateDto3 = ProductMocks.ProductCreateDto;
         productCreateDto3.Name = "product3";
         productCreateDto1.Quantity = null;
-        await CreateProduct(productCreateDto3);
+        await CreateProduct(restaurant.Id, dateTime, productCreateDto3);
 
         var productCreateDto4 = ProductMocks.ProductCreateDto;
         productCreateDto4.Name = "product4";
         productCreateDto4.ExpirationDateTime = dateTime.AddDays(-1);
-        var product4 = await CreateProduct(productCreateDto4);
+        var product4 = await CreateProduct(restaurant.Id, dateTime, productCreateDto4);
 
         var productCreateDto5 = ProductMocks.ProductCreateDto;
         productCreateDto5.Name = "product5";
-        await CreateProduct(productCreateDto5);
+        productCreateDto5.ExpirationDateTime = dateTime.AddDays(1);
+        await CreateProduct(restaurant.Id, dateTime, productCreateDto5);
 
         var expectedProducts = new List<ProductReadDto>
         {
@@ -521,7 +523,7 @@ public class ProductsControllerTest : UnitTestFixture
         };
 
         // Act
-        var response = await _productsController.GetProductsByRestaurantId(_restaurant.Id, filter);
+        var response = await productsController.GetProductsByRestaurantId(restaurant.Id, filter);
 
         // Assert
         var responseResult = Assert.IsType<OkObjectResult>(response.Result);
@@ -538,7 +540,7 @@ public class ProductsControllerTest : UnitTestFixture
             var expectedProduct = expectedProducts[i];
 
             actualProduct.Id.Should().Be(expectedProduct.Id);
-            actualProduct.RestaurantId.Should().Be(_restaurant.Id);
+            actualProduct.RestaurantId.Should().Be(restaurant.Id);
             actualProduct.Name.Should().Be(expectedProduct.Name);
             actualProduct.Price.Should().Be(expectedProduct.Price);
             actualProduct.Description.Should().Be(expectedProduct.Description);
@@ -547,11 +549,11 @@ public class ProductsControllerTest : UnitTestFixture
             actualProduct.ProductType.Should().Be(expectedProduct.ProductType);
             actualProduct.Image.Should().Be(expectedProduct.Image);
             actualProduct.CreationDateTime.Should().BeCloseTo(dateTime, TimeSpan.FromSeconds(5));
-            if (expectedProduct.ExpirationDateTime != null)
+            _ = expectedProduct.ExpirationDateTime switch
             {
-                actualProduct.ExpirationDateTime.Should().BeCloseTo((DateTime)expectedProduct.ExpirationDateTime, TimeSpan.FromSeconds(5));
-            }
-
+                null => actualProduct.ExpirationDateTime.Should().BeNull(),
+                { } dt => actualProduct.ExpirationDateTime.Should().BeCloseTo(dt, TimeSpan.FromSeconds(5))
+            };
             actualProduct.Allergens.Should().BeEquivalentTo(expectedProduct.Allergens)
                          .And
                          .BeInAscendingOrder(x => x.Name);
@@ -566,10 +568,10 @@ public class ProductsControllerTest : UnitTestFixture
     {
         // Assert
         var dateTime = DateTimeMocks.Monday20220321T1000Utc;
-        _productsController = await InitProductsController(dateTime);
+        var productsController = InitProductsController(dateTime);
 
         // Act
-        var response = await _productsController.GetProductsByRestaurantId("NON_EXISTENT_RESTAURANT_ID");
+        var response = await productsController.GetProductsByRestaurantId("NON_EXISTENT_RESTAURANT_ID");
 
         // Assert
         var responseResult = Assert.IsType<NotFoundObjectResult>(response.Result);

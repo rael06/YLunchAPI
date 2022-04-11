@@ -10,7 +10,7 @@ namespace YLunchApi.Domain.RestaurantAggregate.Models;
 public class Order : Entity
 {
     public string UserId { get; set; } = null!;
-    public virtual User? Customer { get; set; }
+    public virtual User? User { get; set; }
 
     public string RestaurantId { get; set; } = null!;
     public virtual Restaurant? Restaurant { get; set; }
