@@ -30,4 +30,19 @@ public class RefreshTokenRepository : IRefreshTokenRepository
         _context.RefreshTokens.Update(refreshToken);
         await _context.SaveChangesAsync();
     }
+
+    public async Task Revoke(string accessTokenId)
+    {
+        var notRevokedRefreshTokens = await _context.RefreshTokens
+                                                    .Where(x => x.JwtId == accessTokenId)
+                                                    .Where(x => !x.IsRevoked)
+                                                    .ToListAsync();
+
+        foreach (var refreshToken in notRevokedRefreshTokens)
+        {
+            refreshToken.IsRevoked = true;
+        }
+
+        await _context.SaveChangesAsync();
+    }
 }
