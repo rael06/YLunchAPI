@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using YLunchApi.Domain.CommonAggregate.Services;
 using YLunchApi.Domain.Exceptions;
 using YLunchApi.Domain.RestaurantAggregate.Filters;
 using YLunchApi.Domain.RestaurantAggregate.Models;
@@ -10,19 +11,21 @@ namespace YLunchApi.Infrastructure.Database.Repositories;
 public class OrderRepository : IOrderRepository
 {
     private readonly ApplicationDbContext _context;
+    private readonly IDateTimeProvider _dateTimeProvider;
 
-    public OrderRepository(ApplicationDbContext context)
+    public OrderRepository(ApplicationDbContext context, IDateTimeProvider dateTimeProvider)
     {
         _context = context;
+        _dateTimeProvider = dateTimeProvider;
     }
 
-    public async Task Create(Order order)
+    public async Task CreateOrder(Order order)
     {
         await _context.Orders.AddAsync(order);
         await _context.SaveChangesAsync();
     }
 
-    public async Task<Order> GetById(string orderId)
+    public async Task<Order> GetOrderById(string orderId)
     {
         var order = await OrdersQueryBase
             .FirstOrDefaultAsync(x => x.Id == orderId);
@@ -46,6 +49,32 @@ public class OrderRepository : IOrderRepository
         return orders.Select(FormatOrder)
                      .OrderBy(x => x.CreationDateTime)
                      .ToList();
+    }
+
+    public async Task<ICollection<Order>> AddStatusToOrders(string restaurantId, SortedSet<string> orderIds, OrderState orderState)
+    {
+        var orders = await OrdersQueryBase
+                           .Where(x => x.RestaurantId == restaurantId)
+                           .Where(x => orderIds.Contains(x.Id)).ToListAsync();
+
+        if (orders.Count < orderIds.Count)
+        {
+            var notFoundOrderIds = orderIds.Except(orders.Select(x => x.Id));
+            throw new EntityNotFoundException($"Orders: {string.Join(" and ", notFoundOrderIds)} not found.");
+        }
+
+        foreach (var order in orders)
+        {
+            order.OrderStatuses.Add(new OrderStatus
+            {
+                OrderId = order.Id,
+                DateTime = _dateTimeProvider.UtcNow,
+                State = orderState
+            });
+        }
+
+        await _context.SaveChangesAsync();
+        return orders;
     }
 
     private IQueryable<Order> OrdersQueryBase =>

@@ -30,14 +30,14 @@ public class OrdersController : ApplicationControllerBase
     {
         try
         {
-            var orderReadDto = await _orderService.Create(CurrentUserId!, restaurantId, orderCreateDto);
+            var orderReadDto = await _orderService.CreateOrder(CurrentUserId!, restaurantId, orderCreateDto);
             return Created("", orderReadDto);
         }
         catch (EntityNotFoundException exception)
         {
             return exception.Message switch
             {
-                { } m when m.Contains("Product") => NotFound(new ErrorDto(HttpStatusCode.NotFound, $"{exception.Message} not found.")),
+                { } m when m.Contains("Product") => NotFound(new ErrorDto(HttpStatusCode.NotFound, exception.Message)),
                 _ => NotFound(new ErrorDto(HttpStatusCode.NotFound, $"Restaurant: {restaurantId} not found."))
             };
         }
@@ -54,8 +54,8 @@ public class OrdersController : ApplicationControllerBase
         try
         {
             return CurrentUserRoles.Contains(Roles.RestaurantAdmin) ?
-                Ok(await _orderService.GetByIdForRestaurantAdmin(CurrentUserId!, orderId)) :
-                Ok(await _orderService.GetByIdForCustomer(CurrentUserId!, orderId));
+                Ok(await _orderService.GetOrderByIdForRestaurantAdmin(CurrentUserId!, orderId)) :
+                Ok(await _orderService.GetOrderByIdForCustomer(CurrentUserId!, orderId));
         }
         catch (EntityNotFoundException)
         {
@@ -69,7 +69,7 @@ public class OrdersController : ApplicationControllerBase
     {
         try
         {
-            var restaurant = await _restaurantService.GetById(restaurantId);
+            var restaurant = await _restaurantService.GetRestaurantById(restaurantId);
             var filter = orderFilter ?? new OrderFilter();
             filter.RestaurantId = restaurant.Id;
             var ordersReadDto = await _orderService.GetOrders(filter);
@@ -78,6 +78,26 @@ public class OrdersController : ApplicationControllerBase
         catch (EntityNotFoundException)
         {
             return NotFound(new ErrorDto(HttpStatusCode.NotFound, $"Restaurant: {restaurantId} not found."));
+        }
+    }
+
+    [HttpPost("restaurants/{restaurantId}/orders/statuses")]
+    [Authorize(Roles = Roles.RestaurantAdmin)]
+    public async Task<ActionResult<ICollection<OrderReadDto>>> AddStatusToOrders([FromRoute] string restaurantId, [FromBody] AddStatusToOrdersDto addStatusToOrdersDto)
+    {
+        try
+        {
+            await _restaurantService.GetRestaurantById(restaurantId);
+            var ordersReadDto = await _orderService.AddStatusToOrders(restaurantId, addStatusToOrdersDto);
+            return Ok(ordersReadDto);
+        }
+        catch (EntityNotFoundException exception)
+        {
+            return exception.Message switch
+            {
+                { } m when m.Contains("Orders") => NotFound(new ErrorDto(HttpStatusCode.NotFound, exception.Message)),
+                _ => NotFound(new ErrorDto(HttpStatusCode.NotFound, $"Restaurant: {restaurantId} not found."))
+            };
         }
     }
 }
