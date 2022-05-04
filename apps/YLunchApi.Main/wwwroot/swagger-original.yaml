@@ -808,7 +808,7 @@ paths:
         - in: query
           name: isAvailable
           required: false
-          description: To filter the restaurants that are available or not. Default null to get both. A product is available when isActive is true, quantity is null or > 1, expirationDateTime is null or in the future.
+          description: To filter the products that are available or not. Default null to get both. A product is available when isActive is true, quantity is null or > 1, expirationDateTime is null or in the future.
           schema:
             type: boolean
         - in: query
