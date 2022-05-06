@@ -311,7 +311,7 @@ public abstract class ControllerITestBase : IClassFixture<WebApplicationFactory<
         responseBody.OrderStatuses.ElementAt(0).Id.Should().MatchRegex(GuidUtils.Regex);
         responseBody.OrderStatuses.ElementAt(0).OrderId.Should().Be(responseBody.Id);
         responseBody.OrderStatuses.ElementAt(0).DateTime.Should().BeCloseTo(dateTime, TimeSpan.FromSeconds(5));
-        responseBody.OrderStatuses.ElementAt(0).State.Should().Be(OrderState.Idling);
+        responseBody.OrderStatuses.ElementAt(0).OrderState.Should().Be(OrderState.Idling);
         responseBody.CustomerComment.Should().Be("Customer comment");
         responseBody.RestaurantComment.Should().BeNull();
         responseBody.IsAccepted.Should().Be(false);
@@ -350,7 +350,7 @@ public abstract class ControllerITestBase : IClassFixture<WebApplicationFactory<
         responseBody.CurrentOrderStatus.Id.Should().MatchRegex(GuidUtils.Regex);
         responseBody.CurrentOrderStatus.OrderId.Should().Be(responseBody.Id);
         responseBody.CurrentOrderStatus.DateTime.Should().BeCloseTo(dateTime, TimeSpan.FromSeconds(5));
-        responseBody.CurrentOrderStatus.State.Should().Be(OrderState.Idling);
+        responseBody.CurrentOrderStatus.OrderState.Should().Be(OrderState.Idling);
 
         return responseBody;
     }

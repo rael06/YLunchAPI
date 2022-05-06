@@ -94,7 +94,7 @@ public class OrderRepository : IOrderRepository
             {
                 OrderId = order.Id,
                 DateTime = _dateTimeProvider.UtcNow,
-                State = orderState
+                OrderState = orderState
             });
         }
 
@@ -138,12 +138,12 @@ public class OrderRepository : IOrderRepository
             null => query,
             _ => orderStates
                 .Aggregate(query, (acc, x) => acc
-                    .Where(o => x == o.OrderStatuses.OrderBy(y => y.DateTime).Last().State))
+                    .Where(o => x == o.OrderStatuses.OrderBy(y => y.DateTime).Last().OrderState))
         };
 
     private static Order FormatOrder(Order order)
     {
-        order.OrderStatuses = order.OrderStatuses.OrderBy(x => x.State).ToList();
+        order.OrderStatuses = order.OrderStatuses.OrderBy(x => x.OrderState).ToList();
         order.OrderedProducts = order.OrderedProducts.OrderBy(x => x.ProductType).ToList();
         return order;
     }

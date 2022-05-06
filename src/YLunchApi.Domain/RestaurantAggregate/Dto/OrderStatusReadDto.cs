@@ -6,6 +6,6 @@ namespace YLunchApi.Domain.RestaurantAggregate.Dto;
 public class OrderStatusReadDto : EntityReadDto
 {
     public string OrderId { get; set; } = null!;
-    public OrderState State { get; set; }
+    public OrderState OrderState { get; set; }
     public DateTime DateTime { get; set; }
 }

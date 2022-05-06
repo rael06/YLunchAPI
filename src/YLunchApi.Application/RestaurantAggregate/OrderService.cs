@@ -71,7 +71,7 @@ public class OrderService : IOrderService
             {
                 OrderId = order.Id,
                 DateTime = _dateTimeProvider.UtcNow,
-                State = OrderState.Idling
+                OrderState = OrderState.Idling
             }
         };
         order.IsDeleted = false;

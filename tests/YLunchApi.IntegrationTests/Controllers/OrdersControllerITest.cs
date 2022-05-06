@@ -182,7 +182,7 @@ public class OrdersControllerITest : ControllerITestBase
         responseBody.OrderStatuses.ElementAt(0).Id.Should().MatchRegex(GuidUtils.Regex);
         responseBody.OrderStatuses.ElementAt(0).OrderId.Should().Be(responseBody.Id);
         responseBody.OrderStatuses.ElementAt(0).DateTime.Should().BeCloseTo(dateTime, TimeSpan.FromSeconds(5));
-        responseBody.OrderStatuses.ElementAt(0).State.Should().Be(OrderState.Idling);
+        responseBody.OrderStatuses.ElementAt(0).OrderState.Should().Be(OrderState.Idling);
         responseBody.CustomerComment.Should().Be("Customer comment");
         responseBody.RestaurantComment.Should().BeNull();
         responseBody.IsAccepted.Should().Be(false);
@@ -221,7 +221,7 @@ public class OrdersControllerITest : ControllerITestBase
         responseBody.CurrentOrderStatus.Id.Should().MatchRegex(GuidUtils.Regex);
         responseBody.CurrentOrderStatus.OrderId.Should().Be(responseBody.Id);
         responseBody.CurrentOrderStatus.DateTime.Should().BeCloseTo(dateTime, TimeSpan.FromSeconds(5));
-        responseBody.CurrentOrderStatus.State.Should().Be(OrderState.Idling);
+        responseBody.CurrentOrderStatus.OrderState.Should().Be(OrderState.Idling);
     }
 
     #endregion
@@ -637,7 +637,7 @@ public class OrdersControllerITest : ControllerITestBase
         {
             responseBody[i].CurrentOrderStatus.Id.Should().MatchRegex(GuidUtils.Regex);
             responseBody[i].CurrentOrderStatus.OrderId.Should().Be(orders[i].Id);
-            responseBody[i].CurrentOrderStatus.State.Should().Be(OrderState.Acknowledged);
+            responseBody[i].CurrentOrderStatus.OrderState.Should().Be(OrderState.Acknowledged);
             responseBody[i].CurrentOrderStatus.DateTime.Should().BeCloseTo(dateTime, TimeSpan.FromSeconds(5));
 
             responseBody[i].OrderStatuses.Should().BeEquivalentTo(orders[i].OrderStatuses

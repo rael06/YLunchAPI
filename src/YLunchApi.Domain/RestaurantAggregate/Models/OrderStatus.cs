@@ -10,6 +10,6 @@ public class OrderStatus : Entity
 {
     public string OrderId { get; set; } = null!;
     public virtual Order? Order { get; set; }
-    public OrderState State { get; set; }
+    public OrderState OrderState { get; set; }
     public DateTime DateTime { get; set; }
 }
