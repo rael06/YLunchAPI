@@ -1556,11 +1556,11 @@ components:
           type: number
           description: 'The day to apply this opening time. Starting from Sunday: 0 to Saturday: 6, for example 4 is thursday.'
           example: 4
-        OffsetInMinutes:
+        offsetInMinutes:
           type: number
           description: 'Number of minutes past from 00:00 for example 10:00 is 600, which means the restaurant is open since 10:00.'
           example: 600
-        DurationInMinutes:
+        durationInMinutes:
           type: number
           description: 'Number of minutes the restaurant is open since the offset, for example 120 minutes, which means the restaurant is open during 2h since 10:00.'
           example: 120
@@ -1581,11 +1581,11 @@ components:
           type: number
           description: 'The day to apply this opening time. Starting from Sunday: 0 to Saturday: 6, for example 4 is thursday.'
           example: 4
-        OffsetInMinutes:
+        offsetInMinutes:
           type: number
           description: 'Number of minutes past from 00:00 for example 10:00 is 600, which means the restaurant is open since 10:00.'
           example: 600
-        DurationInMinutes:
+        durationInMinutes:
           type: number
           description: 'Number of minutes the restaurant is open since the offset, for example 120 minutes, which means the restaurant is open during 2h since 10:00.'
           example: 120
@@ -2035,25 +2035,25 @@ components:
             - `True` if the order is processed
             - `False` if the order is still processing
           example: true
-        CurrentOrderStatus:
+        currentOrderStatus:
           $ref: '#/components/schemas/OrderStatusReadDto'
-        OrderStatuses:
+        orderStatuses:
           type: array
           items:
             $ref: '#/components/schemas/OrderStatusReadDto'
-        OrderedProducts:
+        orderedProducts:
           type: array
           items:
             $ref: '#/components/schemas/OrderedProductReadDto'
     AddStatusToOrdersDto:
       type: object
       properties:
-        OrderIds:
+        orderIds:
           type: array
           items:
             type: string
           example: [ a00000e0-aaa0-000a-0000-00e00aa00e00, b11111f1-bbb1-111b-1111-11f11bb11f11 ]
-        OrderState:
+        orderState:
           type: number
           example: 1
           description: |
@@ -2067,8 +2067,8 @@ components:
             - `6`: Cancelled,
             - `7`: Rejected
       required:
-        - OrderIds
-        - OrderState
+        - orderIds
+        - orderState
   securitySchemes:
     Bearer:
       type: http
