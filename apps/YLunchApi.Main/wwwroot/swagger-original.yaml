@@ -1776,12 +1776,10 @@ components:
       properties:
         name:
           type: string
-          example: my product
-          description: Must be lowercase.
+          example: My product
         description:
           type: string
-          example: my ingredients
-          description: Must be lowercase.
+          example: My first ingredient, my second ingredient
         price:
           type: number
           example: 9.8

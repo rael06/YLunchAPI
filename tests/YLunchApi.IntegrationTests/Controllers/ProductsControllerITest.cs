@@ -62,8 +62,6 @@ public class ProductsControllerITest : ControllerITestBase
         var restaurant = await CreateRestaurant(decodedTokens.AccessToken, RestaurantMocks.SimpleRestaurantCreateDto);
         var body = new
         {
-            Name = "An invalid Name",
-            Description = "An invalid Description",
             Quantity = 0,
             ExpirationDateTime = DateTime.UtcNow.AddDays(-1),
             Allergens = new[]
@@ -83,8 +81,6 @@ public class ProductsControllerITest : ControllerITestBase
         response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
         var responseBody = await ResponseUtils.DeserializeContentAsync(response);
 
-        responseBody.Should().MatchRegex(@"Name.*Must be lowercase\.");
-        responseBody.Should().MatchRegex(@"Description.*Must be lowercase\.");
         responseBody.Should().MatchRegex(@"Quantity.*The field Quantity must be between 1 and 10000\.");
         responseBody.Should().MatchRegex(@"Allergens.*The Name field is required\.");
         responseBody.Should().MatchRegex(@"ProductTags.*The Name field is required\.");
@@ -99,8 +95,6 @@ public class ProductsControllerITest : ControllerITestBase
         var restaurant = await CreateRestaurant(decodedTokens.AccessToken, RestaurantMocks.SimpleRestaurantCreateDto);
         var body = new
         {
-            Name = "An invalid Name",
-            Description = "An invalid Description",
             Allergens = new[]
             {
                 new { Name = "An invalid Name" }
@@ -118,8 +112,6 @@ public class ProductsControllerITest : ControllerITestBase
         response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
         var responseBody = await ResponseUtils.DeserializeContentAsync(response);
 
-        responseBody.Should().MatchRegex(@"Name.*Must be lowercase\.");
-        responseBody.Should().MatchRegex(@"Description.*Must be lowercase\.");
         responseBody.Should().MatchRegex(@"Allergens.*Must be lowercase\.");
         responseBody.Should().MatchRegex(@"ProductTags.*Must be lowercase\.");
     }

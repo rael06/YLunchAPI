@@ -23,7 +23,7 @@ public class ProductRepository : IProductRepository
         await _context.Products.AddAsync(product);
         var existingProduct = await _context.Products
                                             .Where(x => x.RestaurantId == product.RestaurantId)
-                                            .FirstOrDefaultAsync(x => x.Name == product.Name);
+                                            .FirstOrDefaultAsync(x => x.Name.ToLower() == product.Name.ToLower());
         if (existingProduct != null)
         {
             throw new EntityAlreadyExistsException();
