@@ -1558,7 +1558,9 @@ components:
           example: 4
         offsetInMinutes:
           type: number
-          description: 'Number of minutes past from 00:00 for example 10:00 is 600, which means the restaurant is open since 10:00.'
+          description: |
+            Number of minutes past from 00:00 for example 10:00 is 600, which means the restaurant is open since 10:00.  
+              `Warning`: Must be calculated from `UTC` time.
           example: 600
         durationInMinutes:
           type: number
@@ -1583,7 +1585,9 @@ components:
           example: 4
         offsetInMinutes:
           type: number
-          description: 'Number of minutes past from 00:00 for example 10:00 is 600, which means the restaurant is open since 10:00.'
+          description: |
+            Number of minutes past from 00:00 for example 10:00 is 600, which means the restaurant is open since 10:00.  
+              `Warning`: It's calculated from `UTC` time.
           example: 600
         durationInMinutes:
           type: number
