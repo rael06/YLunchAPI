@@ -29,9 +29,9 @@ public class OrderService : IOrderService
     public async Task<OrderReadDto> CreateOrder(string customerId, string restaurantId, OrderCreateDto orderCreateDto)
     {
         var restaurant = await _restaurantRepository.GetRestaurantById(restaurantId);
-        if (!_restaurantService.IsOpenToOrder(restaurant, (DateTime)orderCreateDto.ReservedForDateTime!))
+        if (!_restaurantService.IsOpenInPlace(restaurant, (DateTime)orderCreateDto.ReservedForDateTime!))
         {
-            throw new ReservedForDateTimeOutOfOpenToOrderOpeningTimesException();
+            throw new ReservedForDateTimeOutOfOpenInPlaceOpeningTimesException();
         }
 
         var notFoundProductIds = new List<string>();

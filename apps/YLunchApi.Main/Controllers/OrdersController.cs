@@ -33,9 +33,9 @@ public class OrdersController : ApplicationControllerBase
             var orderReadDto = await _orderService.CreateOrder(CurrentUserId!, restaurantId, orderCreateDto);
             return Created("", orderReadDto);
         }
-        catch (ReservedForDateTimeOutOfOpenToOrderOpeningTimesException)
+        catch (ReservedForDateTimeOutOfOpenInPlaceOpeningTimesException)
         {
-            return BadRequest(new ErrorDto(HttpStatusCode.BadRequest, "ReservedForDateTime must be set when the restaurant is open for orders."));
+            return BadRequest(new ErrorDto(HttpStatusCode.BadRequest, "ReservedForDateTime must be set when the restaurant is open in place."));
         }
         catch (SoldOutProductsException soldOutProductsException)
         {

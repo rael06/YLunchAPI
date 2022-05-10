@@ -1982,7 +1982,7 @@ components:
         reservedForDateTime:
           type: string
           example: "2021-12-31T00:00:00.000000"
-          description: 'Must be in future and within restaurant order opening times'
+          description: 'Must be in future and within restaurant place opening times'
         customerComment:
           type: string
           example: 'without onions'

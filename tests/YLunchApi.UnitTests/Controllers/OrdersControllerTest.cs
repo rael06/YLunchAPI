@@ -215,7 +215,7 @@ public class OrdersControllerTest : UnitTestFixture
         var responseResult = Assert.IsType<BadRequestObjectResult>(response.Result);
         var responseBody = Assert.IsType<ErrorDto>(responseResult.Value);
 
-        responseBody.Should().BeEquivalentTo(new ErrorDto(HttpStatusCode.BadRequest, "ReservedForDateTime must be set when the restaurant is open for orders."));
+        responseBody.Should().BeEquivalentTo(new ErrorDto(HttpStatusCode.BadRequest, "ReservedForDateTime must be set when the restaurant is open in place."));
     }
 
     [Fact]

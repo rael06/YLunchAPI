@@ -184,7 +184,7 @@ public abstract class ControllerITestBase : IClassFixture<WebApplicationFactory<
         responseBody.AdminId.Should().Be(new ApplicationSecurityToken(accessToken).UserId);
         responseBody.Email.Should().Be(body.Email);
         responseBody.PhoneNumber.Should().Be(body.PhoneNumber);
-        responseBody.CreationDateTime.Should().BeCloseTo(DateTime.UtcNow, TimeSpan.FromSeconds(5));
+        responseBody.CreationDateTime.Should().BeCloseTo(DateTime.UtcNow, TimeSpan.FromSeconds(60));
         responseBody.Name.Should().Be(body.Name);
         responseBody.City.Should().Be(body.City);
         responseBody.Country.Should().Be(body.Country);
