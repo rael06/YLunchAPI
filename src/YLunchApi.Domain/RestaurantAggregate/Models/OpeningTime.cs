@@ -22,6 +22,6 @@ public abstract class OpeningTime : Entity
 
 
         return dateTimeMinutesFromFirstDayOfWeek >= OpeningTimeUtils.StartMinutesFromFirstDayOfWeek(this) &&
-               dateTimeMinutesFromFirstDayOfWeek <= OpeningTimeUtils.EndMinutesFromFirstDayOfWeek(this);
+               dateTimeMinutesFromFirstDayOfWeek <= OpeningTimeUtils.EndMinutesFromFirstDayOfWeek(this) + 2 /* for buffer */;
     }
 }
