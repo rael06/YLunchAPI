@@ -1,0 +1,60 @@
+pool:
+  name: Azure Pipelines
+#Your build pipeline references the ‘BuildConfiguration’ variable, which you’ve selected to be settable at queue time. Create or edit the build pipeline for this YAML file, define the variable on the Variables tab, and then select the option to make it settable at queue time. See https://go.microsoft.com/fwlink/?linkid=865971
+#Your build pipeline references the ‘BuildConfiguration’ variable, which you’ve selected to be settable at queue time. Create or edit the build pipeline for this YAML file, define the variable on the Variables tab, and then select the option to make it settable at queue time. See https://go.microsoft.com/fwlink/?linkid=865971
+#Your build pipeline references the ‘BuildConfiguration’ variable, which you’ve selected to be settable at queue time. Create or edit the build pipeline for this YAML file, define the variable on the Variables tab, and then select the option to make it settable at queue time. See https://go.microsoft.com/fwlink/?linkid=865971
+#Your build pipeline references the ‘BuildConfiguration’ variable, which you’ve selected to be settable at queue time. Create or edit the build pipeline for this YAML file, define the variable on the Variables tab, and then select the option to make it settable at queue time. See https://go.microsoft.com/fwlink/?linkid=865971
+variables:
+  RestoreBuildProjects: "**/*.csproj"
+
+steps:
+  - task: DotNetCoreCLI@2
+    displayName: Restore
+    inputs:
+      command: restore
+      projects: "$(Parameters.RestoreBuildProjects)"
+      verbosityRestore: Detailed
+      verbosityPack: Detailed
+
+  - task: DotNetCoreCLI@2
+    displayName: Build
+    inputs:
+      projects: "$(Parameters.RestoreBuildProjects)"
+      arguments: "--configuration $(BuildConfiguration)"
+      verbosityRestore: Detailed
+      verbosityPack: Detailed
+
+  - task: DotNetCoreCLI@2
+    displayName: "Unit Test"
+    inputs:
+      command: test
+      projects: "**/*[Tt]ests/*UnitTests/*.csproj"
+      arguments: "--configuration $(BuildConfiguration)"
+      verbosityRestore: Detailed
+      verbosityPack: Detailed
+
+  - task: DotNetCoreCLI@2
+    displayName: "Integration Test"
+    inputs:
+      command: test
+      projects: "**/*[Tt]ests/*IntegrationTests/*.csproj"
+      arguments: "--configuration $(BuildConfiguration)"
+      verbosityRestore: Detailed
+      verbosityPack: Detailed
+
+  - task: DotNetCoreCLI@2
+    displayName: Publish
+    inputs:
+      command: publish
+      publishWebProjects: True
+      arguments: "--configuration $(BuildConfiguration) --output $(build.artifactstagingdirectory)"
+      zipAfterPublish: True
+      verbosityRestore: Detailed
+      verbosityPack: Detailed
+
+  - task: PublishBuildArtifacts@1
+    displayName: "Publish Artifact"
+    inputs:
+      PathtoPublish: "$(build.artifactstagingdirectory)"
+      StoreAsTar: true
+    condition: succeededOrFailed()

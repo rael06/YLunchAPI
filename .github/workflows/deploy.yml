@@ -17,7 +17,7 @@ jobs:
           java-version: 1.11
       - uses: actions/checkout@v2
         with:
-          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+          fetch-depth: 0 # Shallow clones should be disabled for a better relevancy of analysis
       - name: Cache SonarCloud packages
         uses: actions/cache@v1
         with:
@@ -39,7 +39,7 @@ jobs:
           dotnet tool update dotnet-sonarscanner --tool-path .\.sonar\scanner
       - name: Build and analyze
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         shell: powershell
         run: |
@@ -47,15 +47,15 @@ jobs:
           dotnet build
           dotnet test --no-build --no-restore --logger trx /p:CollectCoverage=true /p:CoverletOutputFormat=opencover
           .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
-          
+
   deploy:
     needs: [sonar]
     name: Call Azure Pipeline
     runs-on: ubuntu-latest
     steps:
-    - name: Azure Pipelines Action
-      uses: Azure/pipelines@v1
-      with:
-        azure-devops-project-url: https://dev.azure.com/ylunch/YnovYLunch
-        azure-pipeline-name: 'YnovYLunch-ASP.NET Core-CI'
-        azure-devops-token: ${{ secrets.AZURE_DEVOPS_TOKEN }}
+      - name: Azure Pipelines Action
+        uses: Azure/pipelines@v1
+        with:
+          azure-devops-project-url: https://dev.azure.com/raelcalitro/YLunchAPI
+          azure-pipeline-name: "YLunchAPI-CI"
+          azure-devops-token: ${{ secrets.AZURE_DEVOPS_TOKEN }}
