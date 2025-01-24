@@ -14,10 +14,10 @@ servers:
     description: SwaggerHub API Auto Mocking
   - url: https://ylunch-api.rael-calitro.ovh
     description: Online server
-  - url: http://localhost:5254
+  - url: http://localhost:5258
     description: Local server
 security:
-  - Bearer: [ ]
+  - Bearer: []
 tags:
   - name: trials
     description: Operations available to try the api
@@ -39,28 +39,28 @@ paths:
         - Authorization header: **no**
       operationId: getAnonymousTry
       responses:
-        '200':
+        "200":
           description: |
             Success
             - The anonymous trial Json object
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/MessageDto'
+                $ref: "#/components/schemas/MessageDto"
               example:
                 message: YLunchApi is running, you are anonymous.
-        '400':
+        "400":
           description: |
             Bad request
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorDto'
+                $ref: "#/components/schemas/ErrorDto"
               example:
                 title: "BadRequest"
                 statusCode: 400
                 errors:
-                  reasons: [ "Something went wrong, please try again later." ]
+                  reasons: ["Something went wrong, please try again later."]
   /trials/authenticated:
     get:
       tags:
@@ -72,40 +72,40 @@ paths:
           - All
       operationId: getAuthenticatedTry
       responses:
-        '200':
+        "200":
           description: |
             Success
             - The authenticated trial Json object
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/MessageDto'
+                $ref: "#/components/schemas/MessageDto"
               example:
-                message: 'YLunchApi is running, you are authenticated as {CurrentUserEmail} with Id: {CurrentUserId} and Roles: {CurrentUserRoles}.'
-        '400':
+                message: "YLunchApi is running, you are authenticated as {CurrentUserEmail} with Id: {CurrentUserId} and Roles: {CurrentUserRoles}."
+        "400":
           description: |
             Bad request
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorDto'
+                $ref: "#/components/schemas/ErrorDto"
               example:
                 title: "BadRequest"
                 statusCode: 400
                 errors:
-                  reasons: [ "Something went wrong, please try again later." ]
-        '401':
+                  reasons: ["Something went wrong, please try again later."]
+        "401":
           description: |
             Unauthorized
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorDto'
+                $ref: "#/components/schemas/ErrorDto"
               example:
                 title: "Unauthorized"
                 statusCode: 401
                 errors:
-                  reasons: [ "Please login and use provided tokens." ]
+                  reasons: ["Please login and use provided tokens."]
   /trials/authenticated-customer:
     get:
       tags:
@@ -117,52 +117,52 @@ paths:
           - Customer
       operationId: getAuthenticatedCustomerTry
       responses:
-        '200':
+        "200":
           description: |
             Success
             - The authenticated trial Json object
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/MessageDto'
+                $ref: "#/components/schemas/MessageDto"
               example:
-                message: 'YLunchApi is running, you are authenticated as {CurrentUserEmail} with Id: {CurrentUserId} and Roles: {CurrentUserRoles}.'
-        '400':
+                message: "YLunchApi is running, you are authenticated as {CurrentUserEmail} with Id: {CurrentUserId} and Roles: {CurrentUserRoles}."
+        "400":
           description: |
             Bad request
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorDto'
+                $ref: "#/components/schemas/ErrorDto"
               example:
                 title: "BadRequest"
                 statusCode: 400
                 errors:
-                  reasons: [ "Something went wrong, please try again later." ]
-        '401':
+                  reasons: ["Something went wrong, please try again later."]
+        "401":
           description: |
             Unauthorized
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorDto'
+                $ref: "#/components/schemas/ErrorDto"
               example:
                 title: "Unauthorized"
                 statusCode: 401
                 errors:
-                  reasons: [ "Please login and use provided tokens." ]
-        '403':
+                  reasons: ["Please login and use provided tokens."]
+        "403":
           description: |
             Forbidden
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorDto'
+                $ref: "#/components/schemas/ErrorDto"
               example:
                 title: "Forbidden"
                 statusCode: 403
                 errors:
-                  reasons: [ "User has not granted roles." ]
+                  reasons: ["User has not granted roles."]
   /trials/authenticated-restaurant-admin:
     get:
       tags:
@@ -174,52 +174,52 @@ paths:
           - RestaurantAdmin
       operationId: getAuthenticatedRestaurantAdminTry
       responses:
-        '200':
+        "200":
           description: |
             Success
             - The authenticated trial Json object
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/MessageDto'
+                $ref: "#/components/schemas/MessageDto"
               example:
-                message: 'YLunchApi is running, you are authenticated as {CurrentUserEmail} with Id: {CurrentUserId} and Roles: {CurrentUserRoles}.'
-        '400':
+                message: "YLunchApi is running, you are authenticated as {CurrentUserEmail} with Id: {CurrentUserId} and Roles: {CurrentUserRoles}."
+        "400":
           description: |
             Bad request
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorDto'
+                $ref: "#/components/schemas/ErrorDto"
               example:
                 title: "BadRequest"
                 statusCode: 400
                 errors:
-                  reasons: [ "Something went wrong, please try again later." ]
-        '401':
+                  reasons: ["Something went wrong, please try again later."]
+        "401":
           description: |
             Unauthorized
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorDto'
+                $ref: "#/components/schemas/ErrorDto"
               example:
                 title: "Unauthorized"
                 statusCode: 401
                 errors:
-                  reasons: [ "Please login and use provided tokens." ]
-        '403':
+                  reasons: ["Please login and use provided tokens."]
+        "403":
           description: |
             Forbidden
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorDto'
+                $ref: "#/components/schemas/ErrorDto"
               example:
                 title: "Forbidden"
                 statusCode: 403
                 errors:
-                  reasons: [ "User has not granted roles." ]
+                  reasons: ["User has not granted roles."]
   /authentication/login:
     post:
       tags:
@@ -234,7 +234,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/LoginRequestDto'
+              $ref: "#/components/schemas/LoginRequestDto"
             examples:
               restaurantAdmin:
                 value:
@@ -245,46 +245,46 @@ paths:
                   email: anne-marie.martin@ynov.com
                   password: Password1234.
       responses:
-        '200':
+        "200":
           description: |
             Success
             - The access and refresh tokens
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/TokenReadDto'
-        '400':
+                $ref: "#/components/schemas/TokenReadDto"
+        "400":
           description: |
             Bad request
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorDto'
+                $ref: "#/components/schemas/ErrorDto"
               examples:
                 ValidationError:
                   value:
                     title: "One or more validation errors occurred."
                     statusCode: 400
                     errors:
-                      Email: [ "The Email field is required." ]
+                      Email: ["The Email field is required."]
                 Other:
                   value:
                     title: "BadRequest"
                     statusCode: 400
                     errors:
-                      reasons: [ "Something went wrong, please try again later." ]
-        '401':
+                      reasons: ["Something went wrong, please try again later."]
+        "401":
           description: |
             Unauthorized
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorDto'
+                $ref: "#/components/schemas/ErrorDto"
               example:
                 title: "Unauthorized"
                 statusCode: 401
                 errors:
-                  reasons: [ "Please login and use provided tokens." ]
+                  reasons: ["Please login and use provided tokens."]
   /authentication/refresh-tokens:
     post:
       tags:
@@ -299,48 +299,51 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/TokenUpdateDto'
+              $ref: "#/components/schemas/TokenUpdateDto"
       responses:
-        '200':
+        "200":
           description: |
             Success
             - The new access and refresh tokens
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/TokenReadDto'
-        '400':
+                $ref: "#/components/schemas/TokenReadDto"
+        "400":
           description: |
             Bad request
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorDto'
+                $ref: "#/components/schemas/ErrorDto"
               examples:
                 ValidationError:
                   value:
                     title: "One or more validation errors occurred."
                     statusCode: 400
                     errors:
-                      AccessToken: [ "The AccessToken field is required." ]
+                      AccessToken: ["The AccessToken field is required."]
                 Other:
                   value:
                     title: "BadRequest"
                     statusCode: 400
                     errors:
-                      reasons: [ "Something went wrong, please try again later." ]
-        '401':
+                      reasons: ["Something went wrong, please try again later."]
+        "401":
           description: |
             Unauthorized
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorDto'
+                $ref: "#/components/schemas/ErrorDto"
               example:
                 title: "Unauthorized"
                 statusCode: 401
                 errors:
-                  reasons: [ "Invalid tokens, please login to generate new valid tokens." ]
+                  reasons:
+                    [
+                      "Invalid tokens, please login to generate new valid tokens.",
+                    ]
   /authentication/current-user:
     get:
       tags:
@@ -352,38 +355,38 @@ paths:
           - All
       operationId: getCurrentUser
       responses:
-        '200':
+        "200":
           description: |
             Success
             - The current user Json object
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UserReadDto'
-        '400':
+                $ref: "#/components/schemas/UserReadDto"
+        "400":
           description: |
             Bad request
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorDto'
+                $ref: "#/components/schemas/ErrorDto"
               example:
                 title: "BadRequest"
                 statusCode: 400
                 errors:
-                  reasons: [ "Something went wrong, please try again later." ]
-        '401':
+                  reasons: ["Something went wrong, please try again later."]
+        "401":
           description: |
             Unauthorized
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorDto'
+                $ref: "#/components/schemas/ErrorDto"
               example:
                 title: "Unauthorized"
                 statusCode: 401
                 errors:
-                  reasons: [ "Please login and use provided tokens." ]
+                  reasons: ["Please login and use provided tokens."]
   /authentication/logout:
     get:
       tags:
@@ -395,33 +398,33 @@ paths:
           - All
       operationId: logout
       responses:
-        '204':
+        "204":
           description: |
             NoContent
-        '400':
+        "400":
           description: |
             Bad request
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorDto'
+                $ref: "#/components/schemas/ErrorDto"
               example:
                 title: "BadRequest"
                 statusCode: 400
                 errors:
-                  reasons: [ "Something went wrong, please try again later." ]
-        '401':
+                  reasons: ["Something went wrong, please try again later."]
+        "401":
           description: |
             Unauthorized
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorDto'
+                $ref: "#/components/schemas/ErrorDto"
               example:
                 title: "Unauthorized"
                 statusCode: 401
                 errors:
-                  reasons: [ "Please login and use provided tokens." ]
+                  reasons: ["Please login and use provided tokens."]
   /restaurant-admins:
     post:
       tags:
@@ -435,46 +438,46 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/RestaurantAdminCreateDto'
+              $ref: "#/components/schemas/RestaurantAdminCreateDto"
       responses:
-        '201':
+        "201":
           description: user created
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UserReadDto'
-        '400':
+                $ref: "#/components/schemas/UserReadDto"
+        "400":
           description: |
             Bad request
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorDto'
+                $ref: "#/components/schemas/ErrorDto"
               examples:
                 ValidationError:
                   value:
                     title: "One or more validation errors occurred."
                     statusCode: 400
                     errors:
-                      Name: [ "The Name field is required." ]
+                      Name: ["The Name field is required."]
                 Other:
                   value:
                     title: "BadRequest"
                     statusCode: 400
                     errors:
-                      reasons: [ "Something went wrong, please try again later." ]
-        '409':
+                      reasons: ["Something went wrong, please try again later."]
+        "409":
           description: |
             Conflict
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorDto'
+                $ref: "#/components/schemas/ErrorDto"
               example:
                 title: "Conflict"
                 statusCode: 409
                 errors:
-                  reasons: [ "User already exists." ]
+                  reasons: ["User already exists."]
   /customers:
     post:
       tags:
@@ -488,46 +491,46 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CustomerCreateDto'
+              $ref: "#/components/schemas/CustomerCreateDto"
       responses:
-        '201':
+        "201":
           description: user created
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UserReadDto'
-        '400':
+                $ref: "#/components/schemas/UserReadDto"
+        "400":
           description: |
             Bad request
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorDto'
+                $ref: "#/components/schemas/ErrorDto"
               examples:
                 ValidationError:
                   value:
                     title: "One or more validation errors occurred."
                     statusCode: 400
                     errors:
-                      Name: [ "The Name field is required." ]
+                      Name: ["The Name field is required."]
                 Other:
                   value:
                     title: "BadRequest"
                     statusCode: 400
                     errors:
-                      reasons: [ "Something went wrong, please try again later." ]
-        '409':
+                      reasons: ["Something went wrong, please try again later."]
+        "409":
           description: |
             Conflict
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorDto'
+                $ref: "#/components/schemas/ErrorDto"
               example:
                 title: "Conflict"
                 statusCode: 409
                 errors:
-                  reasons: [ "User already exists." ]
+                  reasons: ["User already exists."]
   /restaurants:
     post:
       tags:
@@ -543,46 +546,46 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/RestaurantCreateDto'
+              $ref: "#/components/schemas/RestaurantCreateDto"
       responses:
-        '201':
+        "201":
           description: restaurant created
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/RestaurantReadDto'
-        '400':
+                $ref: "#/components/schemas/RestaurantReadDto"
+        "400":
           description: |
             Bad request
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorDto'
+                $ref: "#/components/schemas/ErrorDto"
               examples:
                 ValidationError:
                   value:
                     title: "One or more validation errors occurred."
                     statusCode: 400
                     errors:
-                      Name: [ "The Name field is required." ]
+                      Name: ["The Name field is required."]
                 Other:
                   value:
                     title: "BadRequest"
                     statusCode: 400
                     errors:
-                      reasons: [ "Something went wrong, please try again later." ]
-        '409':
+                      reasons: ["Something went wrong, please try again later."]
+        "409":
           description: |
             Conflict
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorDto'
+                $ref: "#/components/schemas/ErrorDto"
               example:
                 title: "Conflict"
                 statusCode: 409
                 errors:
-                  reasons: [ "Restaurant already exists." ]
+                  reasons: ["Restaurant already exists."]
     get:
       tags:
         - restaurants
@@ -623,7 +626,7 @@ paths:
           schema:
             type: number
       responses:
-        '200':
+        "200":
           description: |
             Success
             - The restaurants
@@ -632,19 +635,19 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/RestaurantReadDto'
-        '400':
+                  $ref: "#/components/schemas/RestaurantReadDto"
+        "400":
           description: |
             Bad request
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorDto'
+                $ref: "#/components/schemas/ErrorDto"
               example:
                 title: "BadRequest"
                 statusCode: 400
                 errors:
-                  reasons: [ "Something went wrong, please try again later." ]
+                  reasons: ["Something went wrong, please try again later."]
   /restaurants/{restaurantId}:
     get:
       tags:
@@ -661,50 +664,53 @@ paths:
           schema:
             type: string
       responses:
-        '200':
+        "200":
           description: |
             Success
             - The restaurant
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/RestaurantReadDto'
-        '400':
+                $ref: "#/components/schemas/RestaurantReadDto"
+        "400":
           description: |
             Bad request
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorDto'
+                $ref: "#/components/schemas/ErrorDto"
               example:
                 title: "BadRequest"
                 statusCode: 400
                 errors:
-                  reasons: [ "Something went wrong, please try again later." ]
-        '401':
+                  reasons: ["Something went wrong, please try again later."]
+        "401":
           description: |
             Unauthorized
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorDto'
+                $ref: "#/components/schemas/ErrorDto"
               example:
                 title: "Unauthorized"
                 statusCode: 401
                 errors:
-                  reasons: [ "Please login and use provided tokens." ]
-        '404':
+                  reasons: ["Please login and use provided tokens."]
+        "404":
           description: |
             Not found:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorDto'
+                $ref: "#/components/schemas/ErrorDto"
               example:
                 title: "NotFound"
                 statusCode: 404
                 errors:
-                  reasons: [ "Restaurant: a00000e0-aaa0-000a-0000-00e00aa00e00 not found." ]
+                  reasons:
+                    [
+                      "Restaurant: a00000e0-aaa0-000a-0000-00e00aa00e00 not found.",
+                    ]
   /restaurants/{restaurantId}/products:
     post:
       tags:
@@ -727,58 +733,61 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ProductCreateDto'
+              $ref: "#/components/schemas/ProductCreateDto"
       responses:
-        '201':
+        "201":
           description: product created
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ProductReadDto'
-        '400':
+                $ref: "#/components/schemas/ProductReadDto"
+        "400":
           description: |
             Bad request
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorDto'
+                $ref: "#/components/schemas/ErrorDto"
               examples:
                 ValidationError:
                   value:
                     title: "One or more validation errors occurred."
                     statusCode: 400
                     errors:
-                      Name: [ "The Name field is required." ]
+                      Name: ["The Name field is required."]
                 Other:
                   value:
                     title: "BadRequest"
                     statusCode: 400
                     errors:
-                      reasons: [ "Something went wrong, please try again later." ]
-        '404':
+                      reasons: ["Something went wrong, please try again later."]
+        "404":
           description: |
             Not found:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorDto'
+                $ref: "#/components/schemas/ErrorDto"
               example:
                 title: "NotFound"
                 statusCode: 404
                 errors:
-                  reasons: [ "Restaurant: a00000e0-aaa0-000a-0000-00e00aa00e00 not found." ]
-        '409':
+                  reasons:
+                    [
+                      "Restaurant: a00000e0-aaa0-000a-0000-00e00aa00e00 not found.",
+                    ]
+        "409":
           description: |
             Conflict
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorDto'
+                $ref: "#/components/schemas/ErrorDto"
               example:
                 title: "Conflict"
                 statusCode: 409
                 errors:
-                  reasons: [ "Product already exists." ]
+                  reasons: ["Product already exists."]
     get:
       tags:
         - products
@@ -824,7 +833,7 @@ paths:
             items:
               type: string
       responses:
-        '200':
+        "200":
           description: |
             Success
             - The products
@@ -833,31 +842,34 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/ProductReadDto'
-        '400':
+                  $ref: "#/components/schemas/ProductReadDto"
+        "400":
           description: |
             Bad request
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorDto'
+                $ref: "#/components/schemas/ErrorDto"
               example:
                 title: "BadRequest"
                 statusCode: 400
                 errors:
-                  reasons: [ "Something went wrong, please try again later." ]
-        '404':
+                  reasons: ["Something went wrong, please try again later."]
+        "404":
           description: |
             Not found:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorDto'
+                $ref: "#/components/schemas/ErrorDto"
               example:
                 title: "NotFound"
                 statusCode: 404
                 errors:
-                  reasons: [ "Restaurant: a00000e0-aaa0-000a-0000-00e00aa00e00 not found." ]
+                  reasons:
+                    [
+                      "Restaurant: a00000e0-aaa0-000a-0000-00e00aa00e00 not found.",
+                    ]
   /products/{productId}:
     get:
       tags:
@@ -874,38 +886,39 @@ paths:
           schema:
             type: string
       responses:
-        '200':
+        "200":
           description: |
             Success
             - The product
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ProductReadDto'
-        '400':
+                $ref: "#/components/schemas/ProductReadDto"
+        "400":
           description: |
             Bad request
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorDto'
+                $ref: "#/components/schemas/ErrorDto"
               example:
                 title: "BadRequest"
                 statusCode: 400
                 errors:
-                  reasons: [ "Something went wrong, please try again later." ]
-        '404':
+                  reasons: ["Something went wrong, please try again later."]
+        "404":
           description: |
             Not found:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorDto'
+                $ref: "#/components/schemas/ErrorDto"
               example:
                 title: "NotFound"
                 statusCode: 404
                 errors:
-                  reasons: [ "Product: a00000e0-aaa0-000a-0000-00e00aa00e00 not found." ]
+                  reasons:
+                    ["Product: a00000e0-aaa0-000a-0000-00e00aa00e00 not found."]
   /restaurants/{restaurantId}/orders:
     post:
       tags:
@@ -928,78 +941,84 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/OrderCreateDto'
+              $ref: "#/components/schemas/OrderCreateDto"
       responses:
-        '201':
+        "201":
           description: order created
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/OrderReadDto'
-        '400':
+                $ref: "#/components/schemas/OrderReadDto"
+        "400":
           description: |
             Bad request
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorDto'
+                $ref: "#/components/schemas/ErrorDto"
               examples:
                 ValidationError:
                   value:
                     title: "One or more validation errors occurred."
                     statusCode: 400
                     errors:
-                      ProductIds: [ "The ProductIds field is required." ]
+                      ProductIds: ["The ProductIds field is required."]
                 Other:
                   value:
                     title: "BadRequest"
                     statusCode: 400
                     errors:
-                      reasons: [ "Something went wrong, please try again later." ]
-        '401':
+                      reasons: ["Something went wrong, please try again later."]
+        "401":
           description: |
             Unauthorized
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorDto'
+                $ref: "#/components/schemas/ErrorDto"
               example:
                 title: "Unauthorized"
                 statusCode: 401
                 errors:
-                  reasons: [ "Please login and use provided tokens." ]
-        '403':
+                  reasons: ["Please login and use provided tokens."]
+        "403":
           description: |
             Forbidden
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorDto'
+                $ref: "#/components/schemas/ErrorDto"
               example:
                 title: "Forbidden"
                 statusCode: 403
                 errors:
-                  reasons: [ "User has not granted roles." ]
-        '404':
+                  reasons: ["User has not granted roles."]
+        "404":
           description: |
             Not found:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorDto'
+                $ref: "#/components/schemas/ErrorDto"
               examples:
                 RestaurantNotFound:
                   value:
                     title: "NotFound"
                     statusCode: 404
                     errors:
-                      reasons: [ "Restaurant: a00000e0-aaa0-000a-0000-00e00aa00e00 not found." ]
+                      reasons:
+                        [
+                          "Restaurant: a00000e0-aaa0-000a-0000-00e00aa00e00 not found.",
+                        ]
                 ProductsNotFound:
                   value:
                     title: "NotFound"
                     statusCode: 404
                     errors:
-                      reasons: [ "Products: a00000e0-aaa0-000a-0000-00e00aa00e00 and b11111f1-bbb1-111b-1111-11f11bb11f11 not found." ]
+                      reasons:
+                        [
+                          "Products: a00000e0-aaa0-000a-0000-00e00aa00e00 and b11111f1-bbb1-111b-1111-11f11bb11f11 not found.",
+                        ]
     get:
       tags:
         - orders
@@ -1070,7 +1089,7 @@ paths:
             items:
               type: number
       responses:
-        '200':
+        "200":
           description: |
             Success
             - The orders
@@ -1079,55 +1098,58 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/OrderReadDto'
-        '400':
+                  $ref: "#/components/schemas/OrderReadDto"
+        "400":
           description: |
             Bad request
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorDto'
+                $ref: "#/components/schemas/ErrorDto"
               example:
                 title: "BadRequest"
                 statusCode: 400
                 errors:
-                  reasons: [ "Something went wrong, please try again later." ]
-        '401':
+                  reasons: ["Something went wrong, please try again later."]
+        "401":
           description: |
             Unauthorized
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorDto'
+                $ref: "#/components/schemas/ErrorDto"
               example:
                 title: "Unauthorized"
                 statusCode: 401
                 errors:
-                  reasons: [ "Please login and use provided tokens." ]
-        '403':
+                  reasons: ["Please login and use provided tokens."]
+        "403":
           description: |
             Forbidden
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorDto'
+                $ref: "#/components/schemas/ErrorDto"
               example:
                 title: "Forbidden"
                 statusCode: 403
                 errors:
-                  reasons: [ "User has not granted roles." ]
-        '404':
+                  reasons: ["User has not granted roles."]
+        "404":
           description: |
             Not found:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorDto'
+                $ref: "#/components/schemas/ErrorDto"
               example:
                 title: "NotFound"
                 statusCode: 404
                 errors:
-                  reasons: [ "Restaurant: a00000e0-aaa0-000a-0000-00e00aa00e00 not found." ]
+                  reasons:
+                    [
+                      "Restaurant: a00000e0-aaa0-000a-0000-00e00aa00e00 not found.",
+                    ]
   /orders:
     get:
       tags:
@@ -1193,7 +1215,7 @@ paths:
             items:
               type: number
       responses:
-        '200':
+        "200":
           description: |
             Success
             - The orders
@@ -1202,55 +1224,58 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/OrderReadDto'
-        '400':
+                  $ref: "#/components/schemas/OrderReadDto"
+        "400":
           description: |
             Bad request
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorDto'
+                $ref: "#/components/schemas/ErrorDto"
               example:
                 title: "BadRequest"
                 statusCode: 400
                 errors:
-                  reasons: [ "Something went wrong, please try again later." ]
-        '401':
+                  reasons: ["Something went wrong, please try again later."]
+        "401":
           description: |
             Unauthorized
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorDto'
+                $ref: "#/components/schemas/ErrorDto"
               example:
                 title: "Unauthorized"
                 statusCode: 401
                 errors:
-                  reasons: [ "Please login and use provided tokens." ]
-        '403':
+                  reasons: ["Please login and use provided tokens."]
+        "403":
           description: |
             Forbidden
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorDto'
+                $ref: "#/components/schemas/ErrorDto"
               example:
                 title: "Forbidden"
                 statusCode: 403
                 errors:
-                  reasons: [ "User has not granted roles." ]
-        '404':
+                  reasons: ["User has not granted roles."]
+        "404":
           description: |
             Not found:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorDto'
+                $ref: "#/components/schemas/ErrorDto"
               example:
                 title: "NotFound"
                 statusCode: 404
                 errors:
-                  reasons: [ "Restaurant: a00000e0-aaa0-000a-0000-00e00aa00e00 not found." ]
+                  reasons:
+                    [
+                      "Restaurant: a00000e0-aaa0-000a-0000-00e00aa00e00 not found.",
+                    ]
   /orders/{orderId}:
     get:
       tags:
@@ -1267,38 +1292,39 @@ paths:
           schema:
             type: string
       responses:
-        '200':
+        "200":
           description: |
             Success
             - The order
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/OrderReadDto'
-        '400':
+                $ref: "#/components/schemas/OrderReadDto"
+        "400":
           description: |
             Bad request
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorDto'
+                $ref: "#/components/schemas/ErrorDto"
               example:
                 title: "BadRequest"
                 statusCode: 400
                 errors:
-                  reasons: [ "Something went wrong, please try again later." ]
-        '404':
+                  reasons: ["Something went wrong, please try again later."]
+        "404":
           description: |
             Not found:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorDto'
+                $ref: "#/components/schemas/ErrorDto"
               example:
                 title: "NotFound"
                 statusCode: 404
                 errors:
-                  reasons: [ "Order: a00000e0-aaa0-000a-0000-00e00aa00e00 not found." ]
+                  reasons:
+                    ["Order: a00000e0-aaa0-000a-0000-00e00aa00e00 not found."]
   /restaurants/{restaurantId}/orders/statuses:
     post:
       tags:
@@ -1321,80 +1347,86 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/AddStatusToOrdersDto'
+              $ref: "#/components/schemas/AddStatusToOrdersDto"
       responses:
-        '201':
+        "201":
           description: updated orders with the new status as the current one
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/OrderReadDto'
-        '400':
+                  $ref: "#/components/schemas/OrderReadDto"
+        "400":
           description: |
             Bad request
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorDto'
+                $ref: "#/components/schemas/ErrorDto"
               examples:
                 ValidationError:
                   value:
                     title: "One or more validation errors occurred."
                     statusCode: 400
                     errors:
-                      OrderIds: [ "The OrderIds field is required." ]
+                      OrderIds: ["The OrderIds field is required."]
                 Other:
                   value:
                     title: "BadRequest"
                     statusCode: 400
                     errors:
-                      reasons: [ "Something went wrong, please try again later." ]
-        '401':
+                      reasons: ["Something went wrong, please try again later."]
+        "401":
           description: |
             Unauthorized
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorDto'
+                $ref: "#/components/schemas/ErrorDto"
               example:
                 title: "Unauthorized"
                 statusCode: 401
                 errors:
-                  reasons: [ "Please login and use provided tokens." ]
-        '403':
+                  reasons: ["Please login and use provided tokens."]
+        "403":
           description: |
             Forbidden
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorDto'
+                $ref: "#/components/schemas/ErrorDto"
               example:
                 title: "Forbidden"
                 statusCode: 403
                 errors:
-                  reasons: [ "User has not granted roles." ]
-        '404':
+                  reasons: ["User has not granted roles."]
+        "404":
           description: |
             Not found:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorDto'
+                $ref: "#/components/schemas/ErrorDto"
               examples:
                 RestaurantNotFound:
                   value:
                     title: "NotFound"
                     statusCode: 404
                     errors:
-                      reasons: [ "Restaurant: a00000e0-aaa0-000a-0000-00e00aa00e00 not found." ]
+                      reasons:
+                        [
+                          "Restaurant: a00000e0-aaa0-000a-0000-00e00aa00e00 not found.",
+                        ]
                 OrdersNotFound:
                   value:
                     title: "NotFound"
                     statusCode: 404
                     errors:
-                      reasons: [ "Orders: a00000e0-aaa0-000a-0000-00e00aa00e00 and b11111f1-bbb1-111b-1111-11f11bb11f11 not found." ]
+                      reasons:
+                        [
+                          "Orders: a00000e0-aaa0-000a-0000-00e00aa00e00 and b11111f1-bbb1-111b-1111-11f11bb11f11 not found.",
+                        ]
 components:
   schemas:
     MessageDto:
@@ -1470,7 +1502,7 @@ components:
         phoneNumber:
           type: string
           format: phone
-          example: '0612345678'
+          example: "0612345678"
         password:
           type: string
           format: password
@@ -1498,7 +1530,7 @@ components:
         phoneNumber:
           type: string
           format: phone
-          example: '0687654321'
+          example: "0687654321"
         password:
           type: string
           format: password
@@ -1528,7 +1560,7 @@ components:
         phoneNumber:
           type: string
           format: phone
-          example: '0687654321'
+          example: "0687654321"
         roles:
           type: array
           example:
@@ -1554,7 +1586,7 @@ components:
       properties:
         dayOfWeek:
           type: number
-          description: 'The day to apply this opening time. Starting from Sunday: 0 to Saturday: 6, for example 4 is thursday.'
+          description: "The day to apply this opening time. Starting from Sunday: 0 to Saturday: 6, for example 4 is thursday."
           example: 4
         offsetInMinutes:
           type: number
@@ -1564,7 +1596,7 @@ components:
           example: 600
         durationInMinutes:
           type: number
-          description: 'Number of minutes the restaurant is open since the offset, for example 120 minutes, which means the restaurant is open during 2h since 10:00.'
+          description: "Number of minutes the restaurant is open since the offset, for example 120 minutes, which means the restaurant is open during 2h since 10:00."
           example: 120
       required:
         - dayOfWeek
@@ -1581,7 +1613,7 @@ components:
           example: a00000e0-aaa0-000a-0000-00e00aa00e00
         dayOfWeek:
           type: number
-          description: 'The day to apply this opening time. Starting from Sunday: 0 to Saturday: 6, for example 4 is thursday.'
+          description: "The day to apply this opening time. Starting from Sunday: 0 to Saturday: 6, for example 4 is thursday."
           example: 4
         offsetInMinutes:
           type: number
@@ -1591,7 +1623,7 @@ components:
           example: 600
         durationInMinutes:
           type: number
-          description: 'Number of minutes the restaurant is open since the offset, for example 120 minutes, which means the restaurant is open during 2h since 10:00.'
+          description: "Number of minutes the restaurant is open since the offset, for example 120 minutes, which means the restaurant is open during 2h since 10:00."
           example: 120
     RestaurantCreateDto:
       type: object
@@ -1602,7 +1634,7 @@ components:
         phoneNumber:
           type: string
           format: phone
-          example: '0612345678'
+          example: "0612345678"
         email:
           type: string
           format: email
@@ -1616,11 +1648,11 @@ components:
           example: true
         isPublic:
           type: boolean
-          description: 'True if the restaurant wants to be visible for customers, actual visibility value is `isPublished` (refer to that field in `RestaurantReadDto`for details).'
+          description: "True if the restaurant wants to be visible for customers, actual visibility value is `isPublished` (refer to that field in `RestaurantReadDto`for details)."
           example: true
         zipCode:
           type: string
-          example: '06560'
+          example: "06560"
         country:
           type: string
           example: France
@@ -1629,7 +1661,7 @@ components:
           example: Valbonne
         streetNumber:
           type: string
-          example: '1'
+          example: "1"
         streetName:
           type: string
           example: Place Sophie Lafitte
@@ -1639,23 +1671,23 @@ components:
         closingDates:
           type: array
           items:
-            $ref: '#/components/schemas/ClosingDateCreateDto'
+            $ref: "#/components/schemas/ClosingDateCreateDto"
         placeOpeningTimes:
           type: array
           items:
-            $ref: '#/components/schemas/OpeningTimeCreateDto'
+            $ref: "#/components/schemas/OpeningTimeCreateDto"
         orderOpeningTimes:
           type: array
           items:
-            $ref: '#/components/schemas/OpeningTimeCreateDto'
+            $ref: "#/components/schemas/OpeningTimeCreateDto"
         base64Image:
           type: string
           description: Base 64 encoded image
-          example: 'data:image/png;base64,iVBORw0KGgoAAA...'
+          example: "data:image/png;base64,iVBORw0KGgoAAA..."
         base64Logo:
           type: string
           description: Base 64 encoded logo
-          example: 'data:image/png;base64,iVBORw0KGgoAAA...'
+          example: "data:image/png;base64,iVBORw0KGgoAAA..."
       required:
         - name
         - email
@@ -1679,7 +1711,7 @@ components:
         phoneNumber:
           type: string
           format: phone
-          example: '0612345678'
+          example: "0612345678"
         email:
           type: string
           format: email
@@ -1693,11 +1725,11 @@ components:
           example: true
         isPublic:
           type: boolean
-          description: 'True if the restaurant wants to be visible for customers, actual display value is `isPublished` (refer to that field for details).'
+          description: "True if the restaurant wants to be visible for customers, actual display value is `isPublished` (refer to that field for details)."
           example: true
         zipCode:
           type: string
-          example: '06560'
+          example: "06560"
         country:
           type: string
           example: France
@@ -1706,7 +1738,7 @@ components:
           example: Valbonne
         streetNumber:
           type: string
-          example: '1'
+          example: "1"
         streetName:
           type: string
           example: Place Sophie Lafitte
@@ -1716,33 +1748,33 @@ components:
         closingDates:
           type: array
           items:
-            $ref: '#/components/schemas/ClosingDateReadDto'
+            $ref: "#/components/schemas/ClosingDateReadDto"
         placeOpeningTimes:
           type: array
           items:
-            $ref: '#/components/schemas/OpeningTimeReadDto'
+            $ref: "#/components/schemas/OpeningTimeReadDto"
         orderOpeningTimes:
           type: array
           items:
-            $ref: '#/components/schemas/OpeningTimeReadDto'
+            $ref: "#/components/schemas/OpeningTimeReadDto"
         base64Image:
           type: string
           description: Base 64 encoded image
-          example: 'data:image/png;base64,iVBORw0KGgoAAA...'
+          example: "data:image/png;base64,iVBORw0KGgoAAA..."
         base64Logo:
           type: string
           description: Base 64 encoded logo
-          example: 'data:image/png;base64,iVBORw0KGgoAAA...'
+          example: "data:image/png;base64,iVBORw0KGgoAAA..."
         isPublished:
           type: boolean
-          description: 'This is true if the restaurant has a value for all the required fields of `RestaurantCreateDto` plus at least one opening time and one product which has isActive value set to true. If true, the restaurant is visible for customers'
+          description: "This is true if the restaurant has a value for all the required fields of `RestaurantCreateDto` plus at least one opening time and one product which has isActive value set to true. If true, the restaurant is visible for customers"
           example: true
         isCurrentlyOpenToOrder:
           type: boolean
-          description: 'True if the restaurant accepts orders.'
+          description: "True if the restaurant accepts orders."
         isCurrentlyOpenInPlace:
           type: boolean
-          description: 'True if the restaurant is open to eat in place.'
+          description: "True if the restaurant is open to eat in place."
     AllergenCreateDto:
       type: object
       properties:
@@ -1799,7 +1831,7 @@ components:
           example: true
         productType:
           type: number
-          example: '0'
+          example: "0"
           description: |
             One of:
             - `0`: Starter,
@@ -1816,15 +1848,15 @@ components:
         image:
           type: string
           description: Base 64 encoded image
-          example: 'data:image/png;base64,iVBORw0KGgoAAA...'
+          example: "data:image/png;base64,iVBORw0KGgoAAA..."
         allergens:
           type: array
           items:
-            $ref: '#/components/schemas/AllergenCreateDto'
+            $ref: "#/components/schemas/AllergenCreateDto"
         productTags:
           type: array
           items:
-            $ref: '#/components/schemas/ProductTagCreateDto'
+            $ref: "#/components/schemas/ProductTagCreateDto"
       required:
         - name
         - price
@@ -1880,15 +1912,15 @@ components:
         image:
           type: string
           description: Base 64 encoded image
-          example: 'data:image/png;base64,iVBORw0KGgoAAA...'
+          example: "data:image/png;base64,iVBORw0KGgoAAA..."
         allergens:
           type: array
           items:
-            $ref: '#/components/schemas/AllergenReadDto'
+            $ref: "#/components/schemas/AllergenReadDto"
         productTags:
           type: array
           items:
-            $ref: '#/components/schemas/ProductTagReadDto'
+            $ref: "#/components/schemas/ProductTagReadDto"
     OrderedProductReadDto:
       type: object
       properties:
@@ -1945,7 +1977,7 @@ components:
         image:
           type: string
           description: Base 64 encoded image
-          example: 'data:image/png;base64,iVBORw0KGgoAAA...'
+          example: "data:image/png;base64,iVBORw0KGgoAAA..."
     OrderStatusReadDto:
       type: object
       properties:
@@ -1982,10 +2014,10 @@ components:
         reservedForDateTime:
           type: string
           example: "2021-12-31T00:00:00.000000"
-          description: 'Must be in future and within restaurant place opening times'
+          description: "Must be in future and within restaurant place opening times"
         customerComment:
           type: string
-          example: 'without onions'
+          example: "without onions"
       required:
         - productIds
         - reservedForDateTime
@@ -2015,10 +2047,10 @@ components:
           example: "2021-12-31T00:00:00.000000"
         customerComment:
           type: string
-          example: 'without onions'
+          example: "without onions"
         restaurantComment:
           type: string
-          example: 'ok, we remove onions'
+          example: "ok, we remove onions"
         isAcknowledged:
           type: boolean
           description: |
@@ -2038,15 +2070,15 @@ components:
             - `False` if the order is still processing
           example: true
         currentOrderStatus:
-          $ref: '#/components/schemas/OrderStatusReadDto'
+          $ref: "#/components/schemas/OrderStatusReadDto"
         orderStatuses:
           type: array
           items:
-            $ref: '#/components/schemas/OrderStatusReadDto'
+            $ref: "#/components/schemas/OrderStatusReadDto"
         orderedProducts:
           type: array
           items:
-            $ref: '#/components/schemas/OrderedProductReadDto'
+            $ref: "#/components/schemas/OrderedProductReadDto"
     AddStatusToOrdersDto:
       type: object
       properties:
@@ -2054,7 +2086,11 @@ components:
           type: array
           items:
             type: string
-          example: [ a00000e0-aaa0-000a-0000-00e00aa00e00, b11111f1-bbb1-111b-1111-11f11bb11f11 ]
+          example:
+            [
+              a00000e0-aaa0-000a-0000-00e00aa00e00,
+              b11111f1-bbb1-111b-1111-11f11bb11f11,
+            ]
         orderState:
           type: number
           example: 1

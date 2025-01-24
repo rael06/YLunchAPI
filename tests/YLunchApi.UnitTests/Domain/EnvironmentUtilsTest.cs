@@ -22,6 +22,6 @@ public class EnvironmentUtilsTest
         // Arrange
         Environment.SetEnvironmentVariable("ASPNETCORE_ENVIRONMENT", "Development");
         EnvironmentUtils.IsDevelopment.Should().BeTrue();
-        EnvironmentUtils.BaseUrl.Should().Be("http://localhost:5254");
+        EnvironmentUtils.BaseUrl.Should().Be("http://localhost:5258");
     }
 }

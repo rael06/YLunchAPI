@@ -20,9 +20,10 @@ using YLunchApi.Domain.UserAggregate.Models;
 using YLunchApi.Domain.UserAggregate.Services;
 using YLunchApi.Infrastructure.Database;
 using YLunchApi.Infrastructure.Database.Repositories;
+DotNetEnv.Env.Load();
+
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Configuration.AddUserSecrets<Program>(true);
 
 // Add services to the container.
 builder.Services.TryAddScoped(_ => new JwtSecurityTokenHandler());
@@ -57,7 +58,12 @@ builder.Services.AddIdentity<User, IdentityRole>()
        .AddDefaultTokenProviders();
 
 // For Jwt
-var jwtSecret = builder.Configuration["JwtSecret"];
+var jwtSecret = Environment.GetEnvironmentVariable("JwtSecret");
+if (string.IsNullOrEmpty(jwtSecret))
+{
+    throw new InvalidOperationException("JwtSecret is not set. Check your .env file or environment variables.");
+}
+
 var key = Encoding.ASCII.GetBytes(jwtSecret);
 var tokenValidationParameters = new TokenValidationParameters
 {
@@ -114,10 +120,37 @@ builder.Services.AddAuthentication(options =>
        });
 
 // For Entity Framework
-var database = builder.Configuration["DbName"];
-var user = builder.Configuration["DbUser"];
-var password = builder.Configuration["DbPassword"];
-var connectionString = $"Server=127.0.0.1;Port=3309;Database={database};User={user};Password={password};";
+var dbName = Environment.GetEnvironmentVariable("DbName");
+if (string.IsNullOrEmpty(dbName))
+{
+    throw new InvalidOperationException("DbName is not set. Check your .env file or environment variables.");
+}
+
+var dbUser = Environment.GetEnvironmentVariable("DbUser");
+if (string.IsNullOrEmpty(dbUser))
+{
+    throw new InvalidOperationException("DbUser is not set. Check your .env file or environment variables.");
+}
+
+var dbPassword = Environment.GetEnvironmentVariable("DbPassword");
+if (string.IsNullOrEmpty(dbPassword))
+{
+    throw new InvalidOperationException("DbPassword is not set. Check your .env file or environment variables.");
+}
+
+var dbHost = Environment.GetEnvironmentVariable("DbHost");
+if (string.IsNullOrEmpty(dbHost))
+{
+    throw new InvalidOperationException("DbHost is not set. Check your .env file or environment variables.");
+}
+
+var dbPort = Environment.GetEnvironmentVariable("DbPort");
+if (string.IsNullOrEmpty(dbPort))
+{
+    throw new InvalidOperationException("DbPort is not set. Check your .env file or environment variables.");
+}
+
+var connectionString = $"Server={dbHost};Port={dbPort};Database={dbName};User={dbUser};Password={dbPassword};";
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
     options.UseMySql(
@@ -169,7 +202,7 @@ if (app.Environment.IsDevelopment())
 }
 else
 {
-    app.Urls.Add("http://localhost:5254");
+    app.Urls.Add("http://localhost:5258");
     app.UseExceptionHandler(errorApp =>
     {
         errorApp.Run(async context =>
@@ -191,7 +224,16 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-app.Run();
+try
+{
+    app.Run("http://localhost:5258");
+}
+catch (IOException ex)
+{
+    Console.WriteLine($"Failed to bind to address: {ex.Message}");
+    throw;
+}
+
 
 public partial class Program
 {
