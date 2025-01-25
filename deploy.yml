@@ -8,7 +8,7 @@ variables:
   RestoreBuildProjects: "**/*.csproj"
 
 steps:
-  - task: UseDotNet@
+  - task: UseDotNet@2
     displayName: Restore
     inputs:
       command: restore
@@ -16,7 +16,7 @@ steps:
       verbosityRestore: Detailed
       verbosityPack: Detailed
 
-  - task: UseDotNet@
+  - task: UseDotNet@2
     displayName: Build
     inputs:
       projects: "$(Parameters.RestoreBuildProjects)"
@@ -24,7 +24,7 @@ steps:
       verbosityRestore: Detailed
       verbosityPack: Detailed
 
-  - task: UseDotNet@
+  - task: UseDotNet@2
     displayName: "Unit Test"
     inputs:
       command: test
@@ -33,7 +33,7 @@ steps:
       verbosityRestore: Detailed
       verbosityPack: Detailed
 
-  - task: UseDotNet@
+  - task: UseDotNet@2
     displayName: "Integration Test"
     inputs:
       command: test
@@ -42,7 +42,7 @@ steps:
       verbosityRestore: Detailed
       verbosityPack: Detailed
 
-  - task: UseDotNet@
+  - task: UseDotNet@2
     displayName: Publish
     inputs:
       command: publish
