@@ -215,6 +215,7 @@ if (app.Environment.IsDevelopment())
 }
 else
 {
+    app.Urls.Add($"http://{host}:{port}");
     app.UseExceptionHandler(errorApp =>
     {
         errorApp.Run(async context =>
@@ -226,8 +227,6 @@ else
         });
     });
 }
-
-app.Urls.Add($"http://{host}:{port}");
 
 app.UseHttpsRedirection();
 
