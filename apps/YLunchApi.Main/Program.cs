@@ -22,6 +22,55 @@ using YLunchApi.Infrastructure.Database;
 using YLunchApi.Infrastructure.Database.Repositories;
 DotNetEnv.Env.Load();
 
+var host = Environment.GetEnvironmentVariable("Host");
+if (string.IsNullOrEmpty(host))
+{
+    throw new InvalidOperationException("Host is not set. Check your .env file or environment variables.");
+}
+
+var port = Environment.GetEnvironmentVariable("Port");
+if (string.IsNullOrEmpty(port))
+{
+    throw new InvalidOperationException("Port is not set. Check your .env file or environment variables.");
+}
+
+
+var jwtSecret = Environment.GetEnvironmentVariable("JwtSecret");
+if (string.IsNullOrEmpty(jwtSecret))
+{
+    throw new InvalidOperationException("JwtSecret is not set. Check your .env file or environment variables.");
+}
+
+var dbName = Environment.GetEnvironmentVariable("DbName");
+if (string.IsNullOrEmpty(dbName))
+{
+    throw new InvalidOperationException("DbName is not set. Check your .env file or environment variables.");
+}
+
+var dbUser = Environment.GetEnvironmentVariable("DbUser");
+if (string.IsNullOrEmpty(dbUser))
+{
+    throw new InvalidOperationException("DbUser is not set. Check your .env file or environment variables.");
+}
+
+var dbPassword = Environment.GetEnvironmentVariable("DbPassword");
+if (string.IsNullOrEmpty(dbPassword))
+{
+    throw new InvalidOperationException("DbPassword is not set. Check your .env file or environment variables.");
+}
+
+var dbHost = Environment.GetEnvironmentVariable("DbHost");
+if (string.IsNullOrEmpty(dbHost))
+{
+    throw new InvalidOperationException("DbHost is not set. Check your .env file or environment variables.");
+}
+
+var dbPort = Environment.GetEnvironmentVariable("DbPort");
+if (string.IsNullOrEmpty(dbPort))
+{
+    throw new InvalidOperationException("DbPort is not set. Check your .env file or environment variables.");
+}
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -58,12 +107,6 @@ builder.Services.AddIdentity<User, IdentityRole>()
        .AddDefaultTokenProviders();
 
 // For Jwt
-var jwtSecret = Environment.GetEnvironmentVariable("JwtSecret");
-if (string.IsNullOrEmpty(jwtSecret))
-{
-    throw new InvalidOperationException("JwtSecret is not set. Check your .env file or environment variables.");
-}
-
 var key = Encoding.ASCII.GetBytes(jwtSecret);
 var tokenValidationParameters = new TokenValidationParameters
 {
@@ -120,36 +163,6 @@ builder.Services.AddAuthentication(options =>
        });
 
 // For Entity Framework
-var dbName = Environment.GetEnvironmentVariable("DbName");
-if (string.IsNullOrEmpty(dbName))
-{
-    throw new InvalidOperationException("DbName is not set. Check your .env file or environment variables.");
-}
-
-var dbUser = Environment.GetEnvironmentVariable("DbUser");
-if (string.IsNullOrEmpty(dbUser))
-{
-    throw new InvalidOperationException("DbUser is not set. Check your .env file or environment variables.");
-}
-
-var dbPassword = Environment.GetEnvironmentVariable("DbPassword");
-if (string.IsNullOrEmpty(dbPassword))
-{
-    throw new InvalidOperationException("DbPassword is not set. Check your .env file or environment variables.");
-}
-
-var dbHost = Environment.GetEnvironmentVariable("DbHost");
-if (string.IsNullOrEmpty(dbHost))
-{
-    throw new InvalidOperationException("DbHost is not set. Check your .env file or environment variables.");
-}
-
-var dbPort = Environment.GetEnvironmentVariable("DbPort");
-if (string.IsNullOrEmpty(dbPort))
-{
-    throw new InvalidOperationException("DbPort is not set. Check your .env file or environment variables.");
-}
-
 var connectionString = $"Server={dbHost};Port={dbPort};Database={dbName};User={dbUser};Password={dbPassword};";
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
@@ -202,7 +215,6 @@ if (app.Environment.IsDevelopment())
 }
 else
 {
-    app.Urls.Add("http://localhost:5258");
     app.UseExceptionHandler(errorApp =>
     {
         errorApp.Run(async context =>
@@ -214,6 +226,8 @@ else
         });
     });
 }
+
+app.Urls.Add($"http://{host}:{port}");
 
 app.UseHttpsRedirection();
 

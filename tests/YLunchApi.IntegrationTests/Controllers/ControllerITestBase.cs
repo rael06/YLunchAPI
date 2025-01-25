@@ -32,6 +32,8 @@ public abstract class ControllerITestBase : IClassFixture<WebApplicationFactory<
 
     protected ControllerITestBase()
     {
+        Environment.SetEnvironmentVariable("Host", "127.0.0.1");
+        Environment.SetEnvironmentVariable("Port", "5258");
         Environment.SetEnvironmentVariable("JwtSecret", "YLunchApiAuthentication.JWT.SECRET.TEST");
         Environment.SetEnvironmentVariable("DbName", "test_db_name");
         Environment.SetEnvironmentVariable("DbUser", "test_db_user");
