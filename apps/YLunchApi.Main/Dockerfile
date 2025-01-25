@@ -5,16 +5,16 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
-COPY ["YLunchApi/YLunchApi.csproj", "YLunchApi/"]
-RUN dotnet restore "YLunchApi/YLunchApi.csproj"
+COPY ["YLunchApi.Main/YLunchApi.Main.csproj", "YLunchApi.Main/"]
+RUN dotnet restore "YLunchApi.Main/YLunchApi.Main.csproj"
 COPY . .
-WORKDIR "/src/YLunchApi"
-RUN dotnet build "YLunchApi.csproj" -c Release -o /app/build
+WORKDIR "/src/YLunchApi.Main"
+RUN dotnet build "YLunchApi.Main.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "YLunchApi.csproj" -c Release -o /app/publish
+RUN dotnet publish "YLunchApi.Main.csproj" -c Release -o /app/publish
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "YLunchApi.dll"]
+ENTRYPOINT ["dotnet", "YLunchApi.Main.dll"]
