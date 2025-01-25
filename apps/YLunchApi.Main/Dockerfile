@@ -3,10 +3,6 @@ WORKDIR /app
 EXPOSE 80
 EXPOSE 443
 
-# Create a non-root user
-RUN addgroup --system appgroup && adduser --system --ingroup appgroup ylunch-user
-USER ylunch-user
-
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
 COPY . .
