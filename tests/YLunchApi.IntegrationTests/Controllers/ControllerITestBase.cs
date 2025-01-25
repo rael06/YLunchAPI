@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Net.Http.Json;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using DotNetEnv;
 using FluentAssertions;
 using Mapster;
 using Microsoft.AspNetCore.Mvc.Testing;
@@ -31,6 +32,12 @@ public abstract class ControllerITestBase : IClassFixture<WebApplicationFactory<
 
     protected ControllerITestBase()
     {
+        Environment.SetEnvironmentVariable("JwtSecret", "YLunchApiAuthentication.JWT.SECRET.TEST");
+        Environment.SetEnvironmentVariable("DbName", "test_db_name");
+        Environment.SetEnvironmentVariable("DbUser", "test_db_user");
+        Environment.SetEnvironmentVariable("DbPassword", "test_db_password");
+        Environment.SetEnvironmentVariable("DbHost", "test_db_host");
+        Environment.SetEnvironmentVariable("DbPort", "test_db_port");
         var webApplication = new CustomWebApplicationFactory<Program>();
         Client = webApplication.CreateClient();
     }

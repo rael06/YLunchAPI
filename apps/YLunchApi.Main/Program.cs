@@ -207,9 +207,9 @@ else
     {
         errorApp.Run(async context =>
         {
-            context.Response.StatusCode = StatusCodes.Status400BadRequest;
+            context.Response.StatusCode = StatusCodes.Status500InternalServerError;
             context.Response.ContentType = "application/json";
-            await context.Response.WriteAsJsonAsync(new ErrorDto(HttpStatusCode.BadRequest,
+            await context.Response.WriteAsJsonAsync(new ErrorDto(HttpStatusCode.InternalServerError,
                 "Something went wrong, try again later."));
         });
     });
@@ -224,16 +224,7 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-try
-{
-    app.Run("http://localhost:5258");
-}
-catch (IOException ex)
-{
-    Console.WriteLine($"Failed to bind to address: {ex.Message}");
-    throw;
-}
-
+app.Run();
 
 public partial class Program
 {
