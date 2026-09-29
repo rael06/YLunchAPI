@@ -1,0 +1,8 @@
+# Build context: only what `dotnet publish` of the API needs.
+**
+!apps/YLunchApi.Main/**
+!src/**
+**/bin
+**/obj
+**/.env
+**/.DS_Store

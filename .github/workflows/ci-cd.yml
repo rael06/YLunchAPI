@@ -1,0 +1,80 @@
+# Builds and runs the unit tests on every push and pull request; on master, deploys to the VPS with
+# Kamal 2. Settings live in config/deploy.yml and the secrets in the GitHub environment `production`
+# (Settings → Environments). See « Deployment » in the README.
+name: CI/CD
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      db_boot:
+        description: "Boot the MySQL accessory (only when no other MySQL uses its volume) instead of deploying"
+        type: boolean
+        default: false
+      proxy_reboot:
+        description: "Reboot kamal-proxy with the proxy settings of config/deploy.yml instead of deploying (a few seconds of outage)"
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: "6.0.x"
+      - run: dotnet build YLunchApi.sln -c Release
+      - run: dotnet test tests/YLunchApi.UnitTests/YLunchApi.UnitTests.csproj -c Release --no-build
+
+  deploy:
+    needs: check
+    # DEPLOY_ENABLED is a repository variable: the switch to stop deployments.
+    if: github.ref == 'refs/heads/master' && github.event_name != 'pull_request' && vars.DEPLOY_ENABLED == 'true'
+    runs-on: ubuntu-latest
+    environment: production
+    concurrency:
+      group: deploy-production
+      cancel-in-progress: false
+    env:
+      VPS_HOST: ${{ secrets.VPS_HOST }}
+      VPS_SSH_PORT: ${{ secrets.VPS_SSH_PORT }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.4"
+      - run: gem install kamal -v 2.12.0 --no-document
+      - name: Load the deploy key and trust the VPS host key
+        env:
+          KAMAL_SSH_KEY: ${{ secrets.KAMAL_SSH_KEY }}
+          VPS_KNOWN_HOSTS: ${{ secrets.VPS_KNOWN_HOSTS }}
+        run: |
+          install -m 700 -d ~/.ssh
+          printf '%s\n' "$VPS_KNOWN_HOSTS" > ~/.ssh/known_hosts
+          eval "$(ssh-agent -s)" >/dev/null
+          printf '%s\n' "$KAMAL_SSH_KEY" | ssh-add - 2>/dev/null
+          echo "SSH_AUTH_SOCK=$SSH_AUTH_SOCK" >> "$GITHUB_ENV"
+      - name: Kamal
+        env:
+          DbPassword: ${{ secrets.DbPassword }}
+          JwtSecret: ${{ secrets.JwtSecret }}
+          MYSQL_ROOT_PASSWORD: ${{ secrets.MYSQL_ROOT_PASSWORD }}
+          MYSQL_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
+          DB_BOOT: ${{ inputs.db_boot }}
+          PROXY_REBOOT: ${{ inputs.proxy_reboot }}
+        run: |
+          if [ "$DB_BOOT" = true ]; then
+            kamal accessory boot db
+          elif [ "$PROXY_REBOOT" = true ]; then
+            kamal proxy reboot -y
+          else
+            kamal deploy
+          fi
+      - name: Release the deploy lock if the run was cancelled
+        if: cancelled()
+        run: kamal lock release

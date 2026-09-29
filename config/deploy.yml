@@ -1,0 +1,85 @@
+# Deployed with Kamal 2 by .github/workflows/ci-cd.yml, following the conventions of the platform
+# repository rael06/vps (docs/architecture.md).
+service: ylunch-api
+image: ylunch-api
+
+servers:
+  web:
+    hosts:
+      - <%= ENV.fetch("VPS_HOST") %>
+    options:
+      read-only: true
+      tmpfs:
+        - /tmp:rw,noexec,nosuid,size=64m
+      cap-drop: ALL
+      security-opt: no-new-privileges
+      memory: 384m
+      pids-limit: 256
+
+# Public through the shared tunnel: ylunch-api.rael-calitro.ovh (wildcard) → cloudflared →
+# kamal-proxy → this app.
+proxy:
+  host: ylunch-api.rael-calitro.ovh
+  app_port: 5258
+  healthcheck:
+    path: /Trials/anonymous
+  # The proxy is shared: identical in every app (nginx holds 80/443; cloudflared reaches kamal-proxy:80).
+  # A new version applies with « Run workflow » + « Reboot kamal-proxy » (a few seconds of outage).
+  run:
+    publish: false
+    version: v0.10.0
+
+env:
+  clear:
+    Host: 0.0.0.0
+    Port: "5258"
+    DbHost: ylunch-db
+    DbPort: "3306"
+    DbName: YLunchApiDatabase
+    DbUser: sa
+  secret:
+    - DbPassword
+    - JwtSecret
+
+accessories:
+  # MySQL on the data volume ylunch-db-data. Booted by hand only (Run workflow « Boot database »):
+  # never while another MySQL uses the volume. MYSQL_* only initialize an empty volume.
+  db:
+    service: ylunch-db
+    image: mysql:9.2.0
+    host: <%= ENV.fetch("VPS_HOST") %>
+    # Administration only, through an SSH tunnel to the VPS.
+    port: "127.0.0.1:3309:3306"
+    volumes:
+      - ylunch-db-data:/var/lib/mysql
+    env:
+      clear:
+        MYSQL_DATABASE: YLunchApiDatabase
+        MYSQL_USER: sa
+      secret:
+        - MYSQL_ROOT_PASSWORD
+        - MYSQL_PASSWORD
+    options:
+      memory: 768m
+
+logging:
+  options:
+    max-size: 10m
+    max-file: 3
+
+ssh:
+  user: kamal
+  port: <%= ENV.fetch("VPS_SSH_PORT") %>
+  # The key comes from the ssh-agent loaded by the workflow; the host key must match known_hosts.
+  config: .kamal/ssh_config
+  forward_agent: false
+
+# The image goes from the runner to the VPS through the SSH tunnel: no external registry.
+registry:
+  server: localhost:5555
+
+builder:
+  arch: amd64
+
+# Old versions kept on the VPS for `kamal rollback <version>`.
+retain_containers: 5
