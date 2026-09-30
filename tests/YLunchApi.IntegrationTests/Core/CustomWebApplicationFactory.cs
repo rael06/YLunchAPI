@@ -4,6 +4,7 @@ using System.Linq;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using YLunchApi.Infrastructure.Database;
@@ -19,11 +20,13 @@ public class CustomWebApplicationFactory<TStartup>
     {
         builder.ConfigureServices(async services =>
         {
-            var dbContextDescriptor = services.SingleOrDefault(
-                d => d.ServiceType ==
-                     typeof(DbContextOptions<ApplicationDbContext>));
+            // Since EF Core 9 the MySQL configuration of Program.cs is also registered as an
+            // IDbContextOptionsConfiguration: both must go, or it still runs next to the in-memory one.
+            var dbContextDescriptors = services.Where(d =>
+                d.ServiceType == typeof(DbContextOptions<ApplicationDbContext>) ||
+                d.ServiceType == typeof(IDbContextOptionsConfiguration<ApplicationDbContext>)).ToList();
 
-            services.Remove(dbContextDescriptor!);
+            foreach (var descriptor in dbContextDescriptors) services.Remove(descriptor);
 
             services.AddDbContext<ApplicationDbContext>(options => { options.UseInMemoryDatabase("YLunchDatabaseForIntegrationTests"); });
 

@@ -75,7 +75,7 @@ public class UnitTestFixtureBase
         _serviceCollection.AddSingleton<IDateTimeProvider, DateTimeProvider>();
 
         // For Jwt
-        const string jwtSecret = "JsonWebTokenSecretForTests";
+        const string jwtSecret = "JsonWebTokenSecretForTests_AtLeast32Bytes";
         var optionsMonitorMock = Substitute.For<IOptionsMonitor<JwtConfig>>();
         optionsMonitorMock.CurrentValue.Returns(new JwtConfig
         {
