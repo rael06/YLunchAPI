@@ -42,11 +42,12 @@ env:
     - JwtSecret
 
 accessories:
-  # MySQL on the data volume ylunch-db-data. Booted by hand only (Run workflow « Boot database »):
-  # never while another MySQL uses the volume. MYSQL_* only initialize an empty volume.
+  # MySQL 9.7 (LTS) on the data volume ylunch-db-data. Started by hand only (Run workflow « Boot » or
+  # « Reboot the MySQL accessory »): never while another MySQL uses the volume. MYSQL_* only
+  # initialize an empty volume. A newer MySQL upgrades the data in place at start: no way back.
   db:
     service: ylunch-db
-    image: mysql:9.2.0
+    image: mysql:9.7.2
     host: <%= ENV.fetch("VPS_HOST") %>
     # Administration only, through an SSH tunnel to the VPS.
     port: "127.0.0.1:3309:3306"

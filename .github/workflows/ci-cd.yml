@@ -12,6 +12,10 @@ on:
         description: "Boot the MySQL accessory (only when no other MySQL uses its volume) instead of deploying"
         type: boolean
         default: false
+      db_reboot:
+        description: "Reboot the MySQL accessory with the settings of config/deploy.yml (a few seconds of database outage; back up first)"
+        type: boolean
+        default: false
       proxy_reboot:
         description: "Reboot kamal-proxy with the proxy settings of config/deploy.yml instead of deploying (a few seconds of outage)"
         type: boolean
@@ -66,10 +70,13 @@ jobs:
           MYSQL_ROOT_PASSWORD: ${{ secrets.MYSQL_ROOT_PASSWORD }}
           MYSQL_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
           DB_BOOT: ${{ inputs.db_boot }}
+          DB_REBOOT: ${{ inputs.db_reboot }}
           PROXY_REBOOT: ${{ inputs.proxy_reboot }}
         run: |
           if [ "$DB_BOOT" = true ]; then
             kamal accessory boot db
+          elif [ "$DB_REBOOT" = true ]; then
+            kamal accessory reboot db
           elif [ "$PROXY_REBOOT" = true ]; then
             kamal proxy reboot -y
           else
