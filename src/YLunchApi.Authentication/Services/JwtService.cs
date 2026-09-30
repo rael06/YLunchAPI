@@ -54,12 +54,23 @@ public class JwtService : IJwtService
         tokenValidationParameters.ValidateLifetime = false;
 
 
-        // Validation 1 - jwt format
-        var tokenInValidation = _jwtSecurityTokenHandler.ValidateToken(
-            tokenUpdateDto.AccessToken,
-            tokenValidationParameters,
-            out var validatedToken
-        );
+        // Validation 1 - jwt format and signature
+        ClaimsPrincipal tokenInValidation;
+        SecurityToken validatedToken;
+        try
+        {
+            tokenInValidation = _jwtSecurityTokenHandler.ValidateToken(
+                tokenUpdateDto.AccessToken,
+                tokenValidationParameters,
+                out validatedToken
+            );
+        }
+        // IdentityModel rejects a token signed with another algorithm (e.g. HS512, whose key must be longer)
+        // before Validation 2 below.
+        catch (Exception e) when (e is SecurityTokenException or ArgumentException)
+        {
+            throw new InvalidTokenException();
+        }
 
         if (tokenInValidation == null || validatedToken == null) throw new InvalidTokenException();
 
