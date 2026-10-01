@@ -1,0 +1,26 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "github>rael06/vps//renovate/default"
+  ],
+  "packageRules": [
+    {
+      "description": "One weekly pull request for the non-major NuGet updates, merged by hand (merging deploys).",
+      "matchManagers": [
+        "nuget"
+      ],
+      "matchUpdateTypes": [
+        "minor",
+        "patch"
+      ],
+      "groupName": "nuget non-major"
+    },
+    {
+      "description": "MySQL stays on the 9.7 LTS line: a newer series upgrades the data in place, with no way back.",
+      "matchDepNames": [
+        "mysql"
+      ],
+      "allowedVersions": "/^9\\.7\\./"
+    }
+  ]
+}
