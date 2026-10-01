@@ -1,7 +1,7 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
-    "github>rael06/vps//renovate/default"
+    "github>rael06/renovate-config"
   ],
   "packageRules": [
     {
