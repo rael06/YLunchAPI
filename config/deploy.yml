@@ -27,7 +27,7 @@ proxy:
   # A new version applies with « Run workflow » + « Reboot kamal-proxy » (a few seconds of outage).
   run:
     publish: false
-    version: v0.10.0
+    version: v0.10.2
 
 env:
   clear:
