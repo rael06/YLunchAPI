@@ -47,7 +47,7 @@ accessories:
   # initialize an empty volume. A newer MySQL upgrades the data in place at start: no way back.
   db:
     service: ylunch-db
-    image: mysql:9.7.2
+    image: mysql:9.7.4
     host: <%= ENV.fetch("VPS_HOST") %>
     # Administration only, through an SSH tunnel to the VPS.
     port: "127.0.0.1:3309:3306"
